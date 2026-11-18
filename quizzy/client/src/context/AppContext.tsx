@@ -17,7 +17,7 @@ const AppContext = createContext<AppContextValue>({
   appSubtitle: '',
   allowedDomain: '',
   publicUrl: '',
-  displayName: 'Quizzy ✦',
+  displayName: 'Tọa đàm Bình đẳng giới · Quizzy',
   brandName: 'Quizzy ✦',
 });
 
@@ -33,7 +33,7 @@ function buildDisplay(
     appSubtitle: appSubtitle.trim(),
     allowedDomain: allowedDomain.trim(),
     publicUrl: publicUrl.trim(),
-    displayName: trimmed ? `${trimmed} by Quizzy` : 'Quizzy ✦',
+    displayName: trimmed ? `${trimmed} by Quizzy` : 'Tọa đàm Bình đẳng giới · Quizzy',
     brandName: trimmed || 'Quizzy ✦',
   };
 }
