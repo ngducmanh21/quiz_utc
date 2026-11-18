@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'Event Cormorant';
+  src: url('/event/fonts/cormorant-garamond.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Event Great Vibes';
+  src: url('/event/fonts/great-vibes.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 .event-brand {
   position: relative;
   z-index: 1;
@@ -6,22 +22,38 @@
 }
 
 .event-brand-logos {
+  --event-logo-size: 86px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: min(100%, 470px);
-  aspect-ratio: 4.7;
+  gap: 10px;
+  width: max-content;
+  max-width: 100%;
+  height: calc(var(--event-logo-size) + 12px);
+  padding: 6px 16px;
   overflow: hidden;
   background: #fff;
   border-radius: 999px;
   box-shadow: 0 12px 28px rgb(82 26 5 / 20%);
 }
 
-.event-brand-logos img {
+.event-brand-logos > img {
   display: block;
-  width: 100%;
+  flex: none;
+  object-fit: contain;
+}
+
+.event-logo-utc { width: var(--event-logo-size); height: var(--event-logo-size); }
+.event-logo-msd-uw { width: calc(var(--event-logo-size) * 2.07); height: calc(var(--event-logo-size) * .92); }
+.event-logo-gender { position: relative; display: block; flex: none; width: var(--event-logo-size); height: var(--event-logo-size); overflow: hidden; }
+.event-logo-gender img {
+  position: absolute;
+  top: calc(var(--event-logo-size) * -.045);
+  left: calc(var(--event-logo-size) * -.69);
+  width: calc(var(--event-logo-size) * 2.34);
+  max-width: none;
   height: auto;
-  transform: translateY(-8%);
+  filter: hue-rotate(-17deg) saturate(1.16);
 }
 
 .event-brand-heading {
@@ -31,21 +63,20 @@
 
 .event-brand-kicker {
   display: block;
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(1.5rem, 3vw, 2.7rem);
-  font-style: italic;
+  font-family: 'Event Great Vibes', cursive;
+  font-size: clamp(2.3rem, 4.2vw, 4.2rem);
   font-weight: 400;
-  letter-spacing: .045em;
-  line-height: 1.1;
+  letter-spacing: .01em;
+  line-height: 1;
 }
 
 .event-brand h1 {
   margin: 4px 0 0;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: 'Event Cormorant', Georgia, serif;
   font-size: clamp(3rem, 7.4vw, 7.4rem);
   font-weight: 500;
-  letter-spacing: -.045em;
-  line-height: 1.06;
+  letter-spacing: -.04em;
+  line-height: .98;
   white-space: nowrap;
 }
 
@@ -66,15 +97,15 @@
   text-align: left;
 }
 
-.event-brand-compact .event-brand-logos { width: min(32vw, 280px); flex: none; }
+.event-brand-compact .event-brand-logos { --event-logo-size: 55px; flex: none; padding: 5px 10px; gap: 6px; height: 65px; }
 .event-brand-compact .event-brand-heading { margin: 0; }
-.event-brand-compact .event-brand-kicker { font-size: clamp(1rem, 1.8vw, 1.45rem); }
+.event-brand-compact .event-brand-kicker { font-size: clamp(1.7rem, 2.4vw, 2.5rem); }
 .event-brand-compact h1 { font-size: clamp(1.65rem, 3.6vw, 3.6rem); }
 
 @media (max-width: 700px) {
-  .event-brand-logos { width: min(82vw, 450px); }
+  .event-brand-logos { --event-logo-size: clamp(54px, 17vw, 76px); padding: 5px 10px; gap: 5px; height: auto; }
   .event-brand h1 { font-size: clamp(2rem, 9.4vw, 4rem); }
   .event-brand-compact { flex-direction: column; gap: 10px; text-align: center; }
-  .event-brand-compact .event-brand-logos { width: min(76vw, 300px); }
+  .event-brand-compact .event-brand-logos { --event-logo-size: 58px; height: 68px; }
   .event-brand-compact h1 { font-size: clamp(1.75rem, 8.2vw, 3rem); }
 }

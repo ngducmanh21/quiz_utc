@@ -9,13 +9,14 @@ export function EventBrand({ compact = false, className = '' }: EventBrandProps)
   return (
     <div className={`event-brand ${compact ? 'event-brand-compact' : ''} ${className}`}>
       <div className="event-brand-logos">
-        <img
-          src="/event/partner-logos.png"
-          alt="Bốn logo: Trường Đại học Giao thông Vận tải, MSD, United Way và biểu tượng chiến dịch"
-        />
+        <img className="event-logo-utc" src="/event/utc-seal.png" alt="Trường Đại học Giao thông Vận tải" />
+        <img className="event-logo-msd-uw" src="/event/msd-united-way.png" alt="MSD và United Way" />
+        <span className="event-logo-gender" role="img" aria-label="Biểu tượng Tháng hành động vì bình đẳng giới">
+          <img src="/event/gender-equality-symbol.jpg" alt="" />
+        </span>
       </div>
       <div className="event-brand-heading">
-        <span className="event-brand-kicker">TỌA ĐÀM</span>
+        <span className="event-brand-kicker">Tọa Đàm</span>
         <h1>BÌNH ĐẲNG GIỚI</h1>
       </div>
       {!compact && (
