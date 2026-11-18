@@ -1,0 +1,18 @@
+node_modules/
+dist/
+*.db
+*.db-shm
+*.db-wal
+.env
+avatars/
+.claude
+AGENTS.md
+CLAUDE.md
+client/.DS_Store
+server/.DS_Store
+.DS_Store
+
+docs
+
+# Runtime data (config with secrets, sqlite db)
+data/

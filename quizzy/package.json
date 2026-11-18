@@ -1,0 +1,23 @@
+{
+  "name": "quizz-root",
+  "private": true,
+  "packageManager": "pnpm@10.29.2",
+  "pnpm": {
+    "overrides": {
+      "picomatch": "4.0.3"
+    }
+  },
+  "scripts": {
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm -r build",
+    "start": "pnpm --filter server start",
+    "seed:demo": "node --env-file=.env server/scripts/seed-demo.mjs",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check": "biome check --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.3"
+  }
+}

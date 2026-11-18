@@ -1,0 +1,74 @@
+import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
+
+interface AppContextValue {
+  appName: string;
+  appSubtitle: string;
+  allowedDomain: string;
+  /** Configured base URL for phones; empty means use the current origin. */
+  publicUrl: string;
+  /** Full display string: "Scaleway by ⚡ Quizz" or "⚡ Quizz" */
+  displayName: string;
+  /** Short brand string: "Scaleway" or "⚡ Quizz" */
+  brandName: string;
+}
+
+const AppContext = createContext<AppContextValue>({
+  appName: '',
+  appSubtitle: '',
+  allowedDomain: '',
+  publicUrl: '',
+  displayName: 'Quizzy ✦',
+  brandName: 'Quizzy ✦',
+});
+
+function buildDisplay(
+  appName: string,
+  appSubtitle: string,
+  allowedDomain: string,
+  publicUrl: string,
+): AppContextValue {
+  const trimmed = appName.trim();
+  return {
+    appName: trimmed,
+    appSubtitle: appSubtitle.trim(),
+    allowedDomain: allowedDomain.trim(),
+    publicUrl: publicUrl.trim(),
+    displayName: trimmed ? `${trimmed} by Quizzy` : 'Quizzy ✦',
+    brandName: trimmed || 'Quizzy ✦',
+  };
+}
+
+export function AppProvider({ children }: { children: ReactNode }) {
+  const [value, setValue] = useState<AppContextValue>(buildDisplay('', '', '', ''));
+
+  useEffect(() => {
+    fetch('/api/public')
+      .then((r) => r.json())
+      .then(
+        ({
+          appName,
+          appSubtitle,
+          allowedDomain,
+          publicUrl,
+        }: {
+          appName: string;
+          appSubtitle: string;
+          allowedDomain?: string;
+          publicUrl?: string;
+        }) =>
+          setValue(buildDisplay(appName, appSubtitle ?? '', allowedDomain ?? '', publicUrl ?? '')),
+      )
+      .catch(() => {});
+  }, []);
+
+  // Keep browser tab title in sync
+  useEffect(() => {
+    document.title = value.displayName;
+  }, [value.displayName]);
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+}
+
+export function useApp() {
+  return useContext(AppContext);
+}

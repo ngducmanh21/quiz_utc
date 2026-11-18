@@ -1,0 +1,1351 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Light only: nothing sets `.dark`, so `dark:` utilities never follow the OS setting. */
+@custom-variant dark (&:is(.dark *));
+
+/* Quizzy palette: warm cream, tangerine, peach and mint. */
+:root {
+  color-scheme: light;
+  --bg: #fffaf0;
+  --surface: #fff0d9;
+  --surface2: #ffffff;
+  --accent: #ef6b2e;
+  --accent2: #ff9a43;
+  --accent-soft: #ffe1bd;
+  --on-soft: #4b2d1a;
+  --track: #f4dcc2;
+  --glow: rgba(255, 176, 97, 0.22);
+  --success: #228b67;
+  --danger: #c74757;
+  --warn: #b86a15;
+  --text2: #746150;
+  --radius: 20px;
+  --background: #fffaf0;
+  --foreground: #302016;
+  --card: #fff0d9;
+  --card-foreground: #302016;
+  --popover: #ffffff;
+  --popover-foreground: #302016;
+  --primary: #ef6b2e;
+  --primary-foreground: #ffffff;
+  --secondary: #c9f1d4;
+  --secondary-foreground: #244b38;
+  --muted: #fff2e3;
+  --muted-foreground: #746150;
+  --accent-foreground: #ffffff;
+  --destructive: #c74757;
+  --border: #efcfaa;
+  --input: #e9c69f;
+  --ring: #ef6b2e;
+  --chart-1: #ef6b2e;
+  --chart-2: #ffad62;
+  --chart-3: #f4c96a;
+  --chart-4: #86c9a2;
+  --chart-5: #dcaedb;
+  --sidebar: #fff0d9;
+  --sidebar-foreground: #302016;
+  --sidebar-primary: #ef6b2e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #ffe1bd;
+  --sidebar-accent-foreground: #4b2d1a;
+  --sidebar-border: #efcfaa;
+  --sidebar-ring: #ef6b2e;
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+  --color-brand: var(--accent2);
+  --color-brand-strong: var(--accent);
+  --color-ok: var(--success);
+  --color-warn: var(--warn);
+  --color-bad: var(--danger);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.8333);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--radius);
+  --radius-2xl: var(--radius);
+  --radius-3xl: var(--radius);
+  --radius-4xl: var(--radius);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    @apply h-full font-sans;
+  }
+
+  body {
+    @apply min-h-full bg-background text-foreground antialiased;
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    background-image: radial-gradient(900px 540px at 4% 1%, #ffedcc, transparent 65%), radial-gradient(860px 520px at 95% 15%, #ffe4d7, transparent 62%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+
+  #root {
+    @apply flex min-h-screen flex-col;
+  }
+
+  a {
+    @apply text-brand-strong no-underline;
+  }
+
+  button {
+    font-family: inherit;
+  }
+
+  /* Consistent heading typography across every page (design-aligned) */
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  h4 {
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+}
+
+/* Game UI — kept as CSS (animations + complex states) */
+/* ── Pin Display ─────────────────────────────────────────── */
+.pin-display {
+  font-size: clamp(2.6rem, 7vw, 62px);
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  text-align: center;
+  padding: 18px 40px;
+  background: var(--accent-soft);
+  border-radius: var(--radius);
+  border: 2px dashed var(--accent);
+  animation: pinGlow 3s ease-in-out infinite;
+}
+@keyframes pinGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 0 0 40px 2px var(--glow);
+  }
+}
+
+/* ── Game Question ───────────────────────────────────────── */
+.question-header {
+  text-align: center;
+  padding: 28px 24px 16px;
+}
+.question-counter {
+  font-size: 0.82rem;
+  color: var(--text2);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.question-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.q-code-inline {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  font-weight: 500;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.08em 0.35em;
+}
+.q-code-block {
+  display: block;
+  text-align: left;
+  font-weight: 400;
+  letter-spacing: normal;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin: 12px auto;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--foreground);
+}
+.q-code-block code {
+  font: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+/* Image answer options */
+.option-img {
+  display: block;
+  max-height: 140px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+.option-img-sm {
+  display: inline-block;
+  max-height: 32px;
+  max-width: 120px;
+  object-fit: contain;
+  border-radius: 4px;
+  vertical-align: middle;
+}
+.question-image {
+  display: block;
+  width: 100%;
+  max-height: min(50vh, 480px);
+  margin: 12px auto 0;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.question-image-host {
+  display: block;
+  width: 100%;
+  max-height: min(45vh, 400px);
+  border-radius: 12px;
+  object-fit: contain;
+}
+.timer-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+.timer-value {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--accent2);
+  min-width: 60px;
+  text-align: center;
+  transition: color 0.3s;
+}
+.timer-value.urgent {
+  color: var(--danger);
+  animation: pulse 0.6s infinite alternate;
+}
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 4px;
+  transition: width 0.25s linear;
+}
+.progress-fill.urgent {
+  background: linear-gradient(90deg, var(--danger), #f97316);
+}
+
+@keyframes pulse {
+  to {
+    transform: scale(1.12);
+  }
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 20px;
+}
+@media (max-width: 560px) {
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+}
+
+.option-btn {
+  background: var(--surface2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 16px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+}
+.option-btn:hover:not(:disabled):not(.selected):not(.correct):not(.wrong) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.option-btn.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.option-btn.correct {
+  border-color: var(--success);
+  background: rgba(34, 197, 94, 0.12);
+}
+.option-btn.wrong {
+  border-color: var(--danger);
+  background: rgba(239, 68, 68, 0.08);
+}
+.option-btn:disabled {
+  cursor: default;
+}
+.option-btn.eliminated {
+  opacity: 0.25;
+  cursor: not-allowed;
+  pointer-events: none;
+  text-decoration: line-through;
+}
+.option-letter {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.82rem;
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+.option-btn.selected .option-letter {
+  background: var(--accent);
+  color: var(--primary-foreground);
+}
+.option-btn.correct .option-letter {
+  background: var(--success);
+  color: #fff;
+}
+.option-btn.wrong .option-letter {
+  background: var(--danger);
+  color: #fff;
+}
+.option-text {
+  flex: 1;
+  line-height: 1.35;
+}
+
+/* ── Leaderboard ─────────────────────────────────────────── */
+.leaderboard {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lb-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.lb-item.rank-1 {
+  border-color: #fbbf24;
+  background: rgba(251, 191, 36, 0.07);
+}
+.lb-item.rank-2 {
+  border-color: #9ca3af;
+}
+.lb-item.rank-3 {
+  border-color: #b45309;
+}
+.lb-rank {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.lb-item.rank-1 .lb-rank {
+  background: #fbbf24;
+  color: #000;
+}
+.lb-item.rank-2 .lb-rank {
+  background: #9ca3af;
+  color: #000;
+}
+.lb-item.rank-3 .lb-rank {
+  background: #b45309;
+  color: #fff;
+}
+.lb-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.lb-score {
+  font-weight: 700;
+  color: var(--accent2);
+  font-size: 1.05rem;
+}
+.lb-delta {
+  font-size: 0.78rem;
+  color: var(--success);
+  font-weight: 700;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.lb-delta.wrong {
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+.lb-indicator {
+  font-size: 1.1rem;
+}
+
+/* ── Answer status overlay ───────────────────────────────── */
+.answer-overlay {
+  text-align: center;
+  padding: 40px 24px;
+}
+.answer-icon {
+  font-size: 5rem;
+  display: block;
+  margin-bottom: 12px;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.answer-label {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.answer-pts {
+  font-size: 1.1rem;
+  color: var(--text2);
+  margin-top: 6px;
+}
+.answer-pts strong {
+  color: var(--accent2);
+  font-size: 1.4rem;
+}
+
+/* Streak combo — shown on the "answer locked in" screen for a 2+ run. */
+.streak-combo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f97316, #ef4444);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 0 24px rgba(249, 115, 22, 0.55);
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.streak-flame {
+  font-size: 1.5rem;
+  display: inline-block;
+  animation: streakFlicker 0.7s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+.streak-count {
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+}
+@keyframes streakFlicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-4deg);
+  }
+  50% {
+    transform: scale(1.25) rotate(4deg);
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Waiting dots ────────────────────────────────────────── */
+.dots span {
+  animation: blink 1.4s infinite;
+}
+.dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+/* ── Players list (admin lobby) ──────────────────────────── */
+.players-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.player-chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  animation: fadeUp 0.25s ease;
+}
+@keyframes fadeUp {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+/* ── Answer bar (admin view) ─────────────────────────────── */
+.answer-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.answer-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+/* ── Podium ───────────────────────────────────────────────── */
+@keyframes podiumRise {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.podium-column {
+  animation-fill-mode: both;
+}
+
+/* ── Game countdown (3-2-1-GO) ───────────────────────────── */
+.countdown-number {
+  font-size: clamp(6rem, 20vw, 12rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: countdownPop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  filter: drop-shadow(0 0 40px var(--glow));
+}
+
+@keyframes countdownPop {
+  0% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+  40% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Staggered option fade-up ────────────────────────────── */
+.option-stagger {
+  animation: optionSlideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes optionSlideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── Answer counter (player view) ────────────────────────── */
+.answer-counter {
+  font-size: 0.82rem;
+  color: var(--text2);
+  margin-top: 8px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ── Timer bar color shift ───────────────────────────────── */
+.progress-fill.warning {
+  background: linear-gradient(90deg, var(--warn), #f97316);
+}
+
+/* ── Score pop on results ────────────────────────────────── */
+.score-pop {
+  display: inline-block;
+  animation: scoreBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-weight: 800;
+}
+@keyframes scoreBounce {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ── Result answer reveal animation ──────────────────────── */
+.result-reveal {
+  animation: resultReveal 0.3s ease both;
+}
+.result-reveal.correct {
+  animation: resultCorrectFlash 0.5s ease both;
+}
+.result-reveal.wrong {
+  animation: resultWrongShake 0.4s ease both;
+}
+@keyframes resultReveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes resultCorrectFlash {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    box-shadow: none;
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.4);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: none;
+  }
+}
+@keyframes resultWrongShake {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  20% {
+    opacity: 1;
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* ── Result flash on my result alert ─────────────────────── */
+.result-flash-correct {
+  animation: flashGreen 0.6s ease;
+}
+.result-flash-wrong {
+  animation: flashRed 0.6s ease;
+}
+@keyframes flashGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 24px 4px rgba(34, 197, 94, 0.3);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+@keyframes flashRed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 24px 4px rgba(239, 68, 68, 0.3);
+  }
+  100% {
+    box-shadow: none;
+  }
+}
+
+/* ── Leaderboard slide-in ────────────────────────────────── */
+.lb-slide {
+  animation: lbSlideIn 0.35s ease both;
+}
+@keyframes lbSlideIn {
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* ── Confetti ────────────────────────────────────────────── */
+.confetti-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 200;
+}
+.confetti-piece {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: hsl(var(--h, 0) 90% 65%);
+  animation: confettiFall var(--d, 1.2s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+@keyframes confettiFall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(var(--x, 0)) rotate(var(--r, 360deg));
+    opacity: 0;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   Color Quadrants — bold per-answer colored tiles (chosen design)
+   ══════════════════════════════════════════════════════════════ */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text2);
+}
+
+.quad-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+@media (max-width: 560px) {
+  .quad-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .option-quad {
+    padding: 14px 16px;
+    min-height: 64px;
+    gap: 12px;
+    font-size: 15px;
+    border-radius: var(--radius);
+  }
+}
+
+.option-quad {
+  --quad-color: #e2455a;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px;
+  min-height: 92px;
+  border: none;
+  border-radius: var(--radius);
+  text-align: left;
+  font-weight: 700;
+  font-size: 22px;
+  color: #fff;
+  cursor: pointer;
+  transition:
+    transform 0.12s,
+    box-shadow 0.12s,
+    opacity 0.2s,
+    filter 0.2s;
+  background: var(--quad-color);
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3);
+  animation: optIn 0.4s both;
+}
+.option-quad:hover:not(:disabled):not(.correct):not(.wrong):not(.dim) {
+  transform: translateY(-2px);
+  box-shadow: 0 9px 0 rgba(0, 0, 0, 0.32);
+}
+.option-quad:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.3);
+}
+.option-quad:disabled {
+  cursor: default;
+}
+.option-quad.selected {
+  outline: 3px solid var(--foreground);
+  outline-offset: 2px;
+}
+.option-quad.correct {
+  border: 3px solid var(--success);
+  animation: flashGreen 0.8s ease both;
+}
+.option-quad.wrong {
+  border: 3px solid var(--danger);
+  animation: shake 0.45s ease both;
+}
+.option-quad.dim {
+  opacity: 0.32;
+  filter: saturate(0.4);
+  animation: none;
+}
+.quad-badge {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.95);
+}
+@media (max-width: 560px) {
+  .quad-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+  }
+}
+.quad-label {
+  flex: 1;
+  line-height: 1.2;
+}
+.quad-check {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+@keyframes optIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-7px);
+  }
+  40% {
+    transform: translateX(7px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+}
+@keyframes barGrow {
+  from {
+    width: 0;
+  }
+}
+@keyframes eqBar {
+  0% {
+    height: 20%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
+/* ── Big timer bar (host projector + player) ──────────────────── */
+.timer-bar {
+  flex: 1;
+  height: 18px;
+  background: var(--track);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.timer-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 1s linear;
+}
+.timer-num {
+  font-weight: 900;
+  font-size: 30px;
+  min-width: 48px;
+  text-align: center;
+  color: var(--accent2);
+  transition: color 0.4s;
+}
+.timer-num.warn {
+  color: var(--warn);
+}
+.timer-num.danger {
+  color: var(--danger);
+}
+.timer-num.pulsing {
+  animation: pulse 0.6s infinite alternate;
+}
+
+/* ── Results — vote distribution rows ─────────────────────────── */
+.dist-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.dist-row.dim {
+  opacity: 0.62;
+}
+.dist-glyph {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  line-height: 1;
+  color: #fff;
+}
+.dist-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.dist-bar {
+  height: 14px;
+  background: var(--track);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.dist-bar-fill {
+  height: 100%;
+  border-radius: 7px;
+  animation: barGrow 0.7s ease both;
+}
+.correct-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--success);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+/* ── Design polish: streak badge, reveal drama, lobby fun ──── */
+
+/* Persistent corner streak flame (player screens) */
+.streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f97316, #ef4444);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.5);
+  transform-origin: top right;
+  animation: streakPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes streakPop {
+  from {
+    transform: scale(1.6);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Pre-reveal heartbeat pause card */
+.pre-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 40vh;
+  color: var(--text2);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.pre-reveal-heart {
+  font-size: 3rem;
+  animation: heartbeatPulse 1.2s ease-in-out infinite;
+}
+@keyframes heartbeatPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  14% {
+    transform: scale(1.14);
+  }
+  28% {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.1);
+  }
+  56% {
+    transform: scale(1);
+  }
+}
+
+/* Correct distribution bar glow (revealed last) */
+.dist-bar.correct-glow {
+  border-radius: 8px;
+  animation: correctBarGlow 1s ease 1.1s;
+}
+@keyframes correctBarGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+  50% {
+    box-shadow: 0 0 22px 3px rgba(34, 197, 94, 0.6);
+  }
+}
+
+/* Lobby avatar idle animations (host) */
+@keyframes idleBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes idleWave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(6deg);
+  }
+}
+
+/* Floating emoji reactions — rise out of the reacting player's lobby chip */
+.reaction-float {
+  font-size: 1.7rem;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  animation: reactionFloat 1.8s ease-out both;
+}
+@keyframes reactionFloat {
+  0% {
+    transform: translateY(8px) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1.15);
+  }
+  100% {
+    transform: translateY(-64px) scale(1);
+    opacity: 0;
+  }
+}
+
+/* Player emoji reaction buttons (waiting screen) */
+.reaction-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.reaction-btn {
+  font-size: 1.5rem;
+  line-height: 1;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+.reaction-btn:hover {
+  background: var(--surface);
+}
+.reaction-btn:active {
+  transform: scale(0.88);
+}
+.reaction-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Presentation screen: room-scale type for a projector or TV. */
+.screen-stage .option-quad {
+  font-size: clamp(18px, 2.4vw, 40px);
+  min-height: clamp(72px, 13vh, 150px);
+}
+.screen-stage .quad-grid {
+  gap: clamp(12px, 1.5vw, 28px);
+}
+.screen-stage .timer-num {
+  font-size: clamp(2rem, 4vw, 4.5rem);
+}
+.screen-stage .lb-item,
+.screen-stage .dist-head {
+  font-size: clamp(1rem, 1.6vw, 1.8rem);
+}
+/* Fixed-size question-type notes, lists and answer reveals. Maps stay out: Leaflet
+   computes its own pointer and tile geometry. */
+.screen-stage .question-detail:not(:has(.leaflet-container)),
+.screen-stage .result-reveal-correct:not(:has(.leaflet-container)) {
+  zoom: 1.6;
+}
+.screen-stage .pin-display {
+  max-width: 100%;
+  padding: 14px 24px;
+  font-size: clamp(2.25rem, 4.5vw, 6rem);
+}
+@media (min-width: 1600px) {
+  .screen-stage .screen-intro {
+    zoom: 1.35;
+  }
+}
+.screen-stage .result-reveal-correct .leaflet-container {
+  height: 52vh !important;
+}
+
+/* Leaflet layers use z-indexes up to 1000: keep them from covering modals. */
+.leaflet-container {
+  isolation: isolate;
+}
+
+/* Player avatar pins on the geo reveal map. */
+.geo-guess-icon {
+  background: none;
+  border: none;
+}
+.geo-guess {
+  position: relative;
+  width: 36px;
+  height: 44px;
+}
+.geo-guess::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-style: solid;
+  border-width: 10px 6px 0;
+  border-color: #fff transparent transparent;
+}
+.geo-guess-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #273918;
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+.geo-guess-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.geo-guess.mine .geo-guess-face {
+  border-color: var(--accent);
+}
+.geo-guess.mine::after {
+  border-top-color: var(--accent);
+}
+.geo-guess-label {
+  display: flex;
+  gap: 5px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.geo-guess > .geo-guess-label {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 3px;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(28, 42, 16, 0.88);
+}
+.geo-guess-name {
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.geo-guess-distance {
+  font-weight: 400;
+  opacity: 0.75;
+}
+.leaflet-tooltip .geo-guess-label {
+  color: #111;
+}
+
+/* Zync's green callout: soft green fading into the card surface. */
+.zync-gs {
+  border-style: solid;
+  border-color: var(--accent-soft);
+  background: linear-gradient(135deg, var(--accent-soft) 0%, var(--surface) 55%);
+}
