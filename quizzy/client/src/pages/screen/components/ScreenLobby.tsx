@@ -1,9 +1,11 @@
 import { QRCodeSVG } from 'qrcode.react';
+import { EventBrand } from '@/components/EventBrand';
 import { LobbyPlayers } from '@/components/game/LobbyPlayers';
 import { QuizIntroCard } from '@/components/game/QuizIntroCard';
 import { useApp } from '@/context/AppContext';
 import { publicBaseUrl } from '@/helpers';
 import type { PlayerInfo, QuizIntro } from '@/types';
+import './ScreenLobby.css';
 
 interface Props {
   pin: string;
@@ -19,7 +21,9 @@ export function ScreenLobby({ pin, title, questionCount, intro, players }: Props
   const joinUrl = `${baseUrl}/play/${pin}`;
 
   return (
-    <div className="mx-auto grid w-full max-w-[1800px] flex-1 items-center gap-8 p-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:p-10">
+    <div className="screen-lobby-event flex flex-1 flex-col">
+      <EventBrand compact className="screen-lobby-event-brand" />
+      <div className="mx-auto grid w-full max-w-[1800px] flex-1 items-center gap-8 p-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:p-10">
       <div className="flex min-w-0 flex-col items-center gap-3 text-center">
         <div className="text-2xl font-bold">Scan to join</div>
         <div className="w-full max-w-[min(46vh,420px)] rounded-3xl bg-white p-5">
@@ -58,6 +62,7 @@ export function ScreenLobby({ pin, title, questionCount, intro, players }: Props
           </div>
           <LobbyPlayers players={players} />
         </div>
+      </div>
       </div>
     </div>
   );

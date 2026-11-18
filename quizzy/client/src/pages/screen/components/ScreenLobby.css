@@ -1,0 +1,8 @@
+.screen-lobby-event { min-height: 100vh; background: linear-gradient(#fff8e9, #fff1dc); }
+.screen-lobby-event-brand { width: 100%; min-height: 140px; padding: 12px 26px; background: linear-gradient(110deg, #632013, #c2471c 60%, #ed752d); box-shadow: 0 8px 24px rgb(109 45 13 / 18%); }
+.screen-lobby-event-brand .event-brand-logos { width: min(25vw, 230px); }
+.screen-lobby-event-brand h1 { font-size: clamp(1.9rem, 3.2vw, 3.1rem); }
+@media (max-width: 700px) {
+  .screen-lobby-event-brand { min-height: 0; padding: 14px; }
+  .screen-lobby-event-brand .event-brand-logos { width: min(73vw, 280px); }
+}

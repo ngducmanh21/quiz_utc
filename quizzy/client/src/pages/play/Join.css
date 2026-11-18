@@ -1,0 +1,26 @@
+.event-join-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  background:
+    radial-gradient(circle at 47% 84%, rgb(255 196 92 / 65%), transparent 44%),
+    linear-gradient(145deg, #632013, #b13c16 42%, #ed6b22 82%, #9d310f);
+}
+.event-join-page::before {
+  position: fixed;
+  inset: 0;
+  background: url('/event/poster.png') center / 450px auto no-repeat;
+  opacity: .085;
+  filter: blur(25px);
+  content: '';
+  pointer-events: none;
+}
+.event-join-shell { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 30px; width: min(100%, 920px); }
+.event-join-card { border: 2px solid #fff0d5; background: #fffaf0; box-shadow: 0 24px 50px rgb(72 23 5 / 27%); }
+@media (max-width: 700px) {
+  .event-join-page { align-items: flex-start; padding: 22px 15px 34px; }
+  .event-join-shell { gap: 19px; }
+  .event-join-card { max-width: 100%; }
+}

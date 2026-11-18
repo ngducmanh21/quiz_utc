@@ -9,7 +9,8 @@ import {
   saveAvatar,
 } from '@/components/AvatarPicker';
 import { Input } from '@/components/Input';
-import { AppLogo, AuthCard, PageCenter, Subtitle } from '@/components/layout';
+import { EventBrand } from '@/components/EventBrand';
+import { AppLogo, AuthCard, Subtitle } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { useApp } from '@/context/AppContext';
 import { useAuth } from '@/context/AuthContext';
@@ -24,6 +25,7 @@ import { getSocket, useSocketEvent } from '@/hooks/useSocket';
 import { apiFetch } from '@/lib/api';
 
 import type { AuthUser } from '@/types';
+import './Join.css';
 
 function defaultJoinName(user: AuthUser | null): string {
   if (!user) return '';
@@ -150,8 +152,10 @@ export default function Join() {
   }
 
   return (
-    <PageCenter className="min-h-screen bg-background">
-      <AuthCard maxWidth="lg" className="max-w-[420px]">
+    <main className="event-join-page">
+      <div className="event-join-shell">
+        <EventBrand compact />
+        <AuthCard maxWidth="lg" className="event-join-card max-w-[420px]">
         <div className="text-center mb-6">
           <AppLogo>
             {appName ? (
@@ -291,7 +295,8 @@ export default function Join() {
             </>
           )}
         </p>
-      </AuthCard>
-    </PageCenter>
+        </AuthCard>
+      </div>
+    </main>
   );
 }
