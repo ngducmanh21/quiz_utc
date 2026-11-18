@@ -1,4 +1,4 @@
-import { ArrowLeft, Braces, Check, Eye, Languages, Sparkles } from 'lucide-react';
+import { ArrowLeft, Braces, Check, Eye, Languages, Sparkles, Upload } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppAlert } from '@/components/AppAlert';
@@ -150,6 +150,22 @@ export default function CreateQuiz() {
     await saveQuiz(parsed.payload);
   }
 
+  async function handleJsonFile(file: File | undefined) {
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) {
+      setJsonError('Tệp JSON phải nhỏ hơn 4 MB.');
+      return;
+    }
+    try {
+      const text = await file.text();
+      setJsonText(text);
+      const parsed = parseQuizImportJson(text);
+      setJsonError(parsed.ok ? '' : parsed.error);
+    } catch {
+      setJsonError('Không đọc được tệp JSON. Hãy thử lại.');
+    }
+  }
+
   function applyJsonToStudio(): boolean {
     setJsonError('');
     const parsed = parseQuizImportJson(jsonText);
@@ -254,13 +270,29 @@ export default function CreateQuiz() {
 
         <Card className="w-full max-w-4xl">
           <CardContent className="p-6">
-            <h2 className="mb-4">Paste JSON</h2>
+            <h2 className="mb-4">Nhập bộ câu hỏi JSON</h2>
             <AppAlert variant="info" className="text-[0.85rem]">
               Use <strong>Copy prompt</strong> for AI instructions + JSON schema, or{' '}
               <strong>Copy example</strong> for a full sample quiz JSON. Attach a document or
               describe a topic (source material is optional), then paste the AI&apos;s JSON here and
               click <strong>Apply to studio</strong>.
             </AppAlert>
+            <div className="mb-4 flex flex-wrap items-center gap-3">
+              <label htmlFor="quiz-json-file" className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-background px-4 py-2 text-sm font-semibold hover:bg-muted">
+                <Upload className="size-4" /> Chọn tệp JSON
+              </label>
+              <input
+                id="quiz-json-file"
+                type="file"
+                accept=".json,application/json"
+                className="sr-only"
+                onChange={(e) => {
+                  void handleJsonFile(e.target.files?.[0]);
+                  e.target.value = '';
+                }}
+              />
+              <span className="text-sm text-muted-foreground">Hoặc dán nội dung JSON vào ô bên dưới.</span>
+            </div>
             <div className="mb-3 flex flex-wrap justify-end gap-2">
               <Button type="button" variant="ghost" size="sm" onClick={() => navigate(basePath)}>
                 Cancel

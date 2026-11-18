@@ -1,3 +1,4 @@
+import { QRCodeSVG } from 'qrcode.react';
 import { LobbyPlayers } from '@/components/game/LobbyPlayers';
 import { QuizIntroCard } from '@/components/game/QuizIntroCard';
 import { MainContent } from '@/components/layout';
@@ -61,6 +62,18 @@ export function GameLobby({
         </div>
 
         <div className="pin-display mt-1">{pin}</div>
+
+        <div className="mt-4 rounded-2xl border border-border bg-white p-3 shadow-sm">
+          <QRCodeSVG
+            value={shareUrl}
+            title={`Quét để tham gia phòng ${pin}`}
+            size={188}
+            level="M"
+            role="img"
+            aria-label={`Mã QR tham gia phòng ${pin}`}
+          />
+        </div>
+        <p className="text-sm text-muted-foreground">Người chơi quét mã QR để vào cùng phòng.</p>
 
         {/* Share link */}
         <div className="mt-3 flex w-full max-w-[440px] gap-2">
