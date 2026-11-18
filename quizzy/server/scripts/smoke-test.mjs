@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { io } from 'socket.io-client';
 
-const base = `http://localhost:${process.env.APP_PORT || 3000}`;
+const base = process.env.API_BASE || `http://localhost:${process.env.APP_PORT || 3000}`;
+const socketBase = process.env.SOCKET_BASE || base;
 const password = process.env.ADMIN_PASSWORD;
 if (!password) throw new Error('ADMIN_PASSWORD is required');
 
@@ -36,9 +37,9 @@ try {
   const session = await request('/api/admin/sessions', 'POST', { quizId }, token);
   assert.match(session.pin, /^\d{6}$/);
 
-  const host = io(base, { transports: ['websocket'] });
-  const p1 = io(base, { transports: ['websocket'] });
-  const p2 = io(base, { transports: ['websocket'] });
+  const host = io(socketBase, { transports: ['websocket'] });
+  const p1 = io(socketBase, { transports: ['websocket'] });
+  const p2 = io(socketBase, { transports: ['websocket'] });
   sockets.push(host, p1, p2);
   await Promise.all(sockets.map((socket) => event(socket, 'connect')));
 
