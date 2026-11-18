@@ -5,7 +5,10 @@ let sharedSocket: Socket | null = null;
 
 export function getSocket(): Socket {
   if (!sharedSocket) {
-    sharedSocket = io({ autoConnect: false, transports: ['websocket', 'polling'] });
+    const origin = import.meta.env.VITE_SOCKET_ORIGIN;
+    sharedSocket = origin
+      ? io(origin, { autoConnect: false, transports: ['websocket', 'polling'] })
+      : io({ autoConnect: false, transports: ['websocket', 'polling'] });
   }
   return sharedSocket;
 }
