@@ -16,3 +16,5 @@ Khi EC2 sẵn sàng:
 5. Đặt `PUBLIC_URL` của backend thành URL Vercel để mã QR dẫn người chơi về giao diện chính. Nối GitHub, deploy và thử hai thiết bị ngoài mạng LAN.
 
 Không đưa SQLite vào Vercel Function: filesystem của Function không lưu dữ liệu ứng dụng bền qua các lần chạy.
+
+Mục tiêu hiện tại là 1000 người đồng thời. `maxPlayersPerSession` mặc định đã đặt thành 1000 trong code. Đây là giới hạn cấu hình, chưa phải kết quả kiểm thử tải. Trên EC2, dùng `server/scripts/load-test.mjs` để đo p95/p99 join, trả lời, event loop lag, SQLite latency và bộ nhớ trước khi mở sự kiện thật.

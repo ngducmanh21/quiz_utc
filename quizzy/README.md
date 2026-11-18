@@ -299,7 +299,7 @@ All values (base score, bonus ranges, streak rules) are editable in the admin se
 - **User management** (super admin) — list users, ban/unban, reset passwords, delete
 - **Registration** can be restricted to a configured email domain
 - **Session history** — past games with per-player answers, force-end running sessions
-- **Settings UI** — app name/subtitle, timing, scoring, leaderboard visibility, max players (default 300), auto-advance
+- **Settings UI** — app name/subtitle, timing, scoring, leaderboard visibility, max players (Quizzy default 1000), auto-advance
 - **Avatar packs** — bulk-upload avatar images for players to pick from
 
 </details>

@@ -21,7 +21,7 @@ const DEFAULTS: AppConfig = {
   defaultBaseScore: 500,
   speedBonusMax: 200,
   speedBonusMin: 10,
-  maxPlayersPerSession: 300,
+  maxPlayersPerSession: 1000,
   showLeaderboardAfterQuestion: true,
   streakBonusEnabled: true,
   streakMinimum: 2,

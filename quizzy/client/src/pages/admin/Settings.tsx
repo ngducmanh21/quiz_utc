@@ -376,7 +376,7 @@ export default function Settings() {
                 <IntegerInput
                   label="Max players per session"
                   min={2}
-                  max={500}
+                  max={2000}
                   value={cfg.maxPlayersPerSession ?? 50}
                   onValueChange={(value) => update('maxPlayersPerSession', value)}
                 />
