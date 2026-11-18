@@ -29,10 +29,13 @@ export function createActiveSession(
     playerSockets: new Map(),
     socketPlayers: new Map(),
     answeredPlayers: new Map(),
+    recordedAnswerCount: new Map(),
     correctAnswerCount: new Map(),
     playerStreaks: new Map(),
     playerAvatars: new Map(),
     questionTimer: null,
+    answerCountTimer: null,
+    revealingQuestionId: null,
     questionStartedAt: null,
     resultsTimer: null,
     resultsShownAt: null,
@@ -70,6 +73,8 @@ export interface ActiveSession {
   socketPlayers: Map<string, number>;
   // questionId → Set of playerIds who answered
   answeredPlayers: Map<number, Set<number>>;
+  // questionId → answers whose database writes have completed
+  recordedAnswerCount: Map<number, number>;
   // questionId → count of correct answers so far (for speed bonus)
   correctAnswerCount: Map<number, number>;
   // playerId → consecutive correct answer streak count
@@ -77,6 +82,9 @@ export interface ActiveSession {
   // playerId → base64 data URI or emoji string
   playerAvatars: Map<number, string>;
   questionTimer: ReturnType<typeof setTimeout> | null;
+  answerCountTimer: ReturnType<typeof setTimeout> | null;
+  // Prevent concurrent timer/answer/admin paths from revealing the same question twice.
+  revealingQuestionId: number | null;
   // Timestamp (Date.now()) when the current question was sent to players
   questionStartedAt: number | null;
   // Auto-advance timer after showing results

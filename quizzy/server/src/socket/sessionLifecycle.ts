@@ -27,6 +27,10 @@ function clearSessionTimers(state: ActiveSession): void {
     clearTimeout(state.resultsTimer);
     state.resultsTimer = null;
   }
+  if (state.answerCountTimer) {
+    clearTimeout(state.answerCountTimer);
+    state.answerCountTimer = null;
+  }
 }
 
 export async function endActiveSession(state: ActiveSession): Promise<void> {

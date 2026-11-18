@@ -659,7 +659,7 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
         if (!state || state.status !== 'active') return;
         // Reject answers once results are revealed — otherwise a player can wait
         // for the correct answer broadcast, then submit it for full points.
-        if (state.questionPhase !== 'question') return;
+        if (state.questionPhase !== 'question' || state.revealingQuestionId !== null) return;
         if (state.socketPlayers.get(socket.id) !== playerId) return;
 
         const currentQ = state.questions[state.currentQuestionIndex];
@@ -1038,6 +1038,8 @@ async function recordAnswer(opts: {
   if (opts.alwaysUpdateTotal || score > 0) {
     await db.run('UPDATE players SET total_score = total_score + ? WHERE id = ?', score, playerId);
   }
+  const recordedCount = (state.recordedAnswerCount.get(questionId) ?? 0) + 1;
+  state.recordedAnswerCount.set(questionId, recordedCount);
 
   socket.emit(
     'player:answer-received',
@@ -1053,14 +1055,21 @@ async function recordAnswer(opts: {
     totalPlayers: state.playerSockets.size,
   });
 
-  // Broadcast answer count to all players in the session
-  io.to(`session:${sessionId}`).emit('game:answer-count', {
-    answeredCount: answered.size,
-    totalPlayers: state.playerSockets.size,
-  });
+  // Coalesce count updates. Broadcasting once per answer turns a 1,000-player
+  // question into roughly a million packets and blocks the event loop.
+  if (!state.answerCountTimer) {
+    state.answerCountTimer = setTimeout(() => {
+      state.answerCountTimer = null;
+      if (state.questionPhase !== 'question') return;
+      io.to(`session:${sessionId}`).emit('game:answer-count', {
+        answeredCount: state.answeredPlayers.get(questionId)?.size ?? 0,
+        totalPlayers: state.playerSockets.size,
+      });
+    }, 100);
+  }
 
-  // Auto advance if everyone answered
-  if (answered.size >= state.playerSockets.size) {
+  // Reveal only after all accepted answers have actually reached the database.
+  if (recordedCount >= state.playerSockets.size) {
     if (state.questionTimer) {
       clearTimeout(state.questionTimer);
       state.questionTimer = null;
@@ -1301,12 +1310,28 @@ async function emitReconnectGameState(
   }
 }
 
+function playerSocketGroups(state: ActiveSession): Map<string, string[]> {
+  const groups = new Map<string, string[]>();
+  for (const [playerId, socketId] of state.playerSockets) {
+    const locale = state.playerLocales.get(playerId) ?? 'base';
+    const sockets = groups.get(locale) ?? [];
+    sockets.push(socketId);
+    groups.set(locale, sockets);
+  }
+  return groups;
+}
+
 function sendQuestion(io: SocketServer, state: ActiveSession, index: number): void {
   // Cancel any pending results auto-advance timer
   if (state.resultsTimer) {
     clearTimeout(state.resultsTimer);
     state.resultsTimer = null;
   }
+  if (state.answerCountTimer) {
+    clearTimeout(state.answerCountTimer);
+    state.answerCountTimer = null;
+  }
+  state.revealingQuestionId = null;
 
   // Reset per-question per-player 50/50 state
   state.playerFiftyFiftyIndices = new Map();
@@ -1333,8 +1358,7 @@ function sendQuestion(io: SocketServer, state: ActiveSession, index: number): vo
   if (state.adminSocketId) io.to(state.adminSocketId).emit('game:question', payload);
   io.to(`screen:${state.sessionId}`).emit('game:question', payload);
   if (state.presentationMode) emitAnswerKey(io, state, q);
-  for (const playerId of state.playerSockets.keys()) {
-    const locale = state.playerLocales.get(playerId) ?? 'base';
+  for (const [locale, socketIds] of playerSocketGroups(state)) {
     const playerPayload =
       locale === 'base'
         ? payload
@@ -1344,7 +1368,7 @@ function sendQuestion(io: SocketServer, state: ActiveSession, index: number): vo
             state.questions,
             state.answerSeed,
           );
-    io.to(`player:${playerId}`).emit('game:question', playerPayload);
+    io.to(socketIds).emit('game:question', playerPayload);
   }
 
   // Server-side timer
@@ -1444,7 +1468,16 @@ async function restoreSlide(
 
 function showResults(io: SocketServer, state: ActiveSession, questionId: number): void {
   const q = state.questions.find((x) => x.id === questionId);
-  if (!q) return;
+  if (!q || state.status !== 'active' || state.questionPhase !== 'question' || state.revealingQuestionId === questionId) return;
+  state.revealingQuestionId = questionId;
+  if (state.answerCountTimer) {
+    clearTimeout(state.answerCountTimer);
+    state.answerCountTimer = null;
+  }
+  io.to(`session:${state.sessionId}`).emit('game:answer-count', {
+    answeredCount: state.answeredPlayers.get(questionId)?.size ?? 0,
+    totalPlayers: state.playerSockets.size,
+  });
 
   Promise.all([
     getRankedPlayers(state.sessionId),
@@ -1596,12 +1629,11 @@ function showResults(io: SocketServer, state: ActiveSession, questionId: number)
       io.to(state.adminSocketId).emit('game:question-results', resultsPayload);
     }
     io.to(`screen:${state.sessionId}`).emit('game:question-results', resultsPayload);
-    for (const playerId of state.playerSockets.keys()) {
-      const locale = state.playerLocales.get(playerId) ?? 'base';
+    for (const [locale, socketIds] of playerSocketGroups(state)) {
       const overlay = localizeResultsOverlay(state, resultsPayload, locale);
       const playerPayload =
         Object.keys(overlay).length === 0 ? resultsPayload : { ...resultsPayload, ...overlay };
-      io.to(`player:${playerId}`).emit('game:question-results', playerPayload);
+      io.to(socketIds).emit('game:question-results', playerPayload);
     }
 
     // Host-only preview of the upcoming question (text only — never the answers,
@@ -1621,6 +1653,9 @@ function showResults(io: SocketServer, state: ActiveSession, questionId: number)
         }
       }, autoAdvanceSec * 1000);
     }
+  }).catch((error) => {
+    state.revealingQuestionId = null;
+    console.error('Failed to reveal question results', error);
   });
 }
 
