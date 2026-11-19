@@ -1,5 +1,5 @@
-import { ArrowRight, Zap } from 'lucide-react';
-import { type FormEvent, useEffect, useState } from 'react';
+import { ArrowRight, Sparkles, Zap } from 'lucide-react';
+import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AppAlert } from '@/components/AppAlert';
 import {
@@ -52,8 +52,12 @@ export default function Join() {
   const [availableLocales, setAvailableLocales] = useState<string[]>([]);
   const [baseLocale, setBaseLocale] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [joining, setJoining] = useState(false);
   const [step, setStep] = useState<'form' | 'avatar'>('form');
+  const pinRef = useRef<HTMLInputElement>(null);
+  const usernameRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -97,7 +101,12 @@ export default function Join() {
   );
 
   useSocketEvent<{ message: string }>('player:error', (data) => {
-    setError(translateError(data.message));
+    if (data.message === 'Invalid PIN') {
+      setPinError('Mã PIN này chưa đúng hoặc phòng đã đóng. Bạn thử lại nhé ✨');
+      setError('');
+    } else {
+      setError(translateError(data.message));
+    }
     setJoining(false);
     setStep('form');
     // Only clear session on hard failures — keep storage for retry on reload/reconnect
@@ -111,12 +120,16 @@ export default function Join() {
     setError('');
     const cleanedPin = cleanPin(pin);
     const cleanName = username.trim();
-    if (!cleanedPin || cleanedPin.length < 4) {
-      setError('Hãy nhập mã PIN hợp lệ');
-      return;
-    }
-    if (!cleanName) {
-      setError('Hãy nhập tên của bạn');
+    const nextPinError = !cleanedPin
+      ? 'Nhập mã PIN để vào phòng nhé ✨'
+      : cleanedPin.length < 4
+        ? 'Mã PIN cần ít nhất 4 chữ số nha ✨'
+        : '';
+    const nextUsernameError = cleanName ? '' : 'Tên bạn là gì nè? 🧡';
+    setPinError(nextPinError);
+    setUsernameError(nextUsernameError);
+    if (nextPinError || nextUsernameError) {
+      (nextPinError ? pinRef : usernameRef).current?.focus();
       return;
     }
     setStep('avatar');
@@ -185,31 +198,45 @@ export default function Join() {
         {error && <AppAlert variant="error">{error}</AppAlert>}
 
         {step === 'form' ? (
-          <form onSubmit={handleFormNext}>
-            <Input
-              id="pin"
-              label="Mã PIN phòng chơi"
-              type="text"
-              inputMode="numeric"
-              maxLength={8}
-              placeholder="123456"
-              value={pin}
-              onChange={(e) => setPin(e.target.value)}
-              className="text-center text-[1.6rem] font-bold tracking-[0.12em]"
-              autoFocus={!pinParam}
-              required
-            />
-            <Input
-              id="username"
-              label="Tên của bạn"
-              type="text"
-              maxLength={24}
-              placeholder="Ví dụ: Mèo Cam"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              autoFocus={!!pinParam}
-              required
-            />
+          <form noValidate onSubmit={handleFormNext}>
+            <div className="event-join-field">
+              <Input
+                ref={pinRef}
+                id="pin"
+                label="Mã PIN phòng chơi"
+                type="text"
+                inputMode="numeric"
+                maxLength={8}
+                placeholder="123456"
+                value={pin}
+                onChange={(e) => { setPin(e.target.value.replace(/\D/g, '')); setPinError(''); }}
+                className="text-center text-[1.6rem] font-bold tracking-[0.12em]"
+                autoFocus={!pinParam}
+                aria-invalid={!!pinError}
+                aria-describedby={pinError ? 'pin-error' : undefined}
+                noMargin
+                required
+              />
+              {pinError && <p id="pin-error" className="event-join-field-error" role="alert"><Sparkles size={15} aria-hidden="true" />{pinError}</p>}
+            </div>
+            <div className="event-join-field">
+              <Input
+                ref={usernameRef}
+                id="username"
+                label="Tên của bạn"
+                type="text"
+                maxLength={24}
+                placeholder="Ví dụ: Mèo Cam"
+                value={username}
+                onChange={(e) => { setUsername(e.target.value); setUsernameError(''); }}
+                autoFocus={!!pinParam}
+                aria-invalid={!!usernameError}
+                aria-describedby={usernameError ? 'username-error' : undefined}
+                noMargin
+                required
+              />
+              {usernameError && <p id="username-error" className="event-join-field-error" role="alert"><Sparkles size={15} aria-hidden="true" />{usernameError}</p>}
+            </div>
             <Button type="submit" variant="default" size="lg" className="mt-2 w-full">
               <span className="inline-flex items-center gap-1.5">
                 Tiếp tục: Chọn avatar <ArrowRight className="size-4" />
