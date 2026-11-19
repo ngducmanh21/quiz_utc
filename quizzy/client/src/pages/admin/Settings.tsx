@@ -18,7 +18,7 @@ const NAV_SECTIONS = [
   { id: 'branding', label: 'Giao diện', icon: Pencil },
   { id: 'gameplay', label: 'Cách chơi', icon: Timer },
   { id: 'scoring', label: 'Tính điểm', icon: Target },
-  { id: 'avatars', label: 'Avatars', icon: Smile },
+  { id: 'avatars', label: 'Kho avatar', icon: Smile },
   { id: 'security', label: 'Bảo mật', icon: Lock },
 ] as const;
 
@@ -28,9 +28,7 @@ function computeSpeedBonus(position: number, totalPlayers: number, max: number, 
 }
 
 function ordinal(n: number): string {
-  const s = ['th', 'st', 'nd', 'rd'];
-  const v = n % 100;
-  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+  return `Hạng ${n}`;
 }
 
 function SpeedBonusPreview({ max, min }: { max: number; min: number }) {

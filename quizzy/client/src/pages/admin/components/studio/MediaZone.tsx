@@ -85,7 +85,7 @@ export function MediaZone({ q, ops, allow, label }: Props) {
             <ImagePlus className="size-6" />
           </span>
           <span className="text-sm font-semibold text-foreground">
-            {label ?? 'Add an image, GIF, video or audio'}
+            {label ?? 'Thêm ảnh, GIF, video hoặc âm thanh'}
           </span>
           <span className="text-xs text-muted-foreground">
             Tìm nội dung hoặc dán liên kết, không cần tải tệp lên

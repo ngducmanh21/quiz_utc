@@ -74,9 +74,9 @@ export default function Dashboard() {
 
   async function forceClose(sessionId: number) {
     const ok = await confirm({
-      title: 'Force-close session?',
+      title: 'Đóng phiên chơi ngay?',
       message: 'Tất cả người chơi đang kết nối sẽ bị ngắt.',
-      confirmText: 'Force-close',
+      confirmText: 'Đóng phiên',
       variant: 'danger',
     });
     if (!ok) return;
@@ -316,7 +316,7 @@ export default function Dashboard() {
                 email={group.email}
                 username={group.username}
                 count={group.items.length}
-                countLabel={group.items.length === 1 ? 'quiz' : 'quizzes'}
+                countLabel="quiz"
                 defaultOpen={index === 0}
               >
                 <CompactQuizList

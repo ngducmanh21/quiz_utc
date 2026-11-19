@@ -276,7 +276,7 @@ export function QuestionScreen({
                 variant="warning"
                 size="sm"
                 disabled={jokersUsed.fiftyFifty}
-                title={jokersUsed.fiftyFifty ? '50/50 already used' : 'Eliminate 2 wrong answers'}
+                title={jokersUsed.fiftyFifty ? 'Đã dùng quyền 50/50' : 'Loại 2 đáp án sai'}
                 onClick={onFiftyFiftyJoker}
               >
                 <span className="inline-flex items-center gap-1.5">

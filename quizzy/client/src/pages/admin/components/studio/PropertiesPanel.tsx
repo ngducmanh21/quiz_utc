@@ -25,9 +25,9 @@ interface Props {
 
 const TIME_PRESETS = [10, 20, 30, 60, 90];
 const POINT_PRESETS: { label: string; value: number }[] = [
-  { label: 'Standard', value: 500 },
-  { label: 'Double', value: 1000 },
-  { label: 'None', value: 0 },
+  { label: 'Tiêu chuẩn', value: 500 },
+  { label: 'Gấp đôi', value: 1000 },
+  { label: 'Không tính', value: 0 },
 ];
 
 function chip(active: boolean) {

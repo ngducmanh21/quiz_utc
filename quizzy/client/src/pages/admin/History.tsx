@@ -14,6 +14,13 @@ import { useAuthFetch } from '../../hooks/useAuthFetch';
 import { useCreatorBase } from '../../hooks/useCreatorBase';
 import type { Session } from '../../types';
 
+const filterLabels = {
+  all: 'Tất cả',
+  active: 'Đang chơi',
+  waiting: 'Đang chờ',
+  finished: 'Đã kết thúc',
+} as const;
+
 export default function History() {
   const { isSuperAdmin } = useAuth();
   const api = useAuthFetch();
@@ -134,7 +141,7 @@ export default function History() {
                 size="sm"
                 onClick={() => setFilter(f)}
               >
-                {f.charAt(0).toUpperCase() + f.slice(1)}
+                {filterLabels[f]}
               </Button>
             ))}
           </div>
@@ -160,7 +167,7 @@ export default function History() {
                 email={group.email}
                 username={group.username}
                 count={group.items.length}
-                countLabel={group.items.length === 1 ? 'session' : 'sessions'}
+                countLabel="phiên chơi"
                 defaultOpen={index === 0}
               >
                 <CompactSessionList items={group.items} basePath={basePath} />

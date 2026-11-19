@@ -14,7 +14,7 @@ interface Props {
 }
 
 function getRankMessage(rank: number, total: number): { icon: ReactNode; title: string } {
-  if (rank === 1) return { icon: <Trophy className="size-12" />, title: 'Champion!' };
+  if (rank === 1) return { icon: <Trophy className="size-12" />, title: 'Vô địch!' };
   if (rank === 2)
     return { icon: <MedalIcon place={2} className="size-12" />, title: 'Sắp tới đích rồi!' };
   if (rank === 3)

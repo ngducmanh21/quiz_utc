@@ -199,7 +199,7 @@ export function QuizPreviewModal({ title, questions, onClose }: Props) {
           <Eye className="size-4" /> XEM TRƯỚC
         </span>
         <span className="truncate rounded-md bg-black/55 px-2 py-1.5 text-xs font-medium text-white backdrop-blur sm:max-w-[38vw] sm:px-2.5">
-          {title || 'Untitled quiz'}
+          {title || 'Quiz chưa đặt tên'}
         </span>
       </div>
 

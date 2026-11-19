@@ -25,7 +25,7 @@ export function UserGroupPanel({
   defaultOpen = false,
   children,
 }: UserGroupPanelProps) {
-  const isAdmin = username === 'Platform admin';
+  const isAdmin = username === 'Quản trị viên nền tảng';
 
   return (
     <details

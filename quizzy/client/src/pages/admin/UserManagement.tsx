@@ -110,7 +110,7 @@ export default function UserManagement() {
     const proceed = await confirm({
       title: 'Đặt lại mật khẩu?',
       message: 'Hệ thống sẽ tạo mật khẩu mới cho người dùng này.',
-      confirmText: 'Generate',
+      confirmText: 'Tạo mật khẩu',
     });
     if (!proceed) return;
     setActionId(id);

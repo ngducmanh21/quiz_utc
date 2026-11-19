@@ -37,7 +37,7 @@ export function groupQuizzesByOwner(quizzes: Quiz[]): OwnerGroup<Quiz>[] {
     const email = isUserOwned ? (quiz.owner_email ?? null) : null;
     const username = isUserOwned
       ? displayUsername(quiz.owner_username, quiz.owner_email, quiz.owner_id as number)
-      : 'Platform admin';
+      : 'Quản trị viên nền tảng';
 
     if (!map.has(key)) {
       map.set(key, {
@@ -67,7 +67,7 @@ export function groupSessionsByHost(sessions: Session[]): OwnerGroup<Session>[] 
           session.host_email,
           session.hosted_by_user_id as number,
         )
-      : 'Platform admin';
+      : 'Quản trị viên nền tảng';
 
     if (!map.has(key)) {
       map.set(key, {
