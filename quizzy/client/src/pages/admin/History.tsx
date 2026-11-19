@@ -62,17 +62,17 @@ export default function History() {
           <StatusBadge status={s.status} />
         </td>
         <td className="px-4 py-3 text-sm text-muted-foreground">
-          {s.started_at ? new Date(s.started_at).toLocaleString() : '—'}
+          {s.started_at ? new Date(s.started_at).toLocaleString('vi-VN') : '—'}
         </td>
         <td className="px-4 py-3 text-sm text-muted-foreground">
-          {dur != null ? `${Math.floor(dur / 60)}m ${dur % 60}s` : '—'}
+          {dur != null ? `${Math.floor(dur / 60)} phút ${dur % 60} giây` : '—'}
         </td>
         <td className="px-4 py-3">
           {s.status === 'finished' ? (
             <Button variant="ghost" size="sm" asChild>
               <Link to={`${basePath}/sessions/${s.id}`}>
                 <span className="flex items-center gap-1.5">
-                  Results <ArrowRight className="size-4" />
+                  Kết quả <ArrowRight className="size-4" />
                 </span>
               </Link>
             </Button>
@@ -80,7 +80,7 @@ export default function History() {
             <Button size="sm" asChild>
               <Link to={`${basePath}/game/${s.id}`}>
                 <span className="flex items-center gap-1.5">
-                  Resume <ArrowRight className="size-4" />
+                  Tiếp tục <ArrowRight className="size-4" />
                 </span>
               </Link>
             </Button>
@@ -96,12 +96,12 @@ export default function History() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border text-left text-muted-foreground">
-              <th className="px-4 py-3 font-medium">Quiz</th>
+              <th className="px-4 py-3 font-medium">Bộ câu hỏi</th>
               <th className="px-4 py-3 font-medium">PIN</th>
-              <th className="px-4 py-3 font-medium">Players</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Started</th>
-              <th className="px-4 py-3 font-medium">Duration</th>
+              <th className="px-4 py-3 font-medium">Người chơi</th>
+              <th className="px-4 py-3 font-medium">Trạng thái</th>
+              <th className="px-4 py-3 font-medium">Bắt đầu lúc</th>
+              <th className="px-4 py-3 font-medium">Thời lượng</th>
               <th className="px-4 py-3 font-medium" />
             </tr>
           </thead>
@@ -117,11 +117,11 @@ export default function History() {
       <MainContent>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <div>
-            <h1>{showGroupedByUser ? 'All Game History' : 'Game History'}</h1>
+            <h1>{showGroupedByUser ? 'Toàn bộ lịch sử phiên chơi' : 'Lịch sử phiên chơi'}</h1>
             <Subtitle>
-              {sessions.length} sessions total
+              {sessions.length} phiên tất cả
               {showGroupedByUser && sessionGroups.length > 0
-                ? ` · ${sessionGroups.length} user${sessionGroups.length !== 1 ? 's' : ''}`
+                ? ` · ${sessionGroups.length} người dùng`
                 : ''}
             </Subtitle>
           </div>
@@ -141,14 +141,14 @@ export default function History() {
         </div>
 
         {loading ? (
-          <p className="text-muted-foreground">Loading…</p>
+          <p className="text-muted-foreground">Đang tải…</p>
         ) : filtered.length === 0 ? (
           <Card>
             <CardContent className="px-8 py-12 text-center">
               <BarChart3 className="mx-auto mb-2.5 size-10 text-muted-foreground" />
-              <h2>No sessions yet</h2>
+              <h2>Chưa có phiên chơi nào</h2>
               <Subtitle className="mt-2">
-                Start a game from the Dashboard to see history here
+                Tạo phiên chơi từ Bảng điều khiển để xem lịch sử ở đây
               </Subtitle>
             </CardContent>
           </Card>

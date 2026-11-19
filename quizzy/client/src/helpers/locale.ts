@@ -2,7 +2,7 @@
 export function localeName(code: string): string {
   try {
     return (
-      new Intl.DisplayNames([navigator.language || 'en'], { type: 'language' }).of(code) ?? code
+      new Intl.DisplayNames(['vi'], { type: 'language' }).of(code) ?? code
     );
   } catch {
     return code;

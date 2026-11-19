@@ -6,6 +6,7 @@ import { QuestionDistribution } from '@/components/game/QuestionDistribution';
 import { Page } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { displayOptions } from '@/helpers';
 import { sound } from '@/lib/sound';
 import type { LeaderboardEntry, QuestionResults } from '../../../types';
 
@@ -27,25 +28,25 @@ function AdvanceHint({
     <p className="mt-4 text-center text-sm text-muted-foreground">
       {autoAdvanceSec > 0 ? (
         <>
-          Next question in <strong className="text-brand">{autoAdvanceLeft}s</strong>…
+          Câu tiếp theo sau <strong className="text-brand">{autoAdvanceLeft}s</strong>…
         </>
       ) : (
-        'Waiting for admin to continue…'
+        'Đang chờ quản trò chuyển tiếp…'
       )}
     </p>
   );
 }
 
 function YourAnswer({ entry, results }: { entry: LeaderboardEntry; results: QuestionResults }) {
-  const opts = results.options;
+  const opts = displayOptions(results.options, results.questionType);
   let body: React.ReactNode;
   switch (results.questionType) {
     case 'open_text':
-      body = entry.chosenText ? entry.chosenText : <em>No answer</em>;
+      body = entry.chosenText ? entry.chosenText : <em>Chưa trả lời</em>;
       break;
     case 'fill_blank': {
       const b = entry.chosenBlanks ?? [];
-      body = b.length ? b.map((x) => x || '—').join('   ·   ') : <em>No answer</em>;
+      body = b.length ? b.map((x) => x || '—').join('   ·   ') : <em>Chưa trả lời</em>;
       break;
     }
     case 'ordering': {
@@ -58,7 +59,7 @@ function YourAnswer({ entry, results }: { entry: LeaderboardEntry; results: Ques
           ))}
         </ol>
       ) : (
-        <em>No answer</em>
+        <em>Chưa trả lời</em>
       );
       break;
     }
@@ -67,22 +68,22 @@ function YourAnswer({ entry, results }: { entry: LeaderboardEntry; results: Ques
         entry.chosenPoint != null ? (
           <>
             <span className="inline-flex items-center gap-1.5">
-              <MapPin className="size-4" /> your pin
+              <MapPin className="size-4" /> ghim của bạn
             </span>
             {entry.distance != null && (
               <span className="text-muted-foreground">
                 {' '}
-                · {Math.round(entry.distance).toLocaleString()} km away
+                · {Math.round(entry.distance).toLocaleString('vi-VN')} km cách đáp án
               </span>
             )}
           </>
         ) : (
-          <em>No pin</em>
+          <em>Chưa đặt ghim</em>
         );
       break;
     case 'multi_select': {
       const idxs = entry.chosenIndices ?? [];
-      body = idxs.length ? idxs.map((i) => opts[i]).join(', ') : <em>No answer</em>;
+      body = idxs.length ? idxs.map((i) => opts[i]).join(', ') : <em>Chưa trả lời</em>;
       break;
     }
     case 'matching': {
@@ -95,13 +96,13 @@ function YourAnswer({ entry, results }: { entry: LeaderboardEntry; results: Ques
             return (
               // biome-ignore lint/suspicious/noArrayIndexKey: pairs are positional
               <li key={i} className={isRowCorrect ? 'text-ok' : 'text-bad'}>
-                {p.left} → {p.right ?? <em>unlinked</em>}
+                {p.left} → {p.right ?? <em>chưa ghép</em>}
               </li>
             );
           })}
         </ul>
       ) : (
-        <em>No answer</em>
+        <em>Chưa trả lời</em>
       );
       break;
     }
@@ -110,14 +111,14 @@ function YourAnswer({ entry, results }: { entry: LeaderboardEntry; results: Ques
         entry.chosenIndex != null && entry.chosenIndex >= 0 ? (
           opts[entry.chosenIndex]
         ) : (
-          <em>No answer</em>
+          <em>Chưa trả lời</em>
         );
   }
 
   return (
     <div className="mb-4 rounded-lg border border-border bg-card px-4 py-3 text-sm">
       <span className="mb-1 block text-[0.72rem] font-semibold uppercase tracking-wider text-muted-foreground">
-        Your answer
+        Câu trả lời của bạn
       </span>
       <div className={entry.isCorrect ? 'font-semibold text-ok' : 'font-semibold'}>{body}</div>
     </div>
@@ -148,7 +149,7 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: 
       <Page className="mx-auto w-full max-w-[600px] px-4 py-6">
         <div className="pre-reveal">
           <Heart className="pre-reveal-heart" fill="currentColor" />
-          <span>Revealing…</span>
+          <span>Đang hiện đáp án…</span>
         </div>
       </Page>
     );
@@ -177,19 +178,19 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: 
         >
           {myEntry.isCorrect ? (
             <span className="inline-flex items-center gap-1.5">
-              <Check className="size-4" /> Exact match!
+              <Check className="size-4" /> Chính xác!
             </span>
           ) : (
             <>
-              Your guess: <strong>{myEntry.chosenNumber}</strong>
-              {myEntry.distance != null && <> (off by {myEntry.distance})</>}
+              Bạn đoán: <strong>{myEntry.chosenNumber}</strong>
+              {myEntry.distance != null && <> (lệch {myEntry.distance})</>}
             </>
           )}
           {myEntry.questionScore > 0 && (
             <>
               {' '}
-              <span className="score-pop">+{myEntry.questionScore}</span> pts · Total:{' '}
-              {myEntry.totalScore.toLocaleString()}
+              <span className="score-pop">+{myEntry.questionScore}</span> điểm · Tổng:{' '}
+              {myEntry.totalScore.toLocaleString('vi-VN')}
             </>
           )}
         </AppAlert>
@@ -205,13 +206,13 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: 
         >
           {myEntry.isCorrect ? (
             <span className="inline-flex items-center gap-1.5">
-              <Check className="size-4" /> Correct!{' '}
-              <span className="score-pop">+{myEntry.questionScore}</span> pts · Total:{' '}
-              {myEntry.totalScore.toLocaleString()}
+              <Check className="size-4" /> Đúng rồi!{' '}
+              <span className="score-pop">+{myEntry.questionScore}</span> điểm · Tổng:{' '}
+              {myEntry.totalScore.toLocaleString('vi-VN')}
             </span>
           ) : (
             <span className="inline-flex items-center gap-1.5">
-              <X className="size-4" /> Wrong — {myEntry.totalScore.toLocaleString()} pts total
+              <X className="size-4" /> Sai — {myEntry.totalScore.toLocaleString('vi-VN')} điểm tổng
             </span>
           )}
         </AppAlert>
@@ -221,7 +222,7 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: 
         <Card className="mb-4 min-w-0 max-w-full">
           <CardContent className="p-6">
             <h2 className="mb-4 flex items-center justify-center gap-1.5">
-              <Target className="size-4" /> Closest Guesses
+              <Target className="size-4" /> Các đáp án gần nhất
             </h2>
             <ClosestGuessesList entries={closestList} highlightPlayerId={playerId} animate />
           </CardContent>
@@ -232,7 +233,7 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: 
         <Card className="min-w-0 max-w-full">
           <CardContent className="p-6">
             <h2 className="mb-4 flex items-center justify-center gap-1.5">
-              <Trophy className="size-4" /> Standings
+              <Trophy className="size-4" /> Bảng xếp hạng
             </h2>
             <LeaderboardList
               entries={results.leaderboard}

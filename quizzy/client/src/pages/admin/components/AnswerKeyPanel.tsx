@@ -10,7 +10,7 @@ export function AnswerKeyPanel({ answerKey }: { answerKey: AnswerKey }) {
   const [visible, setVisible] = useState(false);
   const results =
     answerKey.questionType === 'true_false' && answerKey.options.length === 0
-      ? { ...answerKey, options: ['True', 'False'] }
+      ? { ...answerKey, options: ['Đúng', 'Sai'] }
       : answerKey;
 
   return (
@@ -24,7 +24,7 @@ export function AnswerKeyPanel({ answerKey }: { answerKey: AnswerKey }) {
           onClick={() => setVisible((v) => !v)}
         >
           {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-          {visible ? 'Hide answer' : 'Show answer'}
+          {visible ? 'Ẩn đáp án' : 'Hiện đáp án'}
         </Button>
         {visible && (
           <div className="mt-3">

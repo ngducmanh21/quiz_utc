@@ -41,7 +41,7 @@ export default function EditQuiz() {
       }>(`/api/admin/quizzes/${id}`)
       .then(({ ok, data }) => {
         if (!ok) {
-          setError('Failed to load quiz');
+          setError('Không tải được quiz');
           setLoading(false);
           return;
         }
@@ -57,7 +57,7 @@ export default function EditQuiz() {
         setLoading(false);
       })
       .catch(() => {
-        setError('Failed to load quiz');
+        setError('Không tải được quiz');
         setLoading(false);
       });
   }, [id, api]);
@@ -68,10 +68,10 @@ export default function EditQuiz() {
     const { ok, data } = await api.put<{ error?: string }>(`/api/admin/quizzes/${id}`, payload);
     setSaving(false);
     if (ok) {
-      setSuccess('Quiz updated!');
+      setSuccess('Đã cập nhật quiz!');
       setTimeout(() => navigate(basePath), 1000);
     } else {
-      setError(data.error ?? 'Failed to update quiz');
+      setError(data.error ?? 'Không cập nhật được quiz');
     }
   }
 
@@ -80,7 +80,7 @@ export default function EditQuiz() {
       <Page>
         <CreatorNav />
         <PageCenter>
-          <p className="text-muted-foreground">Loading quiz…</p>
+          <p className="text-muted-foreground">Đang tải bộ câu hỏi…</p>
         </PageCenter>
       </Page>
     );
@@ -103,7 +103,7 @@ export default function EditQuiz() {
         headerExtra={
           <Button type="button" variant="ghost" size="sm" onClick={() => setTranslationsOpen(true)}>
             <Languages className="size-4" />
-            <span className="hidden sm:inline">Translations</span>
+            <span className="hidden sm:inline">Bản dịch</span>
           </Button>
         }
       />

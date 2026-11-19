@@ -74,7 +74,7 @@ export function TagInput({ value, onChange, label, placeholder }: Props) {
               type="button"
               onClick={() => removeTag(i)}
               className="ml-0.5 opacity-70 hover:opacity-100"
-              aria-label={`Remove ${tag}`}
+              aria-label={`Xóa thẻ ${tag}`}
             >
               <X className="size-3" />
             </button>

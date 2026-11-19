@@ -22,9 +22,9 @@ export function MuteToggle({ className }: Props) {
     <button
       type="button"
       onClick={toggle}
-      aria-label={muted ? 'Unmute sound' : 'Mute sound'}
+      aria-label={muted ? 'Bật âm thanh' : 'Tắt âm thanh'}
       aria-pressed={muted}
-      title={muted ? 'Unmute' : 'Mute'}
+      title={muted ? 'Bật tiếng' : 'Tắt tiếng'}
       style={{ background: 'var(--surface2)', color: 'var(--text2)' }}
       className={cn(
         'inline-flex h-9 w-9 items-center justify-center rounded-full border border-border transition-colors hover:text-foreground',

@@ -49,25 +49,25 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
               q={q}
               ops={ops}
               allow={['image', 'gif']}
-              label="Add an image to this slide (optional)"
+              label="Thêm ảnh cho trang này (không bắt buộc)"
             />
             <Textarea
               noMargin
-              label="Body text (optional)"
+              label="Nội dung (không bắt buộc)"
               rows={4}
               className="resize-y"
               value={q.explanation ?? ''}
               onChange={(e) => onChange('explanation', e.target.value || undefined)}
-              placeholder="What are the next questions about?"
+              placeholder="Những câu tiếp theo nói về gì?"
             />
           </>
         ) : (
           <p className="text-sm text-muted-foreground">
-            Everyone sees the current leaderboard under this title.
+            Mọi người sẽ thấy bảng xếp hạng hiện tại dưới tiêu đề này.
           </p>
         )}
         <p className="mt-3 text-sm text-muted-foreground">
-          Players don't answer anything here. The slide stays up until the host moves on.
+          Người chơi không cần trả lời ở trang này. Trang sẽ hiện cho đến khi quản trò chuyển tiếp.
         </p>
       </div>
     );
@@ -82,7 +82,7 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
         q={q}
         ops={ops}
         allow={type === 'geo' ? ['image', 'gif', 'video'] : undefined}
-        label={type === 'geo' ? 'Add a photo — players guess where it was taken' : undefined}
+        label={type === 'geo' ? 'Thêm ảnh để người chơi đoán địa điểm chụp' : undefined}
       />
 
       {choiceMode && (
@@ -91,7 +91,7 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
 
       {type === 'true_false' && (
         <div className="grid grid-cols-2 gap-4">
-          {['True', 'False'].map((label, i) => (
+          {['Đúng', 'Sai'].map((label, i) => (
             <button
               key={label}
               type="button"
@@ -113,10 +113,10 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
 
       {type === 'open_text' && (
         <Input
-          label="Correct Answer *"
+          label="Đáp án đúng *"
           value={q.correctAnswer ?? ''}
           onChange={(e) => onChange('correctAnswer', e.target.value)}
-          placeholder="e.g. Paris (case-insensitive)"
+          placeholder="Ví dụ: Hà Nội (không phân biệt chữ hoa, chữ thường)"
         />
       )}
 
@@ -125,26 +125,26 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <IntegerInput
               noMargin
-              label="Range Min *"
+              label="Giới hạn dưới *"
               value={q.rangeMin ?? 1}
               onValueChange={(value) => onChange('rangeMin', value)}
             />
             <IntegerInput
               noMargin
-              label="Range Max *"
+              label="Giới hạn trên *"
               value={q.rangeMax ?? 100}
               onValueChange={(value) => onChange('rangeMax', value)}
             />
           </div>
           <IntegerInput
             noMargin
-            label="Correct Answer (integer) *"
+            label="Đáp án đúng (số nguyên) *"
             value={q.correctAnswer ?? ''}
             onValueChange={(value) => onChange('correctAnswer', String(value))}
-            placeholder="Must be within the range"
+            placeholder="Phải nằm trong khoảng đã chọn"
           />
           <p className="text-sm text-muted-foreground">
-            Players type a whole number within the range. Closest guesses score the most points.
+            Người chơi nhập số nguyên trong khoảng. Số gần đáp án nhất được nhiều điểm nhất.
           </p>
         </div>
       )}
@@ -152,13 +152,13 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
       {type === 'fill_blank' && (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Write <code className="rounded bg-border px-1">___</code> (3+ underscores) in the
-            question text for each blank — {blankCount} detected. Partial credit is awarded per
-            blank.
+            Nhập <code className="rounded bg-border px-1">___</code> (ít nhất 3 dấu gạch dưới)
+            vào câu hỏi để tạo từng chỗ trống — đã nhận diện {blankCount} chỗ trống.
+            Mỗi chỗ trống đúng sẽ được tính điểm.
           </p>
           {blankCount === 0 && (
             <p className="text-sm text-destructive">
-              Add ___ to the question text above to create a blank.
+              Thêm ___ vào nội dung câu hỏi để tạo chỗ trống.
             </p>
           )}
           {Array.from({ length: blankCount }, (_, bi) => (
@@ -166,10 +166,10 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
               // biome-ignore lint/suspicious/noArrayIndexKey: blanks are positional by design
               key={`blank-${bi}`}
               noMargin
-              label={`Blank ${bi + 1} — accepted answers (comma-separated)`}
+              label={`Chỗ trống ${bi + 1} — các đáp án được chấp nhận (cách nhau bằng dấu phẩy)`}
               value={(q.blanks?.[bi] ?? []).join(', ')}
               onChange={(e) => ops.setBlankAccepted(bi, e.target.value)}
-              placeholder="Paris, City of Light"
+              placeholder="Hà Nội, Thủ đô Việt Nam"
             />
           ))}
         </div>
@@ -182,13 +182,12 @@ export function QuestionCanvas({ q, ops, onChange }: Props) {
       {type === 'geo' && (
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
-            Click the map to set the correct location. Players drop a pin on a live map and score by
-            real-world distance.
+            Nhấp bản đồ để đặt vị trí đúng. Người chơi đặt ghim và được tính điểm theo khoảng cách thực tế.
           </p>
           <MapPicker value={q.geo ?? null} onChange={(p) => onChange('geo', p)} height={340} />
           {q.geo && (
             <p className="text-xs text-muted-foreground">
-              Correct location: {q.geo.lat.toFixed(4)}, {q.geo.lng.toFixed(4)}
+              Vị trí đúng: {q.geo.lat.toFixed(4)}, {q.geo.lng.toFixed(4)}
             </p>
           )}
         </div>
@@ -235,13 +234,13 @@ function ChoiceTiles({
                 <input
                   value={opt}
                   onChange={(e) => ops.updateOption(oi, e.target.value)}
-                  placeholder={`Add answer ${oi + 1}${oi >= 2 ? ' (optional)' : ''}`}
+                  placeholder={`Thêm đáp án ${oi + 1}${oi >= 2 ? ' (không bắt buộc)' : ''}`}
                   className="w-full bg-transparent py-4 text-[15px] font-semibold text-white outline-none placeholder:text-white/70"
                 />
                 {isImageUrl(opt) && (
                   <img
                     src={opt}
-                    alt={`Option ${optionLetter(oi)} preview`}
+                    alt={`Xem trước lựa chọn ${optionLetter(oi)}`}
                     className="mb-2 max-h-[80px] max-w-full rounded-md object-contain"
                     onError={(e) => {
                       e.currentTarget.style.display = 'none';
@@ -252,7 +251,7 @@ function ChoiceTiles({
               <button
                 type="button"
                 onClick={() => setPickFor(oi)}
-                title="Pick an image or GIF for this answer"
+                title="Chọn ảnh hoặc GIF cho đáp án này"
                 className="flex h-16 w-11 shrink-0 items-center justify-center text-white/75 hover:text-white"
               >
                 <ImageIcon className="size-4" />
@@ -260,7 +259,7 @@ function ChoiceTiles({
               <button
                 type="button"
                 onClick={() => (multi ? ops.toggleCorrectIndex(oi) : onChange('correctIndex', oi))}
-                title={correct ? 'Correct answer' : 'Mark correct'}
+                title={correct ? 'Đáp án đúng' : 'Đánh dấu đáp án đúng'}
                 className={cn(
                   'flex h-16 w-12 shrink-0 items-center justify-center transition-colors',
                   correct
@@ -274,7 +273,7 @@ function ChoiceTiles({
                 <button
                   type="button"
                   onClick={() => ops.removeOption(oi)}
-                  title="Remove option"
+                  title="Xóa lựa chọn"
                   className="flex h-16 w-10 shrink-0 items-center justify-center text-white/60 hover:bg-black/10 hover:text-white"
                 >
                   <X className="size-4" />
@@ -286,11 +285,10 @@ function ChoiceTiles({
       </div>
       <div className="mt-4 flex items-center justify-between">
         <Button type="button" variant="ghost" size="sm" onClick={() => ops.addOption()}>
-          <Plus className="size-3.5" /> Add answer
+          <Plus className="size-3.5" /> Thêm đáp án
         </Button>
         <p className="text-xs text-muted-foreground">
-          {multi ? 'Mark every correct answer.' : 'Mark the correct answer.'} Use the image button
-          to set a picture or GIF answer.
+          {multi ? 'Hãy đánh dấu mọi đáp án đúng.' : 'Hãy đánh dấu đáp án đúng.'} Dùng nút ảnh để thêm ảnh hoặc GIF cho đáp án.
         </p>
       </div>
       <MediaPicker
@@ -311,9 +309,9 @@ function OrderingItems({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
   return (
     <div>
       <p className="mb-2 text-sm font-medium text-muted-foreground">
-        Items in correct order{' '}
+        Các mục theo đúng thứ tự{' '}
         <span className="font-normal text-muted-foreground/70">
-          — drag to reorder; players see them shuffled and drag into order
+          — kéo để đổi thứ tự; người chơi sẽ thấy chúng bị xáo trộn
         </span>
       </p>
       <div
@@ -336,7 +334,7 @@ function OrderingItems({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
           >
             <button
               type="button"
-              aria-label="Drag to reorder"
+              aria-label="Kéo để đổi thứ tự"
               {...reorder.handleProps(oi)}
               className="flex h-8 w-6 shrink-0 cursor-grab touch-none items-center justify-center text-muted-foreground active:cursor-grabbing"
             >
@@ -350,7 +348,7 @@ function OrderingItems({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
               noMargin
               value={opt}
               onChange={(e) => ops.updateOption(oi, e.target.value)}
-              placeholder={`Item ${oi + 1}`}
+              placeholder={`Mục ${oi + 1}`}
             />
             {opts.length > 2 && (
               <Button
@@ -358,7 +356,7 @@ function OrderingItems({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => ops.removeOption(oi)}
-                title="Remove item"
+                title="Xóa mục"
               >
                 <X className="size-4" />
               </Button>
@@ -373,7 +371,7 @@ function OrderingItems({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
         className="mt-1"
         onClick={() => ops.addOption()}
       >
-        <Plus className="size-3.5" /> Add Item
+        <Plus className="size-3.5" /> Thêm mục
       </Button>
     </div>
   );
@@ -385,9 +383,9 @@ function MatchingPairs({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
   return (
     <div>
       <p className="mb-2 text-sm font-medium text-muted-foreground">
-        Pairs (2–6){' '}
+        Các cặp (2–6){' '}
         <span className="font-normal text-muted-foreground/70">
-          — players match each left item to its right item; the right column is shuffled for them
+          — người chơi ghép mục bên trái với mục bên phải; cột phải được xáo trộn
         </span>
       </p>
       {opts.map((left, i) => (
@@ -401,7 +399,7 @@ function MatchingPairs({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
             noMargin
             value={left}
             onChange={(e) => ops.updateMatchLeft(i, e.target.value)}
-            placeholder={`Left ${i + 1}`}
+            placeholder={`Bên trái ${i + 1}`}
           />
           <span className="text-muted-foreground">↔</span>
           <Input
@@ -409,7 +407,7 @@ function MatchingPairs({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
             noMargin
             value={matches[i] ?? ''}
             onChange={(e) => ops.updateMatchRight(i, e.target.value)}
-            placeholder={`Right ${i + 1}`}
+            placeholder={`Bên phải ${i + 1}`}
           />
           {opts.length > 2 && (
             <Button
@@ -417,7 +415,7 @@ function MatchingPairs({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
               variant="ghost"
               size="icon-sm"
               onClick={() => ops.removeMatchPair(i)}
-              title="Remove pair"
+              title="Xóa cặp"
             >
               <X className="size-4" />
             </Button>
@@ -432,7 +430,7 @@ function MatchingPairs({ q, ops }: { q: ImportQuestion; ops: ReturnType<typeof q
           className="mt-1"
           onClick={() => ops.addMatchPair()}
         >
-          <Plus className="size-3.5" /> Add Pair
+          <Plus className="size-3.5" /> Thêm cặp
         </Button>
       )}
     </div>

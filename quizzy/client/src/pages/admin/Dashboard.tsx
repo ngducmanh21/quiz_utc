@@ -75,7 +75,7 @@ export default function Dashboard() {
   async function forceClose(sessionId: number) {
     const ok = await confirm({
       title: 'Force-close session?',
-      message: 'All connected players will be disconnected.',
+      message: 'Tất cả người chơi đang kết nối sẽ bị ngắt.',
       confirmText: 'Force-close',
       variant: 'danger',
     });
@@ -90,7 +90,7 @@ export default function Dashboard() {
     if (!appConfig) {
       const { ok, data } = await api.get<AppConfig>('/api/admin/config');
       if (!ok || !data) {
-        await alert({ message: 'Could not load game settings. Please try again.' });
+        await alert({ message: 'Không tải được cài đặt phiên chơi. Hãy thử lại.' });
         return;
       }
       setAppConfig(data);
@@ -117,9 +117,9 @@ export default function Dashboard() {
 
   async function deleteQuiz(id: number) {
     const ok = await confirm({
-      title: 'Delete quiz?',
-      message: 'This permanently deletes the quiz and all its data.',
-      confirmText: 'Delete',
+      title: 'Xóa quiz?',
+      message: 'Quiz và toàn bộ dữ liệu liên quan sẽ bị xóa vĩnh viễn.',
+      confirmText: 'Xóa',
       variant: 'danger',
     });
     if (!ok) return;
@@ -162,7 +162,7 @@ export default function Dashboard() {
         </td>
         <td className="px-4 py-3">{q.question_count} Q</td>
         <td className="px-4 py-3 text-sm text-muted-foreground">
-          {new Date(q.created_at).toLocaleDateString()}
+          {new Date(q.created_at).toLocaleDateString('vi-VN')}
         </td>
         <td className="px-4 py-3">
           <div className="flex justify-end gap-2">
@@ -177,7 +177,7 @@ export default function Dashboard() {
                 '…'
               ) : (
                 <span className="flex items-center gap-1.5">
-                  <Play className="size-4" /> Start
+                  <Play className="size-4" /> Bắt đầu
                 </span>
               )}
             </Button>
@@ -187,20 +187,20 @@ export default function Dashboard() {
               size="sm"
               onClick={() => openPreview(q.id)}
               disabled={previewing === q.id}
-              title="Preview how this quiz looks — no session needed"
+              title="Xem thử quiz mà không cần tạo phòng"
             >
               {previewing === q.id ? (
                 '…'
               ) : (
                 <span className="flex items-center gap-1.5">
-                  <Eye className="size-4" /> Preview
+                  <Eye className="size-4" /> Xem trước
                 </span>
               )}
             </Button>
             <Button variant="secondary" size="sm" asChild>
               <Link to={`${basePath}/quiz/${q.id}/edit`}>
                 <span className="flex items-center gap-1.5">
-                  <Pencil className="size-4" /> Edit
+                  <Pencil className="size-4" /> Sửa
                 </span>
               </Link>
             </Button>
@@ -233,7 +233,7 @@ export default function Dashboard() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-70" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-ok" />
                 </span>
-                {activeSessions.length} open session{activeSessions.length > 1 ? 's' : ''}
+                {activeSessions.length} phiên đang mở
               </span>
               <div className="flex flex-col gap-2.5">
                 {activeSessions.map((s) => (
@@ -256,7 +256,7 @@ export default function Dashboard() {
                         onClick={() => navigate(`${basePath}/game/${s.id}`)}
                       >
                         <span className="flex items-center gap-1.5">
-                          Resume <ArrowRight className="size-4" />
+                          Tiếp tục <ArrowRight className="size-4" />
                         </span>
                       </Button>
                       <Button
@@ -265,7 +265,7 @@ export default function Dashboard() {
                         size="icon-sm"
                         onClick={() => forceClose(s.id)}
                         disabled={closing === s.id}
-                        title="Force-close this session"
+                        title="Đóng phiên chơi này ngay"
                         className="text-destructive hover:bg-destructive/10"
                       >
                         {closing === s.id ? '…' : <X className="size-4" />}
@@ -280,18 +280,18 @@ export default function Dashboard() {
 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1>{showGroupedByUser ? 'All Quizzes' : 'My Quizzes'}</h1>
+            <h1>{showGroupedByUser ? 'Tất cả quiz' : 'Quiz của tôi'}</h1>
             <Subtitle>
-              {quizzes.length} quiz{quizzes.length !== 1 ? 'zes' : ''} total
+              Tổng {quizzes.length} quiz
               {showGroupedByUser && quizGroups.length > 0
-                ? ` · ${quizGroups.length} user${quizGroups.length !== 1 ? 's' : ''}`
+                ? ` · ${quizGroups.length} người dùng`
                 : ''}
             </Subtitle>
           </div>
           <Button size="lg" asChild>
             <Link to={`${basePath}/quiz/new`}>
               <span className="flex items-center gap-1.5">
-                <Plus className="size-4" /> Create Quiz
+                <Plus className="size-4" /> Tạo quiz
               </span>
             </Link>
           </Button>
@@ -301,10 +301,10 @@ export default function Dashboard() {
           <Card>
             <CardContent className="px-8 py-16 text-center">
               <FileText className="mx-auto mb-3 size-10 text-muted-foreground" />
-              <h2>No quizzes yet</h2>
-              <Subtitle className="mt-2 mb-6">Create your first quiz to get started</Subtitle>
+              <h2>Chưa có quiz nào</h2>
+              <Subtitle className="mt-2 mb-6">Tạo quiz đầu tiên để bắt đầu</Subtitle>
               <Button size="lg" asChild>
-                <Link to={`${basePath}/quiz/new`}>Create Quiz</Link>
+                <Link to={`${basePath}/quiz/new`}>Tạo quiz</Link>
               </Button>
             </CardContent>
           </Card>
@@ -351,10 +351,10 @@ export default function Dashboard() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border text-left text-muted-foreground">
-                      <th className="px-4 py-3 font-medium">Title</th>
-                      <th className="px-4 py-3 font-medium">Questions</th>
-                      <th className="px-4 py-3 font-medium">Created</th>
-                      <th className="px-4 py-3 text-right font-medium">Actions</th>
+                      <th className="px-4 py-3 font-medium">Tiêu đề</th>
+                      <th className="px-4 py-3 font-medium">Câu hỏi</th>
+                      <th className="px-4 py-3 font-medium">Ngày tạo</th>
+                      <th className="px-4 py-3 text-right font-medium">Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>{quizzes.map(renderQuizRow)}</tbody>

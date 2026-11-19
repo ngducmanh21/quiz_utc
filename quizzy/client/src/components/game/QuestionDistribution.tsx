@@ -4,7 +4,7 @@ import { QuadGlyph } from '@/components/game/QuadGlyph';
 import { QuestionReveal } from '@/components/game/QuestionReveal';
 import { OptionText } from '@/components/OptionText';
 import { QuestionExplanation } from '@/components/QuestionExplanation';
-import { quadColor } from '@/helpers';
+import { displayOptions, quadColor } from '@/helpers';
 import type { LeaderboardEntry, QuestionResults } from '@/types';
 
 interface Props {
@@ -74,6 +74,7 @@ export function QuestionDistribution({
     [results.leaderboard, myChosenPoint?.lat, myChosenPoint?.lng],
   );
 
+  const options = displayOptions(results.options, results.questionType);
   const dist =
     isOptionBased && results.options.length > 0
       ? (results.answerDistribution ??
@@ -98,25 +99,25 @@ export function QuestionDistribution({
 
   const totalVotes = dist.reduce((a, b) => a + b, 0);
   const maxVotes = Math.max(1, ...dist);
-  const correctText = results.options.filter((_, i) => isCorrect(i)).join(', ');
+  const correctText = options.filter((_, i) => isCorrect(i)).join(', ');
   // Reveal drama: bars grow one after another; the correct bar(s) land last.
   const stagger = 0.15;
-  const lastDelay = (results.options.length - 1) * stagger + 0.3;
+  const lastDelay = (options.length - 1) * stagger + 0.3;
 
   return (
     <>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-3">
-        <span className="text-[22px] font-extrabold tracking-tight">Answers</span>
+        <span className="text-[22px] font-extrabold tracking-tight">Câu trả lời</span>
         <span className="correct-pill inline-flex items-center gap-1">
-          <Check className="size-4" /> Correct: {correctText}
+          <Check className="size-4" /> Đúng: {correctText}
         </span>
       </div>
       <div className="mb-4 text-[13px] text-muted-foreground">
-        {totalVotes} vote{totalVotes === 1 ? '' : 's'} total
+        Tổng {totalVotes} lượt chọn
       </div>
 
       <div className="flex flex-col gap-3">
-        {results.options.map((opt, i) => {
+        {options.map((opt, i) => {
           const correct = isCorrect(i);
           const votes = dist[i] ?? 0;
           // Bar length is proportional to votes, normalised to the most-voted
@@ -137,10 +138,10 @@ export function QuestionDistribution({
                   <span>
                     <OptionText value={opt} imgClassName="option-img-sm" />
                     {correct && <Check className="ml-1.5 inline size-4 text-ok" />}
-                    {mine && <span className="ml-1.5 text-muted-foreground">· you</span>}
+                    {mine && <span className="ml-1.5 text-muted-foreground">· bạn</span>}
                   </span>
                   <span>
-                    {votes} vote{votes === 1 ? '' : 's'}
+                    {votes} lượt chọn
                   </span>
                 </div>
                 <div className={`dist-bar${correct ? ' correct-glow' : ''}`}>

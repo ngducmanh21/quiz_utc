@@ -25,7 +25,7 @@ export function LobbyPlayers({ players }: { players: PlayerInfo[] }) {
     <div className="flex max-w-[820px] flex-wrap justify-center gap-[9px]">
       {players.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          Waiting for players to join
+          Đang chờ người chơi tham gia
           <span className="dots">
             {' '}
             <span>.</span>

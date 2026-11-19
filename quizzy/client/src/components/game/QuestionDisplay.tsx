@@ -6,7 +6,7 @@ import { QuestionImage } from '@/components/QuestionImage';
 import { QuestionMedia } from '@/components/QuestionMedia';
 import { QuestionText } from '@/components/QuestionText';
 import { Card, CardContent } from '@/components/ui/card';
-import { hasQuestionImage, quadColor } from '@/helpers';
+import { displayOptions, hasQuestionImage, quadColor } from '@/helpers';
 import { cn } from '@/lib/utils';
 import type { QuestionPayload } from '@/types';
 
@@ -41,10 +41,7 @@ export function QuestionDisplay({
     question.questionType === 'true_false' ||
     question.questionType === 'multi_select';
 
-  const options =
-    question.questionType === 'true_false' && question.options.length === 0
-      ? ['True', 'False']
-      : question.options;
+  const options = displayOptions(question.options, question.questionType);
 
   return (
     <Card className={stage ? 'w-full' : 'w-full max-w-5xl'}>
@@ -52,9 +49,9 @@ export function QuestionDisplay({
         {/* Counter row */}
         <div className="mb-4 flex items-center justify-between">
           <span className="mono-label">
-            Question {question.questionIndex + 1} of {question.totalQuestions}
+            Câu hỏi {question.questionIndex + 1} trên {question.totalQuestions}
           </span>
-          <span className="mono-label">{question.timeSec}s</span>
+          <span className="mono-label">{question.timeSec} giây</span>
         </div>
 
         {question.mediaType
@@ -91,7 +88,7 @@ export function QuestionDisplay({
             stage ? 'text-2xl' : 'text-[13px]',
           )}
         >
-          {answeredCount} / {totalPlayers} answered
+          {answeredCount} / {totalPlayers} đã trả lời
         </div>
 
         {isOptionBased && (
@@ -102,7 +99,7 @@ export function QuestionDisplay({
           {question.questionType === 'closest_to' && (
             <div className="rounded-xl border border-border bg-muted/50 px-4 py-3 text-center">
               <p className="text-sm text-muted-foreground">
-                Closest-to question — players pick a number from{' '}
+                Câu hỏi đoán gần đúng — người chơi chọn số từ{' '}
                 <strong>
                   {question.rangeMin ?? 0} to {question.rangeMax ?? 100}
                 </strong>
@@ -112,7 +109,7 @@ export function QuestionDisplay({
           {question.questionType === 'open_text' && (
             <div className="rounded-xl border border-border bg-muted/50 px-4 py-3 text-center">
               <p className="text-sm text-muted-foreground">
-                Open-text question — players type their answer
+                Câu hỏi tự luận — người chơi nhập đáp án
               </p>
             </div>
           )}
@@ -128,7 +125,7 @@ export function QuestionDisplay({
             >
               <p className="col-span-2 mb-1 flex items-center justify-center gap-2 text-center text-sm font-medium">
                 <ArrowDownUp className="size-4 shrink-0" />
-                Sort these into the correct order on your phone
+                Sắp xếp đúng thứ tự trên điện thoại của bạn
               </p>
               {options.map((opt) => (
                 <div
@@ -149,7 +146,7 @@ export function QuestionDisplay({
           {question.questionType === 'matching' && (
             <div className="mx-auto grid w-full max-w-2xl grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <p className="mb-1 text-center text-xs text-muted-foreground">Left</p>
+                <p className="mb-1 text-center text-xs text-muted-foreground">Bên trái</p>
                 {options.map((opt, i) => (
                   <div
                     // biome-ignore lint/suspicious/noArrayIndexKey: left items may repeat text
@@ -169,7 +166,7 @@ export function QuestionDisplay({
                 ))}
               </div>
               <div className="flex flex-col gap-2">
-                <p className="mb-1 text-center text-xs text-muted-foreground">Right (shuffled)</p>
+                <p className="mb-1 text-center text-xs text-muted-foreground">Bên phải (đã xáo trộn)</p>
                 {(question.rightOptions ?? []).map((opt, i) => (
                   <div
                     // biome-ignore lint/suspicious/noArrayIndexKey: shuffled right column, values may repeat
@@ -187,15 +184,14 @@ export function QuestionDisplay({
           {question.questionType === 'geo' && (
             <div className="rounded-xl border border-border bg-muted/50 px-4 py-3 text-center">
               <p className="text-sm text-muted-foreground">
-                Map question — players drop a pin on the map
+                Câu hỏi bản đồ — người chơi đặt ghim trên bản đồ
               </p>
             </div>
           )}
           {question.questionType === 'fill_blank' && (
             <div className="rounded-xl border border-border bg-muted/50 px-4 py-3 text-center">
               <p className="text-sm text-muted-foreground">
-                Fill-in-the-blank question — players fill in {question.blankCount ?? 0} blank
-                {question.blankCount === 1 ? '' : 's'}
+                Câu hỏi điền chỗ trống — người chơi điền {question.blankCount ?? 0} chỗ trống
               </p>
             </div>
           )}

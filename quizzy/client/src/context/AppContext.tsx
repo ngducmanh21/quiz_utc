@@ -33,7 +33,7 @@ function buildDisplay(
     appSubtitle: appSubtitle.trim(),
     allowedDomain: allowedDomain.trim(),
     publicUrl: publicUrl.trim(),
-    displayName: trimmed ? `${trimmed} by Quizzy` : 'Tọa đàm Bình đẳng giới · Quizzy',
+    displayName: trimmed ? `${trimmed} · Quizzy` : 'Tọa đàm Bình đẳng giới · Quizzy',
     brandName: trimmed || 'Quizzy ✦',
   };
 }

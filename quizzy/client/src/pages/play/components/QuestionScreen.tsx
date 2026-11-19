@@ -185,11 +185,11 @@ export function QuestionScreen({
       >
         <div className="question-header">
           <div className="question-counter">
-            Question {question.questionIndex + 1} of {question.totalQuestions}
+            Câu hỏi {question.questionIndex + 1} trên {question.totalQuestions}
           </div>
           {controller ? (
             <p className="my-2 inline-flex w-full items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground">
-              <Presentation className="size-4" /> Look at the big screen
+              <Presentation className="size-4" /> Xem câu hỏi trên màn hình lớn
             </p>
           ) : question.mediaType ? (
             <QuestionMedia url={question.mediaUrl} kind={question.mediaType} className="my-3" />
@@ -213,7 +213,7 @@ export function QuestionScreen({
                 textAlign: 'center',
               }}
             >
-              Pick the closest number ({rangeMin}–{rangeMax})
+              Chọn số gần đúng nhất ({rangeMin}–{rangeMax})
             </p>
           )}
           {isMultiSelect && (
@@ -225,14 +225,14 @@ export function QuestionScreen({
                 textAlign: 'center',
               }}
             >
-              Select all correct answers
+              Chọn tất cả đáp án đúng
             </p>
           )}
           <TimerBar timeLeft={timeLeft} totalSec={question.timeSec} className="mt-4 gap-3" />
           {/* Answer counter */}
           {totalPlayers > 0 && (
             <div className="answer-counter">
-              {answeredCount} / {totalPlayers} answered
+              {answeredCount} / {totalPlayers} đã trả lời
             </div>
           )}
         </div>
@@ -255,8 +255,8 @@ export function QuestionScreen({
                 disabled={jokersUsed.pass}
                 title={
                   jokersUsed.pass
-                    ? 'Pass already used'
-                    : 'Skip this question and receive the base score'
+                    ? 'Đã dùng quyền Bỏ qua'
+                    : 'Bỏ qua câu hỏi và nhận điểm cơ bản'
                 }
                 onClick={onPassJoker}
               >
@@ -266,7 +266,7 @@ export function QuestionScreen({
                   ) : (
                     <SkipForward className="size-4" />
                   )}{' '}
-                  Pass
+                  Bỏ qua
                 </span>
               </Button>
             )}
@@ -290,7 +290,7 @@ export function QuestionScreen({
         {isTrueFalse ? (
           <QuadOptionGrid
             className="p-5"
-            options={['True', 'False']}
+            options={['Đúng', 'Sai']}
             selectedIndex={selectedIndex}
             colorFor={(i) => (i === 0 ? '#1f9d57' : '#e2455a')}
             badgeFor={(i) => (i === 0 ? <Check className="size-5" /> : <X className="size-5" />)}
@@ -321,7 +321,7 @@ export function QuestionScreen({
                       htmlFor="closest-answer"
                       className="mb-2 block text-sm font-medium text-muted-foreground"
                     >
-                      Your answer — whole number between {rangeMin} and {rangeMax}
+                      Đáp án của bạn — số nguyên từ {rangeMin} đến {rangeMax}
                     </label>
                     <IntegerInput
                       id="closest-answer"
@@ -344,8 +344,8 @@ export function QuestionScreen({
                       className={`mb-3 text-sm ${outOfRange ? 'text-destructive' : 'text-muted-foreground'}`}
                     >
                       {outOfRange
-                        ? `Enter a whole number from ${rangeMin} to ${rangeMax}.`
-                        : `Range: ${rangeMin} – ${rangeMax}`}
+                        ? `Nhập số nguyên từ ${rangeMin} đến ${rangeMax}.`
+                        : `Khoảng: ${rangeMin} – ${rangeMax}`}
                     </p>
                     <Button
                       type="button"
@@ -356,10 +356,10 @@ export function QuestionScreen({
                       disabled={closestSubmitted || outOfRange}
                     >
                       {closestSubmitted ? (
-                        'Submitted!'
+                        'Đã gửi!'
                       ) : (
                         <span className="inline-flex items-center gap-1.5">
-                          Submit Answer <ArrowRight className="size-4" />
+                          Gửi câu trả lời <ArrowRight className="size-4" />
                         </span>
                       )}
                     </Button>
@@ -389,7 +389,7 @@ export function QuestionScreen({
                   fontWeight: 500,
                 }}
               >
-                Your answer
+                Câu trả lời của bạn
               </label>
               <Input
                 id="open-text-answer"
@@ -398,7 +398,7 @@ export function QuestionScreen({
                 onChange={(e) => onOpenTextChange(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && !openTextSubmitted && onOpenTextSubmit()}
                 disabled={openTextSubmitted}
-                placeholder="Type your answer…"
+                placeholder="Nhập câu trả lời…"
                 className="mb-3 text-lg"
               />
               <Button
@@ -410,10 +410,10 @@ export function QuestionScreen({
                 disabled={openTextSubmitted || !openTextInput.trim()}
               >
                 {openTextSubmitted ? (
-                  'Submitted!'
+                  'Đã gửi!'
                 ) : (
                   <span className="inline-flex items-center gap-1.5">
-                    Submit Answer <ArrowRight className="size-4" />
+                    Gửi câu trả lời <ArrowRight className="size-4" />
                   </span>
                 )}
               </Button>
@@ -437,10 +437,10 @@ export function QuestionScreen({
               disabled={multiSelectSubmitted || selectedIndices.length === 0}
             >
               {multiSelectSubmitted ? (
-                'Submitted!'
+                'Đã gửi!'
               ) : (
                 <span className="inline-flex items-center gap-1.5">
-                  Submit {selectedIndices.length > 0 ? `(${selectedIndices.length} selected)` : ''}
+                  Gửi {selectedIndices.length > 0 ? `(${selectedIndices.length} selected)` : ''}
                   <ArrowRight className="size-4" />
                 </span>
               )}
@@ -491,10 +491,10 @@ export function QuestionScreen({
                 disabled={localSubmitted || fillValues.slice(0, blankCount).some((v) => !v.trim())}
               >
                 {localSubmitted ? (
-                  'Submitted!'
+                  'Đã gửi!'
                 ) : (
                   <span className="inline-flex items-center gap-1.5">
-                    Submit Answer <ArrowRight className="size-4" />
+                    Gửi câu trả lời <ArrowRight className="size-4" />
                   </span>
                 )}
               </Button>
@@ -503,8 +503,7 @@ export function QuestionScreen({
         ) : isOrdering ? (
           <div className="p-5">
             <p className="mb-2 text-center text-sm" style={{ color: 'var(--text2)' }}>
-              Drag (or focus a handle and use the arrow keys) to arrange the items into the correct
-              order
+              Kéo các mục vào đúng thứ tự (hoặc dùng phím mũi tên)
             </p>
             <div
               className={cn(
@@ -527,7 +526,7 @@ export function QuestionScreen({
                 >
                   <button
                     type="button"
-                    aria-label="Reorder — drag or use arrow keys"
+                    aria-label="Đổi thứ tự — kéo hoặc dùng phím mũi tên"
                     disabled={localSubmitted}
                     {...reorder.handleProps(pos)}
                     className="flex shrink-0 cursor-grab touch-none items-center text-muted-foreground active:cursor-grabbing disabled:cursor-default disabled:opacity-40"
@@ -555,10 +554,10 @@ export function QuestionScreen({
               disabled={localSubmitted}
             >
               {localSubmitted ? (
-                'Submitted!'
+                'Đã gửi!'
               ) : (
                 <span className="inline-flex items-center gap-1.5">
-                  Submit Order <ArrowRight className="size-4" />
+                  Gửi thứ tự <ArrowRight className="size-4" />
                 </span>
               )}
             </Button>
@@ -566,7 +565,7 @@ export function QuestionScreen({
         ) : isGeo ? (
           <div className="p-5">
             <p className="mb-2 text-center text-sm" style={{ color: 'var(--text2)' }}>
-              Drop your pin on the map — closest to the real spot wins
+              Đặt ghim trên bản đồ — càng gần vị trí đúng càng nhiều điểm
             </p>
             <MapPicker
               value={pinPoint}
@@ -582,20 +581,20 @@ export function QuestionScreen({
               disabled={localSubmitted || !pinPoint}
             >
               {localSubmitted ? (
-                'Submitted!'
+                'Đã gửi!'
               ) : pinPoint ? (
                 <span className="inline-flex items-center gap-1.5">
-                  Submit pin <ArrowRight className="size-4" />
+                  Gửi vị trí <ArrowRight className="size-4" />
                 </span>
               ) : (
-                'Tap the map to place your pin'
+                'Chạm vào bản đồ để đặt ghim'
               )}
             </Button>
           </div>
         ) : isMatching ? (
           <div className="p-5">
             <p className="mb-3 text-center text-sm" style={{ color: 'var(--text2)' }}>
-              Tap a left item, then tap its match on the right
+              Chọn một mục bên trái rồi chọn mục tương ứng bên phải
             </p>
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col gap-2">
@@ -672,10 +671,10 @@ export function QuestionScreen({
               disabled={localSubmitted}
             >
               {localSubmitted ? (
-                'Submitted!'
+                'Đã gửi!'
               ) : (
                 <span className="inline-flex items-center gap-1.5">
-                  Submit Matches <ArrowRight className="size-4" />
+                  Gửi các cặp <ArrowRight className="size-4" />
                 </span>
               )}
             </Button>

@@ -16,19 +16,19 @@ interface Props {
 function getRankMessage(rank: number, total: number): { icon: ReactNode; title: string } {
   if (rank === 1) return { icon: <Trophy className="size-12" />, title: 'Champion!' };
   if (rank === 2)
-    return { icon: <MedalIcon place={2} className="size-12" />, title: 'Almost there!' };
+    return { icon: <MedalIcon place={2} className="size-12" />, title: 'Sắp tới đích rồi!' };
   if (rank === 3)
-    return { icon: <MedalIcon place={3} className="size-12" />, title: 'On the podium!' };
+    return { icon: <MedalIcon place={3} className="size-12" />, title: 'Bạn đã lên bục vinh danh!' };
   if (rank <= Math.ceil(total / 2))
-    return { icon: <ThumbsUp className="size-12" />, title: 'Well played!' };
-  return { icon: <Gamepad2 className="size-12" />, title: 'Nice try!' };
+    return { icon: <ThumbsUp className="size-12" />, title: 'Chơi hay lắm!' };
+  return { icon: <Gamepad2 className="size-12" />, title: 'Bạn đã cố gắng lắm!' };
 }
 
 export function EndedScreen({ leaderboard, username, onPlayAgain }: Props) {
   const myRank = leaderboard.find((e) => e.username === username);
   const { icon, title } = myRank
     ? getRankMessage(myRank.rank, leaderboard.length)
-    : { icon: <Flag className="size-12" />, title: 'Game Over!' };
+    : { icon: <Flag className="size-12" />, title: 'Trò chơi kết thúc!' };
 
   return (
     <PageCenter>
@@ -39,13 +39,13 @@ export function EndedScreen({ leaderboard, username, onPlayAgain }: Props) {
             <h1>{title}</h1>
             {myRank && (
               <Subtitle className="mt-2">
-                You finished <strong className="text-brand">#{myRank.rank}</strong> with{' '}
-                <strong className="text-brand">{myRank.totalScore.toLocaleString()} pts</strong>
+                Bạn về đích <strong className="text-brand">#{myRank.rank}</strong> với{' '}
+                <strong className="text-brand">{myRank.totalScore.toLocaleString('vi-VN')} điểm</strong>
               </Subtitle>
             )}
           </div>
           <h2 className="mb-4 flex items-center justify-center gap-1.5">
-            <Trophy className="size-4" /> Final Scores
+            <Trophy className="size-4" /> Điểm chung cuộc
           </h2>
           <FinalLeaderboard
             entries={leaderboard}
@@ -58,7 +58,7 @@ export function EndedScreen({ leaderboard, username, onPlayAgain }: Props) {
                 className="mt-6 w-full"
                 onClick={onPlayAgain}
               >
-                Play Again
+                Chơi lại
               </Button>
             }
           />

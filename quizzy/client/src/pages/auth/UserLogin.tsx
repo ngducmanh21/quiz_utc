@@ -52,7 +52,7 @@ export default function UserLogin() {
             label="Email hoặc tên đăng nhập"
             type="text"
             autoComplete="username"
-            placeholder="you@company.com"
+            placeholder="admin hoặc ten@email.vn"
             required
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}

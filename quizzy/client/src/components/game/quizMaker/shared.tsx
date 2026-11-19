@@ -124,7 +124,7 @@ export function WinnerOverlay({ player, caption }: WinnerOverlayProps) {
             <AvatarDisplay avatar={player.avatar} size={96} />
           </div>
           <div className="mt-1 text-2xl font-extrabold text-white">{player.username}</div>
-          <div className="text-sm font-semibold text-[#fbbf24]">makes the next quiz!</div>
+          <div className="text-sm font-semibold text-[#fbbf24]">sẽ tạo quiz tiếp theo!</div>
         </div>
       </div>
     </div>

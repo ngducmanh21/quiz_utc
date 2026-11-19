@@ -105,10 +105,10 @@ export function TranslationsDialog({
     );
     setBusy(false);
     if (!ok) {
-      setError(data.error ?? 'Failed to upload translation');
+      setError(data.error ?? 'Không tải được bản dịch');
       return;
     }
-    setSuccess(`Saved "${data.locale}" translation.`);
+    setSuccess(`Đã lưu bản dịch "${data.locale}".`);
     setJson('');
     setLocale('');
     setLocales((prev) =>
@@ -150,16 +150,16 @@ export function TranslationsDialog({
       <DialogContent className="flex max-h-[85vh] flex-col overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Languages className="size-4" /> Translations
+            <Languages className="size-4" /> Bản dịch
           </DialogTitle>
           <DialogDescription>
             {staged
-              ? "Paste a translated JSON — same question count and order you're building here, only text/options (and explanations) differ. It's held here and saved together with the quiz."
-              : 'Upload a translated JSON for this quiz — same question count and order as the original, only text/options (and explanations) differ.'}{' '}
-            Players pick a language when they join; any question missing a translation falls back to{' '}
+              ? 'Dán JSON bản dịch có cùng số câu và thứ tự với quiz đang soạn. Chỉ dịch nội dung, đáp án và giải thích. Bản dịch sẽ được lưu cùng quiz.'
+              : 'Dán JSON bản dịch có cùng số câu và thứ tự với quiz gốc. Chỉ dịch nội dung, đáp án và giải thích.'}{' '}
+            Người chơi chọn ngôn ngữ khi tham gia; câu chưa có bản dịch sẽ dùng{' '}
             {baseLanguage
-              ? `this quiz's own language, ${localeName(baseLanguage)}`
-              : 'the original'}
+              ? `ngôn ngữ gốc của quiz (${localeName(baseLanguage)})`
+              : 'nội dung gốc'}
             .
           </DialogDescription>
         </DialogHeader>
@@ -177,7 +177,7 @@ export function TranslationsDialog({
                   disabled={busy}
                   onClick={() => handleRemove(loc)}
                   className="text-muted-foreground hover:text-destructive"
-                  title={`Remove ${loc} translation`}
+                  title={`Xóa bản dịch ${loc}`}
                 >
                   <Trash2 className="size-3" />
                 </button>
@@ -197,22 +197,21 @@ export function TranslationsDialog({
             className="w-fit shrink-0"
             onClick={handleUseTemplate}
           >
-            <Wand2 className="size-3.5" /> Use quiz as starting point
+            <Wand2 className="size-3.5" /> Dùng quiz hiện tại làm mẫu
           </Button>
         ) : (
           <p className="text-xs text-muted-foreground">
-            Tip: use the <strong>Export JSON</strong> button in the toolbar to copy this quiz's full
-            text/options as a reference for the translation below.
+            Mẹo: dùng nút <strong>Xuất JSON</strong> trên thanh công cụ để sao chép toàn bộ câu hỏi và đáp án làm mẫu dịch.
           </p>
         )}
 
         <Input
-          label="Locale"
+          label="Ngôn ngữ"
           list="translation-locale-suggestions"
           placeholder="fr, es-MX, de…"
           value={locale}
           onChange={(e) => setLocale(e.target.value)}
-          hint="Pick a suggestion or type any locale code."
+          hint="Chọn gợi ý hoặc nhập mã ngôn ngữ."
           noMargin
         />
         <datalist id="translation-locale-suggestions">
@@ -224,7 +223,7 @@ export function TranslationsDialog({
         </datalist>
 
         <Textarea
-          label="Translation JSON"
+          label="JSON bản dịch"
           placeholder={EXAMPLE}
           value={json}
           onChange={(e) => setJson(e.target.value)}
@@ -239,7 +238,7 @@ export function TranslationsDialog({
           onClick={handleUpload}
           disabled={busy || !json.trim()}
         >
-          {busy ? 'Saving…' : staged ? 'Add translation' : 'Save translation'}
+          {busy ? 'Đang lưu…' : staged ? 'Thêm bản dịch' : 'Lưu bản dịch'}
         </Button>
       </DialogContent>
     </Dialog>

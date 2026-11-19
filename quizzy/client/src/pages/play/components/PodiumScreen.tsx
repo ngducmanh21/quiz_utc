@@ -20,7 +20,7 @@ export function PodiumScreen({ leaderboard, onContinue }: Props) {
       )}
 
       <h1 className="flex items-center justify-center gap-2 text-center text-[2rem]">
-        <Trophy className="size-8" /> Final Podium
+        <Trophy className="size-8" /> Bục vinh danh
       </h1>
       <Podium
         leaderboard={leaderboard}
@@ -30,7 +30,7 @@ export function PodiumScreen({ leaderboard, onContinue }: Props) {
       />
       <Button type="button" variant="default" size="lg" onClick={onContinue}>
         <span className="inline-flex items-center gap-1.5">
-          See Full Results <ArrowRight className="size-4" />
+          Xem kết quả đầy đủ <ArrowRight className="size-4" />
         </span>
       </Button>
     </PageCenter>

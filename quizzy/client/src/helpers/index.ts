@@ -150,18 +150,23 @@ export function hasText(value?: string | null): value is string {
 
 /** Display label + icon for each question type (used in the lobby intro, etc). */
 export const QUESTION_TYPE_META: Record<QuestionType, { label: string; icon: LucideIcon }> = {
-  multiple_choice: { label: 'Single Choice', icon: Target },
-  multi_select: { label: 'Multiple Answers', icon: ListChecks },
-  true_false: { label: 'True / False', icon: ToggleLeft },
-  open_text: { label: 'Open Text', icon: PenLine },
-  closest_to: { label: 'Closest Number', icon: Gauge },
-  fill_blank: { label: 'Fill the Blank', icon: SquareDashed },
-  ordering: { label: 'Put in Order', icon: ArrowUpDown },
-  geo: { label: 'Locate on Map', icon: MapPin },
-  matching: { label: 'Match Pairs', icon: Link2 },
-  title_slide: { label: 'Title Slide', icon: Presentation },
-  standings_slide: { label: 'Standings Slide', icon: Trophy },
+  multiple_choice: { label: 'Chọn một đáp án', icon: Target },
+  multi_select: { label: 'Chọn nhiều đáp án', icon: ListChecks },
+  true_false: { label: 'Đúng / Sai', icon: ToggleLeft },
+  open_text: { label: 'Trả lời bằng chữ', icon: PenLine },
+  closest_to: { label: 'Đoán số gần đúng', icon: Gauge },
+  fill_blank: { label: 'Điền chỗ trống', icon: SquareDashed },
+  ordering: { label: 'Sắp xếp thứ tự', icon: ArrowUpDown },
+  geo: { label: 'Đặt vị trí trên bản đồ', icon: MapPin },
+  matching: { label: 'Ghép cặp', icon: Link2 },
+  title_slide: { label: 'Trang tiêu đề', icon: Presentation },
+  standings_slide: { label: 'Trang bảng xếp hạng', icon: Trophy },
 };
+
+/** True/false is always displayed in Vietnamese; indices remain unchanged. */
+export function displayOptions(options: string[], questionType?: QuestionType): string[] {
+  return questionType === 'true_false' ? ['Đúng', 'Sai'] : options;
+}
 
 /** Slides are non-question entries in a quiz: no answers, no timer, no points. */
 export function isSlideType(type: QuestionType | undefined): boolean {
@@ -215,17 +220,17 @@ export function validateClosestToQuestion(q: ImportQuestion, index: number): str
   const min = q.rangeMin;
   const max = q.rangeMax;
   if (min === undefined || max === undefined) {
-    return `Question ${index + 1} needs a range (min and max)`;
+    return `Câu ${index + 1} cần giới hạn dưới và giới hạn trên`;
   }
   if (!Number.isInteger(min) || !Number.isInteger(max) || min >= max) {
-    return `Question ${index + 1} needs a valid range (min must be less than max)`;
+    return `Câu ${index + 1} cần khoảng hợp lệ (giới hạn dưới nhỏ hơn giới hạn trên)`;
   }
   const target = Number.parseInt(q.correctAnswer ?? '', 10);
   if (!hasText(q.correctAnswer) || Number.isNaN(target)) {
-    return `Question ${index + 1} needs a numeric correct answer`;
+    return `Câu ${index + 1} cần đáp án đúng dạng số`;
   }
   if (target < min || target > max) {
-    return `Question ${index + 1} correct answer must be within the range`;
+    return `Đáp án đúng của câu ${index + 1} phải nằm trong khoảng đã chọn`;
   }
   return null;
 }
@@ -235,23 +240,23 @@ export function validateQuizQuestions(questions: ImportQuestion[]): string | nul
     const q = questions[i];
     const type = q.questionType ?? 'multiple_choice';
     if (isSlideType(type)) {
-      if (!q.text.trim()) return `Slide ${i + 1} has no title`;
+      if (!q.text.trim()) return `Trang ${i + 1} chưa có tiêu đề`;
       continue;
     }
     if (!q.text.trim()) {
-      return `Question ${i + 1} has no text`;
+      return `Câu ${i + 1} chưa có nội dung`;
     }
     if (type === 'open_text' && !q.correctAnswer?.trim()) {
-      return `Question ${i + 1} needs a correct answer`;
+      return `Câu ${i + 1} cần có đáp án đúng`;
     }
     if (
       (type === 'multiple_choice' || type === 'multi_select') &&
       q.options.some((o) => !o.trim())
     ) {
-      return `Question ${i + 1} has empty options`;
+      return `Câu ${i + 1} có lựa chọn bị bỏ trống`;
     }
     if (type === 'multi_select' && (!q.correctIndices || q.correctIndices.length < 2)) {
-      return `Question ${i + 1} needs at least 2 correct answers selected`;
+      return `Câu ${i + 1} cần chọn ít nhất 2 đáp án đúng`;
     }
     if (type === 'closest_to') {
       const err = validateClosestToQuestion(q, i);
@@ -260,39 +265,39 @@ export function validateQuizQuestions(questions: ImportQuestion[]): string | nul
     if (type === 'fill_blank') {
       const marks = countBlanks(q.text);
       if (marks === 0) {
-        return `Question ${i + 1} needs at least one blank — write ___ (3+ underscores) in the text`;
+        return `Câu ${i + 1} cần ít nhất một chỗ trống — nhập ___ vào nội dung`;
       }
       const blanks = q.blanks ?? [];
       if (blanks.length !== marks) {
-        return `Question ${i + 1}: ${marks} blank(s) in the text but ${blanks.length} answer set(s)`;
+        return `Câu ${i + 1}: có ${marks} chỗ trống nhưng mới có ${blanks.length} bộ đáp án`;
       }
       if (blanks.some((accepted) => accepted.filter((a) => a.trim()).length === 0)) {
-        return `Question ${i + 1}: every blank needs at least one accepted answer`;
+        return `Câu ${i + 1}: mỗi chỗ trống cần ít nhất một đáp án được chấp nhận`;
       }
     }
     if (type === 'ordering') {
       if (q.options.length < 2) {
-        return `Question ${i + 1} needs at least 2 items to order`;
+        return `Câu ${i + 1} cần ít nhất 2 mục để sắp xếp`;
       }
       if (q.options.some((o) => !o.trim())) {
-        return `Question ${i + 1} has empty items`;
+        return `Câu ${i + 1} có mục bị bỏ trống`;
       }
     }
     if (type === 'geo') {
       if (!q.geo || typeof q.geo.lat !== 'number' || typeof q.geo.lng !== 'number') {
-        return `Question ${i + 1}: click the correct location on the map`;
+        return `Câu ${i + 1}: hãy chọn vị trí đúng trên bản đồ`;
       }
     }
     if (type === 'matching') {
       if (q.options.length < 2 || q.options.length > 6) {
-        return `Question ${i + 1} needs 2-6 pairs`;
+        return `Câu ${i + 1} cần từ 2 đến 6 cặp`;
       }
       const matches = q.matches ?? [];
       if (matches.length !== q.options.length) {
-        return `Question ${i + 1}: every left item needs a matching right item`;
+        return `Câu ${i + 1}: mỗi mục bên trái cần một mục ghép bên phải`;
       }
       if (q.options.some((o) => !o.trim()) || matches.some((m) => !m.trim())) {
-        return `Question ${i + 1} has empty pair text`;
+        return `Câu ${i + 1} có cặp bị bỏ trống`;
       }
     }
   }
@@ -300,9 +305,9 @@ export function validateQuizQuestions(questions: ImportQuestion[]): string | nul
 }
 
 export function validateQuizPayload(title: string, questions: ImportQuestion[]): string | null {
-  if (!title.trim()) return 'Title is required';
+  if (!title.trim()) return 'Hãy nhập tiêu đề quiz';
   if (questions.every((q) => isSlideType(q.questionType))) {
-    return 'At least one question is required';
+    return 'Quiz cần có ít nhất một câu hỏi';
   }
   return validateQuizQuestions(questions);
 }

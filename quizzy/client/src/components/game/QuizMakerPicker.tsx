@@ -20,8 +20,8 @@ interface Props {
 
 type Phase = 'idle' | 'playing' | 'done';
 
-const GAME_NAME = 'Plinko Elimination';
-const CAPTION = 'Last one in the red!';
+const GAME_NAME = 'Loại trực tiếp Plinko';
+const CAPTION = 'Người cuối cùng ở ô đỏ!';
 
 /**
  * Final-podium "next quiz maker" picker. The host checks the players in the draw and
@@ -94,11 +94,11 @@ export function QuizMakerPicker({ players }: Props) {
       {celebrate && <Confetti count={40} spread="center" durationRange={[0.6, 2]} />}
       <CardContent className="p-6">
         <div className="mb-1 flex items-center justify-center gap-2 text-lg font-extrabold">
-          <Target className="size-5" /> Next Quiz Maker
+          <Target className="size-5" /> Người tạo quiz tiếp theo
         </div>
         <p className="mb-4 min-h-5 text-center text-sm text-muted-foreground">
           {phase === 'idle'
-            ? 'Green slots are safe, red keep you in. Last one left makes the quiz.'
+            ? 'Ô xanh là an toàn, ô đỏ tiếp tục ở lại. Người cuối cùng sẽ tạo quiz.'
             : phase === 'done' && winnerPlayer
               ? `${CAPTION} ${winnerPlayer.username} makes the next quiz!`
               : status}
@@ -142,15 +142,15 @@ export function QuizMakerPicker({ players }: Props) {
         {phase === 'done' ? (
           <div className="grid grid-cols-2 gap-2">
             <Button type="button" size="lg" variant="outline" onClick={backToList}>
-              <Users className="size-4" /> Change players
+              <Users className="size-4" /> Đổi người chơi
             </Button>
             <Button type="button" size="lg" onClick={() => start(dropList)}>
-              Play again <RotateCw className="size-4" />
+              Chơi lại <RotateCw className="size-4" />
             </Button>
           </div>
         ) : phase === 'playing' ? (
           <Button type="button" size="lg" variant="outline" className="w-full" onClick={backToList}>
-            Stop
+            Dừng
           </Button>
         ) : (
           <Button
@@ -161,10 +161,10 @@ export function QuizMakerPicker({ players }: Props) {
             disabled={candidates.length < 2}
           >
             {candidates.length < 2 ? (
-              'Check at least 2 players'
+              'Hãy chọn ít nhất 2 người chơi'
             ) : (
               <>
-                Start {GAME_NAME} ({candidates.length}) <Play className="size-4" />
+                Bắt đầu {GAME_NAME} ({candidates.length}) <Play className="size-4" />
               </>
             )}
           </Button>

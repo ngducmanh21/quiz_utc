@@ -26,12 +26,12 @@ import { TranslationsDialog } from './components/TranslationsDialog';
 
 const COPY_TONE = {
   example: {
-    label: 'Copy example',
+    label: 'Sao chép ví dụ',
     icon: Braces,
     className: 'bg-primary text-primary-foreground hover:bg-primary/85',
   },
   prompt: {
-    label: 'Copy prompt',
+    label: 'Sao chép câu lệnh',
     icon: Sparkles,
     className: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
   },
@@ -68,7 +68,7 @@ function CopyTextButton({
     >
       {copied ? (
         <>
-          <Check className="size-3.5" /> Copied
+          <Check className="size-3.5" /> Đã sao chép
         </>
       ) : (
         <>
@@ -96,10 +96,10 @@ export default function CreateQuiz() {
   const [stagedTranslations, setStagedTranslations] = useState<QuizTranslationPayload[]>([]);
 
   const saveLabel = saving ? (
-    'Saving…'
+    'Đang lưu…'
   ) : (
     <>
-      <Check className="size-4" /> Create Quiz
+      <Check className="size-4" /> Tạo quiz
     </>
   );
 
@@ -113,7 +113,7 @@ export default function CreateQuiz() {
     );
     if (!ok) {
       setSaving(false);
-      setJsonError(data.error ?? 'Failed to save quiz');
+      setJsonError(data.error ?? 'Không lưu được quiz');
       return;
     }
     // Drop the studio autosave here, not only in QuizStudio's success effect —
@@ -132,12 +132,12 @@ export default function CreateQuiz() {
         translation,
       );
       if (!res.ok) {
-        translationWarning = ` (translation "${translation.locale}" failed: ${res.data.error ?? 'unknown error'} — add it from the Edit screen)`;
+        translationWarning = ` (bản dịch "${translation.locale}" chưa lưu được: ${res.data.error ?? 'lỗi không xác định'} — hãy thêm lại trong trang Sửa quiz)`;
       }
     }
 
     setSaving(false);
-    setSuccess(`Quiz created! ID: ${data.id}${translationWarning}`);
+    setSuccess(`Đã tạo quiz! Mã: ${data.id}${translationWarning}`);
     setTimeout(() => navigate(basePath), translationWarning ? 2500 : 1000);
   }
 
@@ -214,11 +214,11 @@ export default function CreateQuiz() {
           headerExtra={
             <>
               <Button type="button" variant="ghost" onClick={() => setMode('json')}>
-                <Braces className="size-4" /> JSON import
+                <Braces className="size-4" /> Nhập JSON
               </Button>
               <Button type="button" variant="ghost" onClick={() => setTranslationsOpen(true)}>
                 <Languages className="size-4" />
-                Translations
+                Bản dịch
                 {stagedTranslations.length > 0 && ` (${stagedTranslations.length})`}
               </Button>
             </>
@@ -248,19 +248,19 @@ export default function CreateQuiz() {
       <MainContent>
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
           <div>
-            <h1>Create Quiz</h1>
-            <Subtitle>Paste AI-generated JSON</Subtitle>
+            <h1>Tạo quiz</h1>
+            <Subtitle>Dán JSON đã tạo</Subtitle>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <CopyTextButton text={QUIZ_IMPORT_EXAMPLE_JSON} tone="example" />
             <CopyTextButton text={QUIZ_IMPORT_AI_PROMPT} tone="prompt" />
             <Button type="button" variant="ghost" onClick={() => setTranslationsOpen(true)}>
               <Languages className="size-4" />
-              Translations
+              Bản dịch
               {stagedTranslations.length > 0 && ` (${stagedTranslations.length})`}
             </Button>
             <Button type="button" variant="ghost" onClick={backToStudio}>
-              <ArrowLeft className="size-4" /> Back to studio
+              <ArrowLeft className="size-4" /> Quay lại trình soạn quiz
             </Button>
           </div>
         </div>
@@ -272,10 +272,9 @@ export default function CreateQuiz() {
           <CardContent className="p-6">
             <h2 className="mb-4">Nhập bộ câu hỏi JSON</h2>
             <AppAlert variant="info" className="text-[0.85rem]">
-              Use <strong>Copy prompt</strong> for AI instructions + JSON schema, or{' '}
-              <strong>Copy example</strong> for a full sample quiz JSON. Attach a document or
-              describe a topic (source material is optional), then paste the AI&apos;s JSON here and
-              click <strong>Apply to studio</strong>.
+              Dùng <strong>Sao chép câu lệnh</strong> để lấy hướng dẫn tạo JSON bằng AI, hoặc{' '}
+              <strong>Sao chép ví dụ</strong> để xem một bộ câu hỏi mẫu. Sau đó dán JSON vào đây
+              và chọn <strong>Đưa vào trình soạn quiz</strong>.
             </AppAlert>
             <div className="mb-4 flex flex-wrap items-center gap-3">
               <label htmlFor="quiz-json-file" className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-border bg-background px-4 py-2 text-sm font-semibold hover:bg-muted">
@@ -295,7 +294,7 @@ export default function CreateQuiz() {
             </div>
             <div className="mb-3 flex flex-wrap justify-end gap-2">
               <Button type="button" variant="ghost" size="sm" onClick={() => navigate(basePath)}>
-                Cancel
+                Hủy
               </Button>
               <Button
                 type="button"
@@ -306,12 +305,12 @@ export default function CreateQuiz() {
                 {saveLabel}
               </Button>
               <Button type="button" onClick={applyJsonToStudio} disabled={!jsonText.trim()}>
-                Apply to studio
+                Đưa vào trình soạn quiz
               </Button>
             </div>
             <Textarea
               id="quiz-json"
-              label="Quiz JSON"
+              label="JSON bộ câu hỏi"
               className="font-mono min-h-80"
               placeholder={QUIZ_IMPORT_JSON_SHORT}
               value={jsonText}
@@ -319,7 +318,7 @@ export default function CreateQuiz() {
             />
             <details className="mt-2 mb-2">
               <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm text-muted-foreground">
-                <span>Example JSON</span>
+                <span>JSON mẫu</span>
                 <CopyTextButton text={QUIZ_IMPORT_EXAMPLE_JSON} tone="example" inSummary />
               </summary>
               <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-background p-4 font-mono text-[0.78rem] text-muted-foreground whitespace-pre-wrap">
@@ -328,7 +327,7 @@ export default function CreateQuiz() {
             </details>
             <details className="mb-4">
               <summary className="flex cursor-pointer items-center justify-between gap-3 text-sm text-muted-foreground">
-                <span>Prompt + schema</span>
+                <span>Câu lệnh + cấu trúc</span>
                 <CopyTextButton text={QUIZ_IMPORT_AI_PROMPT} tone="prompt" inSummary />
               </summary>
               <pre className="mt-3 overflow-x-auto rounded-lg border border-border bg-background p-4 font-mono text-[0.78rem] text-muted-foreground whitespace-pre-wrap">
@@ -337,7 +336,7 @@ export default function CreateQuiz() {
             </details>
             <div className="flex flex-wrap justify-end gap-2">
               <Button type="button" variant="ghost" onClick={() => navigate(basePath)}>
-                Cancel
+                Hủy
               </Button>
               <Button
                 type="button"
@@ -346,7 +345,7 @@ export default function CreateQuiz() {
                 onClick={openJsonPreview}
                 disabled={!jsonText.trim()}
               >
-                <Eye className="size-4" /> Preview
+                <Eye className="size-4" /> Xem trước
               </Button>
               <Button
                 type="button"
@@ -363,7 +362,7 @@ export default function CreateQuiz() {
                 onClick={applyJsonToStudio}
                 disabled={!jsonText.trim()}
               >
-                Apply to studio
+                Đưa vào trình soạn quiz
               </Button>
             </div>
           </CardContent>

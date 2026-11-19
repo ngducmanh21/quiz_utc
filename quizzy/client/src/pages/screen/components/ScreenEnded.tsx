@@ -19,7 +19,7 @@ export function ScreenEnded({ title, leaderboard, chooseQuizMaker }: Props) {
   if (leaderboard.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-2 p-6 text-center">
-        <h1 className="text-4xl font-extrabold">Game ended</h1>
+        <h1 className="text-4xl font-extrabold">Trò chơi đã kết thúc</h1>
         <p className="text-xl text-muted-foreground">{title}</p>
       </div>
     );
@@ -29,7 +29,7 @@ export function ScreenEnded({ title, leaderboard, chooseQuizMaker }: Props) {
     <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col items-center justify-center gap-8 p-6">
       {celebrate && <Confetti />}
       <h1 className="flex items-center gap-3 text-center text-5xl font-extrabold">
-        <Trophy className="size-12" /> Final Podium
+        <Trophy className="size-12" /> Bục vinh danh
       </h1>
       <Podium leaderboard={leaderboard} sequenced onSequenceEnd={() => setCelebrate(true)} />
       {chooseQuizMaker && <QuizMakerPicker players={leaderboard} />}

@@ -39,7 +39,7 @@ export function ScreenResults({ results }: { results: QuestionResults }) {
           ) : (
             <div className="pre-reveal">
               <Heart className="pre-reveal-heart" fill="currentColor" />
-              <span>Revealing…</span>
+              <span>Đang hiện đáp án…</span>
             </div>
           )}
         </CardContent>
@@ -50,12 +50,12 @@ export function ScreenResults({ results }: { results: QuestionResults }) {
           <CardContent className="p-6 lg:p-8">
             {closest.length > 0 && (
               <div className="mb-6">
-                <h2 className="mb-4 text-2xl">Closest guesses</h2>
+                <h2 className="mb-4 text-2xl">Các đáp án gần nhất</h2>
                 <ClosestGuessesList entries={closest} limit={3} />
               </div>
             )}
             <h2 className="mb-4 flex items-center gap-2 text-2xl">
-              <Trophy className="size-6" /> Standings
+              <Trophy className="size-6" /> Bảng xếp hạng
             </h2>
             <LeaderboardList entries={results.leaderboard} limit={5} showQuestionScore animate />
           </CardContent>

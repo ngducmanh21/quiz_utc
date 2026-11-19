@@ -30,10 +30,10 @@ export function GameQuestion({
     <MainContent>
       <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
         <Button type="button" size="sm" onClick={onFinishQuestion}>
-          Finish Question
+          Kết thúc câu hỏi
         </Button>
         <Button type="button" variant="ghost" size="sm" onClick={onEndGame}>
-          End Game
+          Kết thúc trò chơi
         </Button>
       </div>
 

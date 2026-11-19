@@ -28,7 +28,7 @@ export function WaitingScreen({
   playerId,
   presentationMode,
 }: Props) {
-  const title = intro ? intro.title : reconnecting ? 'Welcome back!' : 'Get ready!';
+  const title = intro ? intro.title : reconnecting ? 'Chào mừng bạn trở lại!' : 'Chuẩn bị nhé!';
 
   const [cooling, setCooling] = useState(false);
   const cooldownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -47,7 +47,7 @@ export function WaitingScreen({
           intro={intro}
           title={title}
           layout="grid"
-          typesHeading="What to expect"
+          typesHeading="Cách chơi"
           footer={
             /* Pinned to the bottom of the right column */
             <div className="mt-auto pt-6">
@@ -62,10 +62,10 @@ export function WaitingScreen({
                   <p className="truncate font-bold">{username}</p>
                   <p className="text-sm text-muted-foreground">
                     {reconnecting
-                      ? 'Resuming your game'
+                      ? 'Đang tiếp tục phiên chơi'
                       : presentationMode
-                        ? 'Watch the big screen'
-                        : 'Waiting for the host to start'}
+                        ? 'Xem màn hình lớn'
+                        : 'Đang chờ quản trò bắt đầu'}
                     <span className="dots">
                       <span>.</span>
                       <span>.</span>
@@ -76,7 +76,7 @@ export function WaitingScreen({
                 <span className="inline-block h-2.5 w-2.5 shrink-0 animate-pulse rounded-full bg-ok" />
               </div>
               <div className="mt-4">
-                <p className="mb-2 text-center text-xs text-muted-foreground">Send a reaction</p>
+                <p className="mb-2 text-center text-xs text-muted-foreground">Gửi cảm xúc</p>
                 <div className="reaction-bar">
                   {REACTIONS.map((emoji) => (
                     <button
@@ -85,7 +85,7 @@ export function WaitingScreen({
                       className="reaction-btn"
                       disabled={cooling}
                       onClick={() => sendReaction(emoji)}
-                      aria-label={`React with ${emoji}`}
+                      aria-label={`Gửi cảm xúc ${emoji}`}
                     >
                       {emoji}
                     </button>

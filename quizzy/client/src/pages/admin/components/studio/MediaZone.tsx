@@ -37,18 +37,18 @@ export function MediaZone({ q, ops, allow, label }: Props) {
       {hasBrokenMedia ? (
         <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-destructive/60 bg-destructive/5 p-6">
           <span className="flex items-center gap-2 text-sm font-semibold text-destructive">
-            <TriangleAlert className="size-4" /> Unsupported media link
+            <TriangleAlert className="size-4" /> Liên kết nội dung không được hỗ trợ
           </span>
           <code className="max-w-full truncate text-xs text-muted-foreground">{q.mediaUrl}</code>
           <span className="text-xs text-muted-foreground">
-            Only YouTube links play in the game — replace it or remove it.
+            Chỉ liên kết YouTube phát được trong trò chơi. Hãy thay hoặc gỡ liên kết.
           </span>
           <div className="flex gap-2">
             <Button type="button" size="sm" variant="secondary" onClick={() => setPickerOpen(true)}>
-              Replace
+              Thay thế
             </Button>
             <Button type="button" size="sm" variant="destructive" onClick={() => ops.clearMedia()}>
-              Remove
+              Gỡ
             </Button>
           </div>
         </div>
@@ -57,7 +57,7 @@ export function MediaZone({ q, ops, allow, label }: Props) {
           {hasImage && (
             <QuestionImage
               src={q.imageUrl}
-              alt="Question media"
+              alt="Nội dung câu hỏi"
               className="mx-auto max-h-[320px] w-full object-contain"
             />
           )}
@@ -68,10 +68,10 @@ export function MediaZone({ q, ops, allow, label }: Props) {
           )}
           <div className="absolute right-3 top-3 flex gap-2 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
             <Button type="button" size="sm" variant="secondary" onClick={() => setPickerOpen(true)}>
-              Replace
+              Thay thế
             </Button>
             <Button type="button" size="sm" variant="destructive" onClick={() => ops.clearMedia()}>
-              Remove
+              Gỡ
             </Button>
           </div>
         </div>
@@ -88,7 +88,7 @@ export function MediaZone({ q, ops, allow, label }: Props) {
             {label ?? 'Add an image, GIF, video or audio'}
           </span>
           <span className="text-xs text-muted-foreground">
-            Search providers or paste a link — no upload needed
+            Tìm nội dung hoặc dán liên kết, không cần tải tệp lên
           </span>
         </button>
       )}

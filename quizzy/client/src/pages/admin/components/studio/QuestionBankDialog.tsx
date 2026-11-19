@@ -55,10 +55,13 @@ interface Props {
 const ALL = 'all';
 const RANDOM_COUNT = 10;
 const DIFFICULTIES = ['easy', 'medium', 'hard'];
+function difficultyLabel(value: string): string {
+  return ({ easy: 'Dễ', medium: 'Trung bình', hard: 'Khó' } as Record<string, string>)[value] ?? value;
+}
 const TYPES = [
-  { value: 'multiple', label: 'Multiple choice' },
-  { value: 'boolean', label: 'True / False' },
-  { value: 'geo', label: 'Map' },
+  { value: 'multiple', label: 'Trắc nghiệm' },
+  { value: 'boolean', label: 'Đúng / Sai' },
+  { value: 'geo', label: 'Bản đồ' },
 ];
 const SEARCH_DELAY_MS = 250;
 
@@ -123,7 +126,7 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
   useEffect(() => {
     api.get<BankMeta>('/api/admin/question-bank/meta').then(({ ok, data }) => {
       if (ok) setMeta(data);
-      else setError('The question bank is not available.');
+      else setError('Ngân hàng câu hỏi hiện không khả dụng.');
     });
   }, [api]);
 
@@ -173,10 +176,10 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
     <Dialog open onOpenChange={(next) => !next && onClose()}>
       <DialogContent className="flex max-h-[85vh] flex-col sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Question bank</DialogTitle>
+          <DialogTitle>Ngân hàng câu hỏi</DialogTitle>
           <DialogDescription>
             {meta
-              ? `${meta.total.toLocaleString()} ready-made questions in English. Map questions also come in French and follow the quiz's language.`
+              ? `${meta.total.toLocaleString('vi-VN')} câu hỏi mẫu, phần lớn bằng tiếng Anh; câu bản đồ có thêm tiếng Pháp. Hãy sửa nội dung trước khi dùng bằng tiếng Việt.`
               : ' '}
           </DialogDescription>
         </DialogHeader>
@@ -189,16 +192,16 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search questions…"
-                aria-label="Search questions"
+                placeholder="Tìm câu hỏi…"
+                aria-label="Tìm câu hỏi"
                 className="min-w-40 flex-1"
               />
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="w-52" aria-label="Topic">
+                <SelectTrigger className="w-52" aria-label="Chủ đề">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL}>All topics</SelectItem>
+                  <SelectItem value={ALL}>Tất cả chủ đề</SelectItem>
                   {meta?.categories.map((c) => (
                     <SelectItem key={c.name} value={c.name}>
                       {categoryLabel(c.name)} ({c.count})
@@ -207,24 +210,24 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
                 </SelectContent>
               </Select>
               <Select value={difficulty} onValueChange={setDifficulty}>
-                <SelectTrigger className="w-36 capitalize" aria-label="Difficulty">
+                <SelectTrigger className="w-36 capitalize" aria-label="Độ khó">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL}>All levels</SelectItem>
+                  <SelectItem value={ALL}>Tất cả mức độ</SelectItem>
                   {DIFFICULTIES.map((d) => (
                     <SelectItem key={d} value={d} className="capitalize">
-                      {d}
+                      {difficultyLabel(d)}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <Select value={type} onValueChange={setType}>
-                <SelectTrigger className="w-40" aria-label="Question type">
+                <SelectTrigger className="w-40" aria-label="Loại câu hỏi">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={ALL}>All types</SelectItem>
+                  <SelectItem value={ALL}>Tất cả loại</SelectItem>
                   {TYPES.map((t) => (
                     <SelectItem key={t.value} value={t.value}>
                       {t.label}
@@ -233,7 +236,7 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
                 </SelectContent>
               </Select>
               <Button type="button" variant="outline" onClick={pickRandom} disabled={total === 0}>
-                <Dices className="size-4" /> Pick {RANDOM_COUNT} at random
+                <Dices className="size-4" /> Chọn {RANDOM_COUNT} ngẫu nhiên
               </Button>
             </div>
 
@@ -253,29 +256,28 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
                   <span className="min-w-0 flex-1 text-sm">
                     <span className="block font-medium">{questionText(q, language)}</span>
                     <span className="mt-0.5 block text-xs text-muted-foreground">
-                      {categoryLabel(q.category)} · {q.difficulty}
-                      {q.correct ? ` · Answer: ${q.correct}` : ' · Map'}
+                      {categoryLabel(q.category)} · {difficultyLabel(q.difficulty)}
+                      {q.correct ? ` · Đáp án: ${q.correct}` : ' · Bản đồ'}
                     </span>
                   </span>
                 </label>
               ))}
               {!loading && results.length === 0 && (
                 <p className="p-8 text-center text-sm text-muted-foreground">
-                  No questions match these filters.
+                  Không có câu hỏi nào khớp bộ lọc.
                 </p>
               )}
             </div>
             {results.length < total && (
               <p className="text-xs text-muted-foreground">
-                Showing the first {results.length} of {total.toLocaleString()}. Filter or search to
-                narrow them down.
+                Đang hiện {results.length} trên {total.toLocaleString('vi-VN')}. Hãy lọc hoặc tìm kiếm để thu hẹp.
               </p>
             )}
 
             <div className="flex flex-wrap items-center justify-between gap-3">
               {meta && (
                 <p className="text-xs text-muted-foreground">
-                  Questions from{' '}
+                  Câu hỏi từ{' '}
                   {meta.sources.map((s, i) => (
                     <span key={s.source}>
                       {i > 0 && ' and '}
@@ -299,7 +301,7 @@ export function QuestionBankDialog({ language, onAdd, onClose }: Props) {
                   onAdd([...selected.values()].map((q) => toQuizQuestion(q, language)))
                 }
               >
-                Add {selected.size} question{selected.size === 1 ? '' : 's'}
+                Thêm {selected.size} câu hỏi
               </Button>
             </div>
           </>

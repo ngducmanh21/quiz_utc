@@ -60,12 +60,12 @@ export function SlideDisplay({ slide, stage, playerId }: Props) {
             />
             {me && me.rank > STANDINGS_LIMIT && (
               <p className="mt-3 text-center font-semibold">
-                You're #{me.rank} with {me.totalScore.toLocaleString()} points
+                Bạn xếp thứ {me.rank} với {me.totalScore.toLocaleString('vi-VN')} điểm
               </p>
             )}
           </div>
         ) : (
-          <p className="text-muted-foreground">The live standings appear here during the game.</p>
+          <p className="text-muted-foreground">Bảng xếp hạng trực tiếp sẽ hiện ở đây khi chơi.</p>
         ))}
     </div>
   );

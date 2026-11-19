@@ -2,7 +2,7 @@ import { Check, MapPin } from 'lucide-react';
 import { type MapGuess, MapReveal } from '@/components/GeoMap';
 import { OptionText } from '@/components/OptionText';
 import { QuestionExplanation } from '@/components/QuestionExplanation';
-import { optionLetter } from '@/helpers';
+import { displayOptions, optionLetter } from '@/helpers';
 import type { QuestionResults } from '@/types';
 
 interface Props {
@@ -52,7 +52,7 @@ export function QuestionReveal({
     <>
       {isFillBlank ? (
         <div className="result-reveal-correct rounded-lg border border-ok/30 bg-ok/10 px-4 py-3">
-          <p className="mb-2 text-[0.78rem] text-muted-foreground">Correct answers</p>
+          <p className="mb-2 text-[0.78rem] text-muted-foreground">Các đáp án đúng</p>
           <ol className="list-decimal space-y-1 pl-5">
             {(results.correctBlanks ?? []).map((ans, i) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: positional blanks
@@ -64,7 +64,7 @@ export function QuestionReveal({
         </div>
       ) : isOrdering ? (
         <div className="result-reveal-correct rounded-lg border border-ok/30 bg-ok/10 px-4 py-3">
-          <p className="mb-2 text-[0.78rem] text-muted-foreground">Correct order</p>
+          <p className="mb-2 text-[0.78rem] text-muted-foreground">Thứ tự đúng</p>
           <ol className="list-decimal space-y-1 pl-5">
             {(results.correctOrder ?? results.options).map((item, i) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: positional order
@@ -76,7 +76,7 @@ export function QuestionReveal({
         </div>
       ) : isMatching ? (
         <div className="result-reveal-correct rounded-lg border border-ok/30 bg-ok/10 px-4 py-3">
-          <p className="mb-2 text-[0.78rem] text-muted-foreground">Correct pairs</p>
+          <p className="mb-2 text-[0.78rem] text-muted-foreground">Các cặp đúng</p>
           <ul className="space-y-1">
             {(results.correctPairs ?? []).map((p, i) => (
               <li
@@ -93,7 +93,7 @@ export function QuestionReveal({
         </div>
       ) : isGeo ? (
         <div className="result-reveal-correct rounded-lg border border-ok/30 bg-ok/10 p-3">
-          <p className="mb-2 text-[0.78rem] text-muted-foreground">Correct location</p>
+          <p className="mb-2 text-[0.78rem] text-muted-foreground">Vị trí đúng</p>
           {results.geo ? (
             <MapReveal
               correct={results.geo}
@@ -102,38 +102,38 @@ export function QuestionReveal({
               height={300}
             />
           ) : (
-            <p className="text-sm text-muted-foreground">Location revealed on the host screen.</p>
+            <p className="text-sm text-muted-foreground">Vị trí sẽ hiện trên màn hình của quản trò.</p>
           )}
           <p className="mt-2 flex items-center justify-center gap-1 text-center text-xs text-muted-foreground">
-            <Check className="size-3.5 text-ok" /> correct
+            <Check className="size-3.5 text-ok" /> đúng
             {myChosenPoint ? (
               <>
-                · <MapPin className="size-3.5" /> your pin
+                · <MapPin className="size-3.5" /> ghim của bạn
               </>
             ) : null}
             {mapGuesses?.length ? (
               <>
-                · {mapGuesses.length} player{mapGuesses.length === 1 ? '' : 's'}
+                · {mapGuesses.length} người chơi
               </>
             ) : null}
           </p>
         </div>
       ) : isClosestTo ? (
         <div className="result-reveal-correct rounded-lg border border-ok/30 bg-ok/10 px-4 py-3">
-          <p className="mb-1 text-[0.78rem] text-muted-foreground">Correct answer</p>
+          <p className="mb-1 text-[0.78rem] text-muted-foreground">Đáp án đúng</p>
           <p className="text-[1.8rem] font-bold text-ok">{results.correctAnswer}</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Range: {results.rangeMin}–{results.rangeMax}
+            Khoảng: {results.rangeMin}–{results.rangeMax}
           </p>
         </div>
       ) : isOpenText ? (
         <div className="result-reveal-correct rounded-lg border border-ok/30 bg-ok/10 px-4 py-3">
-          <p className="mb-1 text-[0.78rem] text-muted-foreground">Correct answer</p>
+          <p className="mb-1 text-[0.78rem] text-muted-foreground">Đáp án đúng</p>
           <p className="text-[1.1rem] font-bold text-ok">{results.correctAnswer}</p>
         </div>
       ) : (
         <div className={`options-grid ${animate ? 'gap-2 p-0' : ''}`}>
-          {results.options.map((opt, i) => {
+          {displayOptions(results.options, results.questionType).map((opt, i) => {
             const isCorrect = isMultiSelect
               ? (results.correctIndices ?? []).includes(i)
               : i === results.correctIndex;

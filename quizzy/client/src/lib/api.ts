@@ -1,3 +1,5 @@
+import { translateError } from './viErrors';
+
 export function authHeaders(token: string | null | undefined): Record<string, string> {
   if (!token) return {};
   return { Authorization: `Bearer ${token}` };
@@ -32,7 +34,12 @@ export async function apiFetch<T>(
   let data = null as T;
   try {
     const text = await res.text();
-    if (text) data = JSON.parse(text) as T;
+    if (text) {
+      data = JSON.parse(text) as T;
+      if (data && typeof data === 'object' && 'error' in data && typeof data.error === 'string') {
+        data.error = translateError(data.error);
+      }
+    }
   } catch {
     /* non-JSON body → data stays null */
   }

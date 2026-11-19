@@ -31,10 +31,10 @@ export type MediaTab = 'image' | 'gif' | 'video' | 'audio';
 type Tab = MediaTab;
 
 const TABS: { id: Tab; label: string; icon: LucideIcon }[] = [
-  { id: 'image', label: 'Images', icon: ImageIcon },
-  { id: 'gif', label: 'GIFs', icon: ImagePlay },
+  { id: 'image', label: 'Ảnh', icon: ImageIcon },
+  { id: 'gif', label: 'Ảnh GIF', icon: ImagePlay },
   { id: 'video', label: 'Video', icon: Video },
-  { id: 'audio', label: 'Audio', icon: Music },
+  { id: 'audio', label: 'Âm thanh', icon: Music },
 ];
 
 // Which provider tab backs each picker tab. Video/audio have no search provider
@@ -118,7 +118,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
       if (myReq !== reqId.current) return; // a newer request superseded this one
       setLoading(false);
       if (!ok) {
-        setError('Search failed — try again.');
+        setError('Tìm kiếm thất bại. Hãy thử lại.');
         return;
       }
       const merged = append && base ? [...base.items, ...data.items] : data.items;
@@ -152,7 +152,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
     if (!url) return;
     if (tab === 'video' || tab === 'audio') {
       if (!parseYouTubeId(url)) {
-        setError('Paste a valid YouTube link.');
+        setError('Hãy dán liên kết YouTube hợp lệ.');
         return;
       }
       onPick({ kind: tab === 'audio' ? 'audio' : 'video', url });
@@ -178,7 +178,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
         showCloseButton
       >
         <DialogHeader>
-          <DialogTitle>Add media</DialogTitle>
+          <DialogTitle>Thêm nội dung đa phương tiện</DialogTitle>
         </DialogHeader>
 
         {/* Tabs */}
@@ -227,8 +227,8 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
             <span className="flex items-center gap-1.5 text-sm font-medium text-foreground">
               {tab === 'audio' ? <Music className="size-4" /> : <Video className="size-4" />}
               {tab === 'audio'
-                ? 'YouTube link — plays sound only, video hidden'
-                : 'YouTube video link — embedded player'}
+                ? 'Liên kết YouTube — chỉ phát âm thanh'
+                : 'Liên kết video YouTube — phát trong trang'}
             </span>
             <form
               onSubmit={(e) => {
@@ -243,19 +243,18 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
                 type="url"
                 value={pasteUrl}
                 onChange={(e) => setPasteUrl(e.target.value)}
-                placeholder="https://www.youtube.com/watch?v=…  or  https://youtu.be/…"
+                placeholder="https://www.youtube.com/watch?v=… hoặc https://youtu.be/…"
                 autoFocus
               />
               <Button type="submit" disabled={!pasteUrl.trim()}>
-                Add {tab === 'audio' ? 'audio' : 'video'}
+                Thêm {tab === 'audio' ? 'âm thanh' : 'video'}
               </Button>
             </form>
             <p className="text-xs text-muted-foreground">
-              Tip: add <code className="rounded bg-border px-1">?t=90</code> (or{' '}
-              <code className="rounded bg-border px-1">&t=1m30s</code>) to the link to start partway
-              in.
+              Mẹo: thêm <code className="rounded bg-border px-1">?t=90</code> (hoặc{' '}
+              <code className="rounded bg-border px-1">&t=1m30s</code>) vào liên kết để phát từ thời điểm đó.
               {pasteUrl && parseYouTubeStart(pasteUrl) > 0 && (
-                <> Starts at {parseYouTubeStart(pasteUrl)}s.</>
+                <> Bắt đầu tại {parseYouTubeStart(pasteUrl)} giây.</>
               )}
             </p>
             {pasteUrl && parseYouTubeId(pasteUrl) ? (
@@ -266,7 +265,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
               />
             ) : pasteUrl ? (
               <p className="text-sm text-destructive">
-                That doesn't look like a YouTube link — paste a youtube.com or youtu.be URL.
+                Liên kết chưa đúng. Hãy dán URL từ youtube.com hoặc youtu.be.
               </p>
             ) : null}
           </div>
@@ -285,11 +284,11 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
                   className="flex-1"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder={`Search ${tab === 'gif' ? 'GIFs' : 'images'}…`}
+                  placeholder={`Tìm ${tab === 'gif' ? 'GIF' : 'ảnh'}…`}
                   autoFocus
                 />
                 <Button type="submit" disabled={loading || !query.trim()}>
-                  {loading ? '…' : 'Search'}
+                  {loading ? '…' : 'Tìm kiếm'}
                 </Button>
               </form>
             )}
@@ -298,7 +297,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
             <div className="studio-scroll min-h-0 flex-1 overflow-y-auto">
               {items.length === 0 ? (
                 <p className="py-8 text-center text-sm text-muted-foreground">
-                  {loading ? 'Loading…' : `No ${tab === 'gif' ? 'GIFs' : 'images'} found.`}
+                  {loading ? 'Đang tải…' : `Không tìm thấy ${tab === 'gif' ? 'GIF' : 'ảnh'}.`}
                 </p>
               ) : (
                 <>
@@ -328,7 +327,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
                         onClick={() => load(provider, lastQuery.current.get(provider) ?? '', true)}
                         disabled={loading}
                       >
-                        {loading ? 'Loading…' : 'Load more'}
+                        {loading ? 'Đang tải…' : 'Tải thêm'}
                       </Button>
                     </div>
                   )}
@@ -344,7 +343,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
                 type="url"
                 value={pasteUrl}
                 onChange={(e) => setPasteUrl(e.target.value)}
-                placeholder="Or paste a direct image URL…"
+                placeholder="Hoặc dán URL ảnh trực tiếp…"
               />
               <Button
                 type="button"
@@ -352,7 +351,7 @@ export function MediaPicker({ open, onClose, onPick, allow }: Props) {
                 onClick={submitPaste}
                 disabled={!pasteUrl.trim()}
               >
-                Use URL
+                Dùng URL
               </Button>
             </div>
           </>

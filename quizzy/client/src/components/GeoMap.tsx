@@ -69,7 +69,7 @@ function guessLabel(guess: MapGuess): HTMLElement {
   if (guess.distanceKm != null) {
     const distance = document.createElement('span');
     distance.className = 'geo-guess-distance';
-    distance.textContent = `${Math.round(guess.distanceKm).toLocaleString()} km`;
+    distance.textContent = `${Math.round(guess.distanceKm).toLocaleString('vi-VN')} km`;
     label.append(distance);
   }
   return label;

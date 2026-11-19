@@ -8,7 +8,7 @@ interface Props {
   className?: string;
 }
 
-export function QuestionImage({ src, alt = 'Question', className }: Props) {
+export function QuestionImage({ src, alt = 'Hình câu hỏi', className }: Props) {
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {

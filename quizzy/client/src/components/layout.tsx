@@ -83,7 +83,7 @@ export function Subtitle({ children, className }: { children: ReactNode; classNa
 }
 
 /** Full-page loading (or error) placeholder shown under the creator nav. */
-export function PageLoading({ message = 'Loading…', nav }: { message?: string; nav?: ReactNode }) {
+export function PageLoading({ message = 'Đang tải…', nav }: { message?: string; nav?: ReactNode }) {
   return (
     <Page>
       {nav ?? <CreatorNav />}

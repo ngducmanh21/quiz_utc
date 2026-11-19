@@ -38,7 +38,7 @@ export function SlideRail({
     >
       {!horizontal && (
         <div className="mb-3 px-1 text-[0.7rem] font-semibold uppercase tracking-wider text-muted-foreground">
-          Slides · {questions.length}
+          Trang · {questions.length}
         </div>
       )}
 
@@ -79,7 +79,7 @@ export function SlideRail({
                   horizontal ? 'mb-1.5 min-h-[2em] text-[0.65rem]' : 'mb-2 min-h-[2.2em] text-[0.7rem]',
                 )}
               >
-                {q.text || (isSlideType(type) ? 'Untitled slide' : 'Untitled question')}
+                {q.text || (isSlideType(type) ? 'Trang chưa đặt tên' : 'Câu hỏi chưa đặt tên')}
               </div>
               {!isSlideType(type) && (
                 <div className="grid grid-cols-2 gap-1">
@@ -101,7 +101,7 @@ export function SlideRail({
                   e.stopPropagation();
                   onRemove(i);
                 }}
-                title="Delete slide"
+                title="Xóa trang"
                 className={cn(
                   'absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-white',
                   horizontal ? 'opacity-100' : 'hidden group-hover:flex',
@@ -122,7 +122,7 @@ export function SlideRail({
           horizontal ? 'w-[100px] shrink-0 px-2' : 'mt-1 w-full',
         )}
       >
-        <Plus className="size-3.5" /> Add
+        <Plus className="size-3.5" /> Thêm
       </button>
     </aside>
   );

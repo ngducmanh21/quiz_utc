@@ -23,6 +23,7 @@ import {
 } from '@/helpers/playerSession';
 import { getSocket, useSocketEvent } from '@/hooks/useSocket';
 import { apiFetch } from '@/lib/api';
+import { translateError } from '@/lib/viErrors';
 
 import type { AuthUser } from '@/types';
 import './Join.css';
@@ -96,7 +97,7 @@ export default function Join() {
   );
 
   useSocketEvent<{ message: string }>('player:error', (data) => {
-    setError(data.message);
+    setError(translateError(data.message));
     setJoining(false);
     setStep('form');
     // Only clear session on hard failures — keep storage for retry on reload/reconnect
@@ -162,7 +163,7 @@ export default function Join() {
               <>
                 {appName}{' '}
                 <span className="mt-1 flex items-center justify-center gap-1 text-[0.6em] font-normal text-muted-foreground opacity-85">
-                  by <Zap className="size-4" /> Quizzy
+                  bởi <Zap className="size-4" /> Quizzy
                 </span>
               </>
             ) : (

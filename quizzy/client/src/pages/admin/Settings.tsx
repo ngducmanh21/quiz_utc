@@ -15,11 +15,11 @@ import type { AppConfig } from '../../types';
 import { SettingsFieldGroup, SettingsSection, SettingsToggle } from './components/SettingsSection';
 
 const NAV_SECTIONS = [
-  { id: 'branding', label: 'Branding', icon: Pencil },
-  { id: 'gameplay', label: 'Gameplay', icon: Timer },
-  { id: 'scoring', label: 'Scoring', icon: Target },
+  { id: 'branding', label: 'Giao diện', icon: Pencil },
+  { id: 'gameplay', label: 'Cách chơi', icon: Timer },
+  { id: 'scoring', label: 'Tính điểm', icon: Target },
   { id: 'avatars', label: 'Avatars', icon: Smile },
-  { id: 'security', label: 'Security', icon: Lock },
+  { id: 'security', label: 'Bảo mật', icon: Lock },
 ] as const;
 
 function computeSpeedBonus(position: number, totalPlayers: number, max: number, min: number) {
@@ -38,12 +38,12 @@ function SpeedBonusPreview({ max, min }: { max: number; min: number }) {
   return (
     <div className="rounded-lg border border-border bg-muted/30 p-4 mt-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-        Speed bonus preview
+        Xem trước thưởng tốc độ
       </p>
       <div className="flex flex-wrap gap-4 text-sm">
         {examples.map((n) => (
           <div key={n} className="flex flex-col gap-0.5">
-            <strong>{n} players</strong>
+            <strong>{n} người chơi</strong>
             {Array.from({ length: Math.min(n, 5) }, (_, i) => {
               const bonus = computeSpeedBonus(i, n, max, min);
               return (
@@ -69,12 +69,12 @@ function SpeedBonusPreview({ max, min }: { max: number; min: number }) {
 
 function BrandingPreview({ appName, appSubtitle }: { appName: string; appSubtitle: string }) {
   const name = appName.trim();
-  const logo = name ? `${name} by ⚡ Quizz` : '⚡ Quizz';
+  const logo = name ? `${name} · Quizzy` : 'Quizzy';
 
   return (
     <div className="rounded-lg border border-border bg-muted/30 p-4 mt-4">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
-        Join screen preview
+        Xem trước màn hình tham gia
       </p>
       <div className="py-4 text-center">
         <div className="text-xl font-extrabold bg-gradient-to-br from-brand-strong to-brand bg-clip-text text-transparent">
@@ -122,7 +122,7 @@ export default function Settings() {
 
     fetch('/api/avatars')
       .then((r) => {
-        if (!r.ok) throw new Error('Failed to load avatars');
+        if (!r.ok) throw new Error('Không tải được avatar');
         return r.json();
       })
       .then((urls: string[]) => {
@@ -131,7 +131,7 @@ export default function Settings() {
       })
       .catch(() => {
         setAvailableAvatars([]);
-        setAvatarsError('Could not load current avatars.');
+        setAvatarsError('Không tải được các avatar hiện có.');
       });
 
     if (isSuperAdmin) {
@@ -146,11 +146,11 @@ export default function Settings() {
 
   async function changePassword() {
     if (!currentPassword) {
-      await alert({ message: 'Please enter your current password' });
+      await alert({ message: 'Hãy nhập mật khẩu hiện tại' });
       return;
     }
     if (!newPassword && !newUsername) {
-      await alert({ message: 'Please enter a new password or username to change' });
+      await alert({ message: 'Hãy nhập mật khẩu hoặc tên đăng nhập mới' });
       return;
     }
 
@@ -163,19 +163,19 @@ export default function Settings() {
       const { ok, data } = await api.post<{ error?: string }>('/api/admin/change-password', body);
 
       if (!ok) {
-        await alert({ message: data?.error || 'Failed to change password' });
+        await alert({ message: data?.error || 'Không đổi được mật khẩu' });
         return;
       }
 
       await alert({
-        title: 'Password changed',
-        message: 'Please log in again.',
+        title: 'Đã đổi mật khẩu',
+        message: 'Hãy đăng nhập lại.',
       });
       await logout();
       window.location.href = '/login';
     } catch (error) {
-      console.error('Password change failed:', error);
-      await alert({ message: 'Failed to change password' });
+      console.error('Đổi mật khẩu thất bại:', error);
+      await alert({ message: 'Không đổi được mật khẩu' });
     } finally {
       setChangingPassword(false);
       setCurrentPassword('');
@@ -190,7 +190,7 @@ export default function Settings() {
     const { ok } = await api.put('/api/admin/config', { ...cfg });
     setSaving(false);
     if (!ok) {
-      await alert({ message: 'Failed to save settings' });
+      await alert({ message: 'Không lưu được cài đặt' });
       return;
     }
     setSaved(true);
@@ -209,7 +209,7 @@ export default function Settings() {
         new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
           reader.onload = () => resolve(reader.result as string);
-          reader.onerror = () => reject(new Error('Failed to read file'));
+          reader.onerror = () => reject(new Error('Không đọc được tệp'));
           reader.readAsDataURL(file);
         });
 
@@ -225,7 +225,7 @@ export default function Settings() {
       );
 
       if (!ok) {
-        throw new Error(payload?.error || 'Upload failed');
+        throw new Error(payload?.error || 'Tải lên thất bại');
       }
 
       const urls = Array.isArray(payload?.urls) ? payload.urls : [];
@@ -237,12 +237,12 @@ export default function Settings() {
 
       setAvatarUploadMessage(
         created > 0
-          ? `Uploaded ${created} new avatar${created === 1 ? '' : 's'}. They will appear in the avatar picker.`
-          : 'Upload completed, but no new avatars were created.',
+          ? `Đã tải lên ${created} avatar mới. Người chơi có thể chọn các avatar này.`
+          : 'Đã tải lên nhưng không có avatar mới.',
       );
     } catch (err) {
       console.error(err);
-      setAvatarUploadMessage('Could not upload avatars. Please try again with valid image files.');
+      setAvatarUploadMessage('Không tải được avatar. Hãy thử lại với tệp ảnh hợp lệ.');
     } finally {
       setUploadingAvatars(false);
       e.target.value = '';
@@ -251,9 +251,9 @@ export default function Settings() {
 
   async function handleDeleteAvatar(url: string) {
     const ok = await confirm({
-      title: 'Delete avatar?',
-      message: 'Players who picked this avatar will keep it until they change it.',
-      confirmText: 'Delete',
+      title: 'Xóa avatar?',
+      message: 'Người chơi đang dùng avatar này vẫn giữ ảnh cho đến khi họ đổi.',
+      confirmText: 'Xóa',
       variant: 'danger',
     });
     if (!ok) return;
@@ -266,13 +266,13 @@ export default function Settings() {
     setDeletingAvatar(null);
 
     if (!deleted) {
-      setAvatarUploadMessage(data?.error ?? 'Could not delete avatar.');
+      setAvatarUploadMessage(data?.error ?? 'Không xóa được avatar.');
       return;
     }
 
     setAvailableAvatars((prev) => (prev ?? []).filter((u) => u !== url));
     invalidateAvatarCache();
-    setAvatarUploadMessage('Avatar deleted.');
+    setAvatarUploadMessage('Đã xóa avatar.');
   }
 
   function update<K extends keyof AppConfig>(key: K, value: AppConfig[K]) {
@@ -291,28 +291,28 @@ export default function Settings() {
       <MainContent>
         <header className="flex flex-wrap items-start justify-between gap-4 mb-6">
           <div>
-            <h1>Settings</h1>
-            <Subtitle>Configure branding, gameplay, scoring, and admin access</Subtitle>
+            <h1>Cài đặt</h1>
+            <Subtitle>Cài đặt giao diện, cách chơi, điểm số và tài khoản quản trị</Subtitle>
           </div>
           <Button type="button" onClick={save} disabled={saving} size="lg">
             {saving ? (
-              'Saving…'
+              'Đang lưu…'
             ) : saved ? (
               <span className="flex items-center gap-1.5">
-                <Check className="size-4" /> Saved!
+                <Check className="size-4" /> Đã lưu!
               </span>
             ) : (
-              'Save changes'
+              'Lưu thay đổi'
             )}
           </Button>
         </header>
 
-        {saved && <AppAlert variant="success">Settings saved successfully.</AppAlert>}
+        {saved && <AppAlert variant="success">Đã lưu cài đặt.</AppAlert>}
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-[200px_1fr]">
           <nav
             className="flex gap-1 overflow-x-auto lg:sticky lg:top-20 lg:flex-col lg:self-start"
-            aria-label="Settings sections"
+            aria-label="Các mục cài đặt"
           >
             {NAV_SECTIONS.map(({ id, label, icon: Icon }) => (
               <a
@@ -330,51 +330,51 @@ export default function Settings() {
             <SettingsSection
               id="branding"
               icon={Pencil}
-              title="Branding"
-              description="Customise how the app appears on the player join screen."
+              title="Giao diện"
+              description="Tùy chỉnh giao diện màn hình người chơi tham gia."
             >
               <Input
-                label="Organisation / event name"
-                placeholder="e.g. Scaleway (leave blank for default)"
+                label="Tên đơn vị / sự kiện"
+                placeholder="Ví dụ: Tọa đàm Bình đẳng giới"
                 value={cfg.appName ?? ''}
                 onChange={(e) => update('appName', e.target.value)}
-                hint='Shown as "Your Name by ⚡ Quizz" — leave blank to show just ⚡ Quizz'
+                hint='Tên này sẽ hiện trong ứng dụng. Để trống để dùng tên mặc định.'
               />
               <Input
-                label="Join page subtitle"
-                placeholder="e.g. Quizz of the day — Cloud Edition"
+                label="Dòng mô tả trang tham gia"
+                placeholder="Ví dụ: Cùng tham gia tọa đàm"
                 value={cfg.appSubtitle ?? ''}
                 onChange={(e) => update('appSubtitle', e.target.value)}
                 noMargin
-                hint="Displayed below the logo on the join screen. Leave blank to hide."
+                hint="Hiện bên dưới logo ở trang tham gia. Để trống để ẩn."
               />
               <BrandingPreview appName={cfg.appName ?? ''} appSubtitle={cfg.appSubtitle ?? ''} />
               <Input
-                label="Public URL"
-                placeholder="e.g. https://quiz.example.com"
+                label="Địa chỉ công khai"
+                placeholder="Ví dụ: https://quiz.example.com"
                 value={cfg.publicUrl ?? ''}
                 onChange={(e) => update('publicUrl', e.target.value)}
                 noMargin
-                hint="Address phones use for join links and QR codes. Leave blank to use the host's browser address."
+                hint="Địa chỉ người chơi mở khi bấm liên kết hoặc quét QR. Để trống để dùng địa chỉ hiện tại."
               />
             </SettingsSection>
 
             <SettingsSection
               id="gameplay"
               icon={Timer}
-              title="Gameplay"
-              description="Default timing and session limits for new games."
+              title="Cách chơi"
+              description="Thời gian và giới hạn mặc định cho phiên chơi mới."
             >
               <FormRow>
                 <IntegerInput
-                  label="Question time (seconds)"
+                  label="Thời gian mỗi câu (giây)"
                   min={5}
                   max={120}
                   value={cfg.questionTimeSec ?? 20}
                   onValueChange={(value) => update('questionTimeSec', value)}
                 />
                 <IntegerInput
-                  label="Max players per session"
+                  label="Số người chơi tối đa mỗi phòng"
                   min={2}
                   max={2000}
                   value={cfg.maxPlayersPerSession ?? 50}
@@ -383,12 +383,12 @@ export default function Settings() {
               </FormRow>
 
               <SettingsFieldGroup
-                title="Results screen"
-                description="How long to show results before auto-advancing. Set to 0 for manual-only (admin clicks Next)."
+                title="Màn hình kết quả"
+                description="Thời gian hiện kết quả trước khi tự chuyển câu. Đặt 0 để quản trò tự bấm Tiếp."
               >
                 <IntegerInput
                   id="results-auto-advance-sec"
-                  label="Duration (seconds)"
+                  label="Thời lượng (giây)"
                   min={0}
                   max={60}
                   value={cfg.resultsAutoAdvanceSec ?? 5}
@@ -401,12 +401,12 @@ export default function Settings() {
             <SettingsSection
               id="scoring"
               icon={Target}
-              title="Scoring"
-              description="Points awarded for correct answers, speed, and streaks."
+              title="Tính điểm"
+              description="Điểm cho đáp án đúng, tốc độ và chuỗi trả lời đúng."
             >
-              <SettingsFieldGroup title="Base score">
+              <SettingsFieldGroup title="Điểm cơ bản">
                 <IntegerInput
-                  label="Default base score per question"
+                  label="Điểm cơ bản mỗi câu"
                   min={0}
                   step={50}
                   value={cfg.defaultBaseScore ?? 500}
@@ -416,12 +416,12 @@ export default function Settings() {
               </SettingsFieldGroup>
 
               <SettingsFieldGroup
-                title="Speed bonus"
-                description="Extra points for correct answers based on answer order. 1st correct gets max, last gets min."
+                title="Thưởng tốc độ"
+                description="Thưởng thêm theo thứ tự trả lời đúng: người đầu tiên nhận nhiều nhất."
               >
                 <FormRow>
                   <IntegerInput
-                    label="Max bonus (1st correct)"
+                    label="Thưởng tối đa (người đúng đầu tiên)"
                     min={0}
                     step={10}
                     value={cfg.speedBonusMax ?? 200}
@@ -429,7 +429,7 @@ export default function Settings() {
                     noMargin
                   />
                   <IntegerInput
-                    label="Min bonus (last correct)"
+                    label="Thưởng tối thiểu (người đúng cuối)"
                     min={0}
                     step={5}
                     value={cfg.speedBonusMin ?? 10}
@@ -441,34 +441,34 @@ export default function Settings() {
               </SettingsFieldGroup>
 
               <SettingsFieldGroup
-                title="Streak bonus"
-                description="Reward players who answer correctly multiple times in a row."
+                title="Thưởng liên tiếp"
+                description="Thưởng người chơi trả lời đúng nhiều câu liên tiếp."
               >
                 <SettingsToggle
                   id="streakEnabled"
-                  label="Enable streak bonus"
-                  description="Adds bonus points on consecutive correct answers"
+                  label="Bật thưởng trả lời liên tiếp"
+                  description="Cộng thêm điểm khi trả lời đúng liên tiếp"
                   checked={streakEnabled}
                   onChange={(checked) => update('streakBonusEnabled', checked)}
                 />
                 <FormRow>
                   <IntegerInput
-                    label="Streak starts at"
+                    label="Bắt đầu thưởng từ"
                     min={2}
                     max={10}
                     value={cfg.streakMinimum ?? 2}
                     onValueChange={(value) => update('streakMinimum', value)}
                     disabled={!streakEnabled}
-                    hint="Minimum consecutive correct answers before bonus kicks in"
+                    hint="Số câu đúng liên tiếp tối thiểu để được thưởng"
                   />
                   <IntegerInput
-                    label="Bonus per streak level"
+                    label="Điểm thưởng mỗi mức"
                     min={0}
                     step={10}
                     value={cfg.streakBonusBase ?? 50}
                     onValueChange={(value) => update('streakBonusBase', value)}
                     disabled={!streakEnabled}
-                    hint="e.g. 50 → 3-streak: +50, 4-streak: +100…"
+                    hint="Ví dụ: 50 → đúng 3 câu: +50, đúng 4 câu: +100…"
                     noMargin
                   />
                 </FormRow>
@@ -478,8 +478,8 @@ export default function Settings() {
             <SettingsSection
               id="avatars"
               icon={Smile}
-              title="Avatar library"
-              description="Upload emoji-style images for players to pick as avatars."
+              title="Kho avatar"
+              description="Tải ảnh lên để người chơi chọn làm avatar."
             >
               <label className="flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed border-border bg-muted/20 p-8 transition hover:border-brand/50 hover:bg-muted/40">
                 <FileInput
@@ -492,10 +492,10 @@ export default function Settings() {
                 />
                 <Upload className="size-10 text-muted-foreground" aria-hidden />
                 <span className="font-semibold">
-                  {uploadingAvatars ? 'Uploading…' : 'Click to upload avatars'}
+                  {uploadingAvatars ? 'Đang tải lên…' : 'Chọn ảnh để tải avatar lên'}
                 </span>
                 <span className="text-center text-xs text-muted-foreground">
-                  PNG, JPG, GIF, SVG, or WebP — square images around 128×128 work best
+                  PNG, JPG, GIF, SVG hoặc WebP — ảnh vuông khoảng 128×128 hiển thị tốt nhất
                 </span>
               </label>
 
@@ -505,14 +505,14 @@ export default function Settings() {
                 </AppAlert>
               )}
 
-              <SettingsFieldGroup title="Available avatars">
+              <SettingsFieldGroup title="Avatar có sẵn">
                 {availableAvatars === null && !avatarsError && (
-                  <p className="text-sm text-muted-foreground">Loading current avatars…</p>
+                  <p className="text-sm text-muted-foreground">Đang tải avatar…</p>
                 )}
                 {avatarsError && <p className="text-sm text-muted-foreground">{avatarsError}</p>}
                 {availableAvatars && availableAvatars.length === 0 && !avatarsError && (
                   <p className="text-sm text-muted-foreground">
-                    No avatars yet. Upload some above to populate the library.
+                    Chưa có avatar. Hãy tải ảnh lên ở phía trên.
                   </p>
                 )}
                 {availableAvatars && availableAvatars.length > 0 && (
@@ -525,7 +525,7 @@ export default function Settings() {
                         <img src={url} alt="" className="h-full w-full object-cover" />
                         <button
                           type="button"
-                          aria-label="Delete avatar"
+                          aria-label="Xóa avatar"
                           disabled={deletingAvatar === url}
                           onClick={() => handleDeleteAvatar(url)}
                           className={cn(
@@ -545,22 +545,22 @@ export default function Settings() {
             <SettingsSection
               id="security"
               icon={Lock}
-              title="Security"
+              title="Bảo mật"
               description={
                 isSuperAdmin
-                  ? 'Manage database admin accounts.'
-                  : 'Update your admin username and password.'
+                  ? 'Quản lý tài khoản quản trị trong cơ sở dữ liệu.'
+                  : 'Đổi tên đăng nhập và mật khẩu quản trị.'
               }
             >
               {isSuperAdmin ? (
                 <>
                   <AppAlert variant="warn" className="mb-4">
-                    You are logged in as super admin. Your password is managed via the{' '}
-                    <code>ADMIN_PASSWORD</code> environment variable.
+                    Bạn đang đăng nhập bằng tài khoản quản trị cao nhất. Mật khẩu mặc định còn được
+                    lưu trong biến môi trường <code>ADMIN_PASSWORD</code> của máy chủ.
                   </AppAlert>
 
                   {dbAdmins.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">No database admins found.</p>
+                    <p className="text-sm text-muted-foreground">Không tìm thấy tài khoản quản trị trong cơ sở dữ liệu.</p>
                   ) : (
                     <div className="flex flex-col gap-4">
                       {dbAdmins.map((admin) => (
@@ -570,10 +570,10 @@ export default function Settings() {
                         >
                           <div className="pb-2 font-semibold text-sm sm:pb-0">{admin.username}</div>
                           <Input
-                            label="New password"
+                            label="Mật khẩu mới"
                             type="password"
                             autoComplete="new-password"
-                            placeholder="Enter new password"
+                            placeholder="Nhập mật khẩu mới"
                             value={resetPasswords[admin.id] || ''}
                             onChange={(e) =>
                               setResetPasswords((prev) => ({
@@ -595,19 +595,19 @@ export default function Settings() {
                                   { newPassword: resetPasswords[admin.id] },
                                 );
                                 if (ok) {
-                                  await alert({ message: `Password reset for ${admin.username}` });
+                                  await alert({ message: `Đã đặt lại mật khẩu cho ${admin.username}` });
                                   setResetPasswords((prev) => ({ ...prev, [admin.id]: '' }));
                                 } else {
-                                  await alert({ message: err?.error || 'Reset failed' });
+                                  await alert({ message: err?.error || 'Đặt lại thất bại' });
                                 }
                               } catch {
-                                await alert({ message: 'Reset failed' });
+                                await alert({ message: 'Đặt lại thất bại' });
                               } finally {
                                 setResettingId(null);
                               }
                             }}
                           >
-                            {resettingId === admin.id ? 'Resetting…' : 'Reset'}
+                            {resettingId === admin.id ? 'Đang đặt lại…' : 'Đặt lại'}
                           </Button>
                         </div>
                       ))}
@@ -617,33 +617,33 @@ export default function Settings() {
               ) : (
                 <>
                   <div className="mb-4 rounded-lg border border-border bg-muted/30 p-4">
-                    <p className="mb-1 text-xs text-muted-foreground">Current username</p>
+                    <p className="mb-1 text-xs text-muted-foreground">Tên đăng nhập hiện tại</p>
                     <p className="text-lg font-semibold">{adminUsername || '…'}</p>
                   </div>
 
                   <Input
-                    label="Current password"
+                    label="Mật khẩu hiện tại"
                     type="password"
                     autoComplete="off"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    placeholder="Required to make changes"
+                    placeholder="Bắt buộc để thay đổi"
                   />
                   <Input
-                    label="New username"
+                    label="Tên đăng nhập mới"
                     autoComplete="off"
                     value={newUsername}
                     onChange={(e) => setNewUsername(e.target.value)}
                     placeholder={adminUsername || 'admin'}
-                    hint="Leave blank to keep current username"
+                    hint="Để trống nếu không đổi tên đăng nhập"
                   />
                   <Input
-                    label="New password"
+                    label="Mật khẩu mới"
                     type="password"
                     autoComplete="new-password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    placeholder="Leave blank to keep current password"
+                    placeholder="Để trống nếu không đổi mật khẩu"
                     noMargin
                   />
 
@@ -653,11 +653,11 @@ export default function Settings() {
                     disabled={changingPassword}
                     className="mt-4"
                   >
-                    {changingPassword ? 'Updating…' : 'Update credentials'}
+                    {changingPassword ? 'Đang cập nhật…' : 'Cập nhật thông tin đăng nhập'}
                   </Button>
 
                   <AppAlert variant="warn" className="mt-4">
-                    After changing credentials, you&apos;ll be logged out and need to sign in again.
+                    Sau khi đổi thông tin đăng nhập, bạn sẽ cần đăng nhập lại.
                   </AppAlert>
                 </>
               )}

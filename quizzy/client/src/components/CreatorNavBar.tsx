@@ -22,7 +22,7 @@ export default function CreatorNavBar({
   loginPath,
   showUsers = false,
   showMyGames = false,
-  playLabel = 'Play ↗',
+  playLabel = 'Vào chơi ↗',
 }: Props) {
   const { logout } = useAuth();
   const location = useLocation();
@@ -34,12 +34,12 @@ export default function CreatorNavBar({
     cn(navBtn, location.pathname === path && 'bg-muted text-foreground');
 
   const links = [
-    { to: basePath, label: 'Dashboard' },
-    { to: `${basePath}/quiz/new`, label: '+ New Quiz' },
-    { to: `${basePath}/history`, label: 'History' },
-    ...(showMyGames ? [{ to: `${basePath}/my-games`, label: 'My games' }] : []),
-    ...(showUsers ? [{ to: `${basePath}/users`, label: 'Users' }] : []),
-    { to: `${basePath}/settings`, label: 'Settings' },
+    { to: basePath, label: 'Bảng điều khiển' },
+    { to: `${basePath}/quiz/new`, label: '+ Tạo quiz' },
+    { to: `${basePath}/history`, label: 'Lịch sử' },
+    ...(showMyGames ? [{ to: `${basePath}/my-games`, label: 'Lịch sử chơi' }] : []),
+    ...(showUsers ? [{ to: `${basePath}/users`, label: 'Người dùng' }] : []),
+    { to: `${basePath}/settings`, label: 'Cài đặt' },
   ];
 
   async function handleLogout() {
@@ -62,12 +62,12 @@ export default function CreatorNavBar({
                 {appName}
               </span>{' '}
               <span className="hidden font-normal text-[0.72em] text-muted-foreground opacity-80 sm:inline">
-                by Quizz
+                bởi Quizzy
               </span>
             </span>
           ) : (
             <span className="bg-gradient-to-br from-brand-strong to-brand bg-clip-text text-transparent">
-              Quizz
+              Quizzy
             </span>
           )}
         </Link>
@@ -87,7 +87,7 @@ export default function CreatorNavBar({
             {playLabel}
           </a>
           <Button type="button" onClick={handleLogout} variant="ghost" size="sm">
-            Log out
+            Đăng xuất
           </Button>
         </div>
 
@@ -97,7 +97,7 @@ export default function CreatorNavBar({
           size="icon-sm"
           className="md:hidden"
           aria-expanded={menuOpen}
-          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-label={menuOpen ? 'Đóng menu' : 'Mở menu'}
           onClick={() => setMenuOpen((o) => !o)}
         >
           {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
@@ -132,7 +132,7 @@ export default function CreatorNavBar({
               className="justify-start px-3"
               onClick={handleLogout}
             >
-              <LogOut className="size-4" /> Log out
+              <LogOut className="size-4" /> Đăng xuất
             </Button>
           </div>
         </div>

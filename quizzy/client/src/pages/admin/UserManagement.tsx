@@ -32,7 +32,7 @@ function UserActions({ user, actionId, onUnban, onBan, onReset, onDelete }: User
           disabled={busy}
           onClick={() => onUnban(user.id)}
         >
-          Unban
+          Bỏ chặn
         </Button>
       ) : (
         <Button
@@ -42,7 +42,7 @@ function UserActions({ user, actionId, onUnban, onBan, onReset, onDelete }: User
           disabled={busy}
           onClick={() => onBan(user.id)}
         >
-          Ban
+          Chặn
         </Button>
       )}
       <Button
@@ -52,7 +52,7 @@ function UserActions({ user, actionId, onUnban, onBan, onReset, onDelete }: User
         disabled={busy}
         onClick={() => onReset(user.id)}
       >
-        Reset pw
+        Đặt lại mật khẩu
       </Button>
       <Button
         type="button"
@@ -62,7 +62,7 @@ function UserActions({ user, actionId, onUnban, onBan, onReset, onDelete }: User
         onClick={() => onDelete(user.id)}
         className="text-destructive"
       >
-        Delete
+        Xóa
       </Button>
     </>
   );
@@ -80,7 +80,7 @@ export default function UserManagement() {
   const load = useCallback(async () => {
     const { ok, data } = await api.get<{ users?: UserAccount[] }>('/api/admin/users');
     if (!ok) {
-      setError('Failed to load users');
+      setError('Không tải được danh sách người dùng');
       setLoading(false);
       return;
     }
@@ -108,8 +108,8 @@ export default function UserManagement() {
 
   async function resetUserPassword(id: number) {
     const proceed = await confirm({
-      title: 'Reset password?',
-      message: 'This generates a new password for this user.',
+      title: 'Đặt lại mật khẩu?',
+      message: 'Hệ thống sẽ tạo mật khẩu mới cho người dùng này.',
       confirmText: 'Generate',
     });
     if (!proceed) return;
@@ -120,14 +120,14 @@ export default function UserManagement() {
     );
     setActionId(null);
     if (ok && data?.password) setResetPassword({ id, password: data.password });
-    else setError(data?.error ?? 'Reset failed');
+    else setError(data?.error ?? 'Đặt lại thất bại');
   }
 
   async function deleteUser(id: number) {
     const ok = await confirm({
-      title: 'Delete user?',
-      message: 'Their quizzes will become unowned.',
-      confirmText: 'Delete',
+      title: 'Xóa người dùng?',
+      message: 'Các quiz của họ sẽ không còn người sở hữu.',
+      confirmText: 'Xóa',
       variant: 'danger',
     });
     if (!ok) return;
@@ -141,14 +141,14 @@ export default function UserManagement() {
     <Page>
       <AdminNav />
       <MainContent>
-        <h1>User Management</h1>
-        <Subtitle className="mb-6">Manage registered quiz creators</Subtitle>
+        <h1>Quản lý người dùng</h1>
+        <Subtitle className="mb-6">Quản lý tài khoản tạo quiz</Subtitle>
 
         {error && <AppAlert variant="error">{error}</AppAlert>}
         {resetPassword && (
           <AppAlert variant="success">
-            New password for user #{resetPassword.id}: <code>{resetPassword.password}</code> — copy
-            it now, it won&apos;t be shown again.
+            Mật khẩu mới của người dùng #{resetPassword.id}: <code>{resetPassword.password}</code>.
+            Hãy sao chép ngay; mật khẩu sẽ không hiện lại.
             <Button
               type="button"
               variant="ghost"
@@ -156,17 +156,17 @@ export default function UserManagement() {
               className="ml-2"
               onClick={() => setResetPassword(null)}
             >
-              Dismiss
+              Đóng
             </Button>
           </AppAlert>
         )}
 
         {loading ? (
-          <p className="text-muted-foreground">Loading…</p>
+          <p className="text-muted-foreground">Đang tải…</p>
         ) : users.length === 0 ? (
           <Card>
             <CardContent className="px-6 py-12 text-center">
-              <p className="text-muted-foreground">No registered users yet.</p>
+              <p className="text-muted-foreground">Chưa có người dùng đăng ký.</p>
             </CardContent>
           </Card>
         ) : (
@@ -178,8 +178,8 @@ export default function UserManagement() {
                     <span className="block truncate font-medium">{u.username}</span>
                     <span className="block truncate text-sm text-muted-foreground">{u.email}</span>
                     <span className="mt-0.5 block text-xs text-muted-foreground">
-                      {u.quiz_count} quiz{u.quiz_count !== 1 ? 'zes' : ''} ·{' '}
-                      {new Date(u.created_at).toLocaleDateString()}
+                      {u.quiz_count} quiz ·{' '}
+                      {new Date(u.created_at).toLocaleDateString('vi-VN')}
                     </span>
                   </div>
                   <Badge
@@ -191,7 +191,7 @@ export default function UserManagement() {
                         : 'border-ok/30 bg-ok/15 text-ok',
                     )}
                   >
-                    {u.is_banned ? 'banned' : 'active'}
+                    {u.is_banned ? 'Đã chặn' : 'Đang hoạt động'}
                   </Badge>
                   <div className="flex w-full flex-wrap gap-2 sm:w-auto">
                     <UserActions
@@ -212,11 +212,11 @@ export default function UserManagement() {
                   <thead>
                     <tr className="border-b border-border text-left text-muted-foreground">
                       <th className="px-4 py-3 font-medium">Email</th>
-                      <th className="px-4 py-3 font-medium">Name</th>
-                      <th className="px-4 py-3 font-medium">Quizzes</th>
-                      <th className="px-4 py-3 font-medium">Status</th>
-                      <th className="px-4 py-3 font-medium">Created</th>
-                      <th className="px-4 py-3 text-right font-medium">Actions</th>
+                      <th className="px-4 py-3 font-medium">Tên</th>
+                      <th className="px-4 py-3 font-medium">Bộ câu hỏi</th>
+                      <th className="px-4 py-3 font-medium">Trạng thái</th>
+                      <th className="px-4 py-3 font-medium">Ngày tạo</th>
+                      <th className="px-4 py-3 text-right font-medium">Thao tác</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -235,11 +235,11 @@ export default function UserManagement() {
                                 : 'border-ok/30 bg-ok/15 text-ok',
                             )}
                           >
-                            {u.is_banned ? 'banned' : 'active'}
+                            {u.is_banned ? 'Đã chặn' : 'Đang hoạt động'}
                           </Badge>
                         </td>
                         <td className="px-4 py-3 text-sm text-muted-foreground">
-                          {new Date(u.created_at).toLocaleDateString()}
+                          {new Date(u.created_at).toLocaleDateString('vi-VN')}
                         </td>
                         <td className="px-4 py-3">
                           <div className="flex justify-end gap-2">

@@ -4,34 +4,34 @@ import type { ImportPayload, QuizTranslationPayload } from '@/types';
 
 /** Full import example — one question per supported type, with every optional field shown. */
 export const QUIZ_IMPORT_EXAMPLE = {
-  title: 'General Knowledge Quiz',
-  description: 'A quick 12-question warm-up — geography, code, music & more',
+  title: 'Quiz kiến thức tổng hợp',
+  description: 'Khởi động với 12 câu về địa lý, lập trình, âm nhạc và nhiều chủ đề khác',
   coverImage: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200',
-  language: 'fr',
+  language: 'vi',
   questions: [
     {
-      text: 'What is the capital of France?',
-      options: ['Berlin', 'Madrid', 'Paris', 'Rome'],
+      text: 'Thủ đô của Pháp là thành phố nào?',
+      options: ['Berlin', 'Madrid', 'Paris', 'Roma'],
       correctIndex: 2,
       baseScore: 500,
       timeSec: 20,
       questionType: 'multiple_choice',
       imageUrl: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800',
-      explanation: 'Paris has been the capital of France since 987 AD.',
-      tags: ['easy', 'geography'],
+      explanation: 'Paris là thủ đô của Pháp từ năm 987.',
+      tags: ['dễ', 'địa lý'],
     },
     {
-      text: 'What does this print?\n```js\nconst a = [1, 2, 3];\nconsole.log(a.map(x => x * 2));\n```',
+      text: 'Đoạn mã này in ra gì?\n```js\nconst a = [1, 2, 3];\nconsole.log(a.map(x => x * 2));\n```',
       options: ['[1, 2, 3]', '[2, 4, 6]', '[1, 4, 9]', 'undefined'],
       correctIndex: 1,
       baseScore: 500,
       timeSec: 30,
       questionType: 'multiple_choice',
-      explanation: 'map doubles each element, so `[1,2,3]` becomes `[2,4,6]`.',
-      tags: ['code', 'javascript'],
+      explanation: 'map nhân đôi từng phần tử nên `[1,2,3]` thành `[2,4,6]`.',
+      tags: ['lập trình', 'javascript'],
     },
     {
-      text: 'Which of these animals is a fox?',
+      text: 'Ảnh nào là con cáo?',
       options: [
         'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600',
         'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600',
@@ -42,11 +42,11 @@ export const QUIZ_IMPORT_EXAMPLE = {
       baseScore: 500,
       timeSec: 20,
       questionType: 'multiple_choice',
-      explanation: 'A: fox · B: dog · C: cat · D: elephant',
-      tags: ['images', 'animals'],
+      explanation: 'A: cáo · B: chó · C: mèo · D: voi',
+      tags: ['hình ảnh', 'động vật'],
     },
     {
-      text: 'Listen — who is the artist?',
+      text: 'Nghe nhạc và đoán tên ca sĩ.',
       options: ['Rick Astley', 'Bruno Mars', 'The Weeknd', 'Ed Sheeran'],
       correctIndex: 0,
       baseScore: 500,
@@ -54,23 +54,23 @@ export const QUIZ_IMPORT_EXAMPLE = {
       questionType: 'multiple_choice',
       mediaType: 'audio',
       mediaUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=43',
-      explanation: "Rick Astley — 'Never Gonna Give You Up' (starts at 0:43).",
-      tags: ['music', 'fun'],
+      explanation: "Rick Astley — 'Never Gonna Give You Up' (bắt đầu tại 0:43).",
+      tags: ['âm nhạc', 'giải trí'],
     },
     {
-      text: 'The first-ever YouTube video — where was it filmed?',
-      options: ['At the zoo', 'At a concert', 'In a car', 'At home'],
+      text: 'Video đầu tiên trên YouTube được quay ở đâu?',
+      options: ['Sở thú', 'Buổi hòa nhạc', 'Trong ô tô', 'Ở nhà'],
       correctIndex: 0,
       baseScore: 500,
       timeSec: 30,
       questionType: 'multiple_choice',
       mediaType: 'video',
       mediaUrl: 'https://youtu.be/jNQXAC9IVRw',
-      explanation: "'Me at the zoo' — San Diego Zoo, 2005.",
-      tags: ['trivia', 'fun'],
+      explanation: "Video 'Me at the zoo' được quay tại sở thú San Diego năm 2005.",
+      tags: ['kiến thức', 'giải trí'],
     },
     {
-      text: 'Which of these are prime numbers?',
+      text: 'Những số nào sau đây là số nguyên tố?',
       options: ['2', '4', '7', '9'],
       correctIndex: 0,
       correctIndices: [0, 2],
@@ -78,33 +78,33 @@ export const QUIZ_IMPORT_EXAMPLE = {
       timeSec: 25,
       questionType: 'multi_select',
       explanation:
-        'A prime number has exactly two divisors: 1 and itself. 2 and 7 qualify; 4 and 9 do not.',
-      tags: ['math', 'medium'],
+        'Số nguyên tố chỉ có hai ước là 1 và chính nó. 2 và 7 là số nguyên tố.',
+      tags: ['toán học', 'trung bình'],
     },
     {
-      text: 'The Earth is flat.',
-      options: ['True', 'False'],
+      text: 'Trái Đất phẳng.',
+      options: ['Đúng', 'Sai'],
       correctIndex: 1,
       baseScore: 300,
       timeSec: 20,
       questionType: 'true_false',
       explanation:
-        'Earth is an oblate spheroid — photos from space and centuries of science confirm this.',
-      tags: ['science', 'easy'],
+        'Trái Đất có dạng gần cầu, hơi dẹt ở hai cực.',
+      tags: ['khoa học', 'dễ'],
     },
     {
-      text: 'What is 2 + 2?',
+      text: '2 + 2 bằng bao nhiêu?',
       options: [],
       correctIndex: 0,
       correctAnswer: '4',
       baseScore: 400,
       timeSec: 20,
       questionType: 'open_text',
-      explanation: 'Basic addition: 2 + 2 = 4.',
-      tags: ['math', 'easy'],
+      explanation: 'Phép cộng cơ bản: 2 + 2 = 4.',
+      tags: ['toán học', 'dễ'],
     },
     {
-      text: 'How many countries are in the African Union?',
+      text: 'Liên minh châu Phi có bao nhiêu quốc gia thành viên?',
       options: [],
       correctIndex: 0,
       correctAnswer: '55',
@@ -113,62 +113,62 @@ export const QUIZ_IMPORT_EXAMPLE = {
       baseScore: 500,
       timeSec: 25,
       questionType: 'closest_to',
-      explanation: 'The African Union has 55 member states.',
-      tags: ['geography', 'medium'],
+      explanation: 'Liên minh châu Phi có 55 quốc gia thành viên.',
+      tags: ['địa lý', 'trung bình'],
     },
     {
-      text: 'The ___ is the largest planet, and ___ is closest to the Sun.',
+      text: '___ là hành tinh lớn nhất và ___ gần Mặt Trời nhất.',
       options: [],
       correctIndex: 0,
       questionType: 'fill_blank',
-      blanks: [['Jupiter'], ['Mercury']],
+      blanks: [['Sao Mộc'], ['Sao Thủy']],
       baseScore: 500,
       timeSec: 25,
-      explanation: 'Partial credit is awarded per blank.',
-      tags: ['science', 'space'],
+      explanation: 'Mỗi chỗ trống đúng được tính điểm riêng.',
+      tags: ['khoa học', 'vũ trụ'],
     },
     {
-      text: 'Put these events in chronological order (earliest first).',
-      options: ['Fall of Rome', 'Renaissance', 'Moon landing', 'First iPhone'],
+      text: 'Sắp xếp các sự kiện theo thời gian (sớm nhất trước).',
+      options: ['Đế quốc La Mã sụp đổ', 'Thời kỳ Phục hưng', 'Con người lên Mặt Trăng', 'iPhone đầu tiên'],
       correctIndex: 0,
       questionType: 'ordering',
       baseScore: 600,
       timeSec: 30,
-      explanation: 'Score is proportional to how many items land in the right spot.',
-      tags: ['history', 'medium'],
+      explanation: 'Số điểm phụ thuộc vào số mục được đặt đúng vị trí.',
+      tags: ['lịch sử', 'trung bình'],
     },
     {
-      text: 'Drop a pin on Paris.',
+      text: 'Đặt ghim vào vị trí Paris.',
       options: [],
       correctIndex: 0,
       questionType: 'geo',
       geo: { lat: 48.8566, lng: 2.3522 },
       baseScore: 500,
       timeSec: 25,
-      explanation: 'Closest pin wins — GeoGuessr-style, scored by real distance.',
-      tags: ['geography', 'fun'],
+      explanation: 'Ghim càng gần vị trí thực càng nhiều điểm.',
+      tags: ['địa lý', 'giải trí'],
     },
     {
-      text: 'Round 2: Geography',
+      text: 'Vòng 2: Địa lý',
       options: [],
       correctIndex: 0,
       questionType: 'title_slide',
       baseScore: 0,
-      explanation: 'The next questions are about places. The host moves on when everyone is ready.',
+      explanation: 'Các câu tiếp theo về địa điểm. Quản trò chuyển tiếp khi mọi người sẵn sàng.',
     },
     {
-      text: 'Match each capital to its country.',
+      text: 'Ghép thủ đô với quốc gia tương ứng.',
       options: ['Paris', 'Tokyo', 'Cairo'],
-      matches: ['France', 'Japan', 'Egypt'],
+      matches: ['Pháp', 'Nhật Bản', 'Ai Cập'],
       correctIndex: 0,
       questionType: 'matching',
       baseScore: 500,
       timeSec: 30,
-      explanation: 'Partial credit is awarded per correctly matched pair.',
-      tags: ['geography', 'medium'],
+      explanation: 'Mỗi cặp ghép đúng được tính điểm riêng.',
+      tags: ['địa lý', 'trung bình'],
     },
     {
-      text: 'Current standings',
+      text: 'Bảng xếp hạng hiện tại',
       options: [],
       correctIndex: 0,
       questionType: 'standings_slide',
@@ -181,14 +181,14 @@ export const QUIZ_IMPORT_JSON = JSON.stringify(QUIZ_IMPORT_EXAMPLE, null, 2);
 
 /** Compact hint for the empty textarea. */
 export const QUIZ_IMPORT_JSON_SHORT = `{
-  "title": "My Quiz",
-  "description": "Optional subtitle shown in the lobby",
+  "title": "Quiz của tôi",
+  "description": "Mô tả không bắt buộc, hiện trong phòng chờ",
   "coverImage": "https://example.com/cover.jpg",
-  "language": "fr",
+  "language": "vi",
   "questions": [
     {
-      "text": "What is the capital of France?",
-      "options": ["Berlin", "Madrid", "Paris", "Rome"],
+      "text": "Thủ đô của Pháp là thành phố nào?",
+      "options": ["Berlin", "Madrid", "Paris", "Roma"],
       "correctIndex": 2,
       "baseScore": 500,
       "timeSec": 20,
@@ -204,14 +204,14 @@ const QUIZ_IMPORT_SCHEMA_OBJECT = {
   type: 'object',
   required: ['title', 'questions'],
   properties: {
-    title: { type: 'string', description: 'Quiz name' },
-    description: { type: 'string', description: 'Lobby subtitle' },
-    coverImage: { type: 'string', description: 'Lobby cover image URL' },
+    title: { type: 'string', description: 'Tên quiz' },
+    description: { type: 'string', description: 'Dòng mô tả trong phòng chờ' },
+    coverImage: { type: 'string', description: 'URL ảnh bìa phòng chờ' },
     language: {
       type: 'string',
-      default: 'fr',
+      default: 'vi',
       description:
-        'Locale code the quiz is authored in (e.g. "fr", "en", "es"). Defaults to French.',
+        'Mã ngôn ngữ của quiz (ví dụ "vi", "en", "fr"). Mặc định là tiếng Việt.',
     },
     questions: {
       type: 'array',
@@ -226,27 +226,27 @@ const QUIZ_IMPORT_SCHEMA_OBJECT = {
       properties: {
         text: {
           type: 'string',
-          description: 'Question body; supports newlines, ```code blocks```, and `inline code`',
+          description: 'Nội dung câu hỏi; hỗ trợ xuống dòng, ```khối mã``` và `mã trong dòng`',
         },
         options: {
           type: 'array',
           items: { type: 'string' },
           description:
-            'Answer choices; image URLs render as pictures; for ordering list items in correct order; for matching, options are the left-column items; use [] for open_text, closest_to, fill_blank, geo',
+            'Các đáp án; URL ảnh sẽ hiện thành ảnh. Với câu sắp xếp, liệt kê theo thứ tự đúng; với ghép cặp, đây là cột trái. Dùng [] cho open_text, closest_to, fill_blank, geo.',
         },
         correctIndex: {
           type: 'integer',
           minimum: 0,
-          description: '0-based index of the correct option; use 0 when options is []',
+          description: 'Vị trí đáp án đúng, tính từ 0; dùng 0 khi options là []',
         },
         correctIndices: {
           type: 'array',
           items: { type: 'integer', minimum: 0 },
-          description: 'multi_select: indices of all correct options',
+          description: 'multi_select: vị trí của tất cả đáp án đúng',
         },
         correctAnswer: {
           type: 'string',
-          description: 'open_text: accepted answer; closest_to: numeric target as string',
+          description: 'open_text: đáp án được chấp nhận; closest_to: số đúng dạng chuỗi',
         },
         questionType: {
           type: 'string',
@@ -264,35 +264,35 @@ const QUIZ_IMPORT_SCHEMA_OBJECT = {
             'standings_slide',
           ],
           description:
-            'title_slide: section intro, text is the title and explanation the body. standings_slide: shows the current leaderboard under the title in text. Slides have no answers or timer and stay up until the host advances; use options [] and correctIndex 0.',
+            'title_slide: trang mở đầu, text là tiêu đề và explanation là nội dung. standings_slide: hiện bảng xếp hạng dưới tiêu đề. Trang trình chiếu không có đáp án hoặc đồng hồ; dùng options [] và correctIndex 0.',
           default: 'multiple_choice',
         },
         baseScore: {
           type: 'integer',
           default: 500,
-          description: 'Points for a fully correct answer',
+          description: 'Điểm cho đáp án đúng hoàn toàn',
         },
-        timeSec: { type: 'integer', default: 20, description: 'Seconds to answer' },
-        imageUrl: { type: 'string', description: 'Question image URL' },
+        timeSec: { type: 'integer', default: 20, description: 'Số giây để trả lời' },
+        imageUrl: { type: 'string', description: 'URL ảnh câu hỏi' },
         explanation: {
           type: 'string',
-          description: 'Shown on the results screen after reveal; title_slide: the body text',
+          description: 'Hiện sau khi công bố đáp án; với title_slide là nội dung trang',
         },
-        rangeMin: { type: 'number', description: 'closest_to slider minimum' },
-        rangeMax: { type: 'number', description: 'closest_to slider maximum' },
+        rangeMin: { type: 'number', description: 'closest_to: giới hạn dưới' },
+        rangeMax: { type: 'number', description: 'closest_to: giới hạn trên' },
         mediaUrl: {
           type: 'string',
-          description: 'YouTube URL (supports ?t=SECONDS start offset)',
+          description: 'URL YouTube (hỗ trợ ?t=SECONDS để chọn thời điểm bắt đầu)',
         },
         mediaType: {
           type: 'string',
           enum: ['audio', 'video'],
-          description: 'audio: sound only; video: embedded player',
+          description: 'audio: chỉ phát âm thanh; video: phát video trong trang',
         },
         blanks: {
           type: 'array',
           items: { type: 'array', items: { type: 'string' } },
-          description: 'fill_blank: accepted answers per ___ blank, case-insensitive',
+          description: 'fill_blank: đáp án chấp nhận cho mỗi ___, không phân biệt chữ hoa',
         },
         geo: {
           type: 'object',
@@ -301,18 +301,18 @@ const QUIZ_IMPORT_SCHEMA_OBJECT = {
             lat: { type: 'number' },
             lng: { type: 'number' },
           },
-          description: 'geo: correct map location',
+          description: 'geo: vị trí đúng trên bản đồ',
         },
         matches: {
           type: 'array',
           items: { type: 'string' },
           description:
-            'matching: correct right-hand item for each options[i] (left item); 2-6 pairs, index-aligned with options',
+            'matching: mục bên phải tương ứng với mỗi options[i] bên trái; 2–6 cặp, cùng thứ tự với options',
         },
         tags: {
           type: 'array',
           items: { type: 'string' },
-          description: 'Free-form labels (topic, difficulty); shown in the lobby',
+          description: 'Thẻ tự do (chủ đề, độ khó); hiện trong phòng chờ',
         },
       },
     },
@@ -325,24 +325,23 @@ export const QUIZ_IMPORT_SCHEMA = JSON.stringify(QUIZ_IMPORT_SCHEMA_OBJECT, null
 export const QUIZ_IMPORT_EXAMPLE_JSON = QUIZ_IMPORT_JSON;
 
 /** AI task instructions only. */
-const QUIZ_IMPORT_AI_INSTRUCTIONS = `I am building a quiz for Quizz (a Kahoot-style multiplayer quiz app).
+const QUIZ_IMPORT_AI_INSTRUCTIONS = `Tôi đang tạo bộ câu hỏi cho Quizzy, ứng dụng quiz nhiều người chơi.
 
-Generate a complete quiz as JSON that matches the Quizz import schema exactly.
+Hãy tạo một quiz hoàn chỉnh bằng JSON đúng theo cấu trúc bên dưới.
 
-How to decide what to ask:
-• If I attach or paste source material (document, PDF, lecture notes, slides, article, or any other media), extract questions from that content.
-• If I do not provide source material, generate questions from the topic or instructions I write in this message.
+Chọn nội dung câu hỏi:
+• Nếu tôi đính kèm hoặc dán tài liệu (PDF, bài giảng, slide, bài viết...), hãy lấy câu hỏi từ tài liệu đó.
+• Nếu không có tài liệu, hãy tạo câu hỏi từ chủ đề hoặc hướng dẫn tôi cung cấp.
 
-Requirements:
-1. Output ONLY valid JSON — no markdown code fences, no commentary before or after.
-2. Use the exact field names and question types from the Quizz JSON schema below.
-3. Include a clear title and description for the quiz lobby.
-3b. Set "language" to the locale code you're writing the questions in (default "fr" for French; use "en" if I ask for English, etc.).
-4. Add an explanation on each question (shown after the answer is revealed).
-5. Add tags (topic, difficulty) on questions when helpful.
-6. Mix question types where appropriate.
-6b. If the quiz has distinct themes or rounds, put a "title_slide" before each one, and a "standings_slide" between rounds. Slides are not questions: leave out timeSec and tags, and include at least one real question.
-7. Double-check every correctIndex, correctIndices, correctAnswer, blanks, and geo coordinate.`;
+Yêu cầu:
+1. Chỉ xuất JSON hợp lệ, không có hàng rào mã Markdown hoặc lời giải thích ngoài JSON.
+2. Giữ nguyên tên trường và loại câu hỏi trong cấu trúc JSON bên dưới.
+3. Thêm tiêu đề và mô tả rõ ràng cho phòng chờ.
+4. Đặt "language" là "vi" khi câu hỏi bằng tiếng Việt; nếu dùng ngôn ngữ khác, hãy đặt mã tương ứng.
+5. Thêm lời giải thích cho từng câu hỏi, hiện sau khi công bố đáp án.
+6. Thêm thẻ chủ đề hoặc độ khó khi phù hợp và kết hợp nhiều loại câu hỏi.
+7. Nếu quiz có nhiều chủ đề hoặc vòng, thêm "title_slide" trước mỗi vòng và "standings_slide" giữa các vòng. Quiz phải có ít nhất một câu hỏi thật.
+8. Kiểm tra kỹ correctIndex, correctIndices, correctAnswer, blanks và tọa độ geo.`;
 
 /** Prompt + JSON schema — copied by "Copy prompt". */
 export const QUIZ_IMPORT_AI_PROMPT = `${QUIZ_IMPORT_AI_INSTRUCTIONS}
@@ -364,21 +363,21 @@ export function parseQuizImportJson(
   try {
     payload = JSON.parse(text);
   } catch {
-    return { ok: false, error: 'Invalid JSON — please check the format' };
+    return { ok: false, error: 'JSON không hợp lệ — hãy kiểm tra định dạng' };
   }
   if (!Array.isArray(payload.questions) || payload.questions.length === 0) {
-    return { ok: false, error: 'JSON must have a non-empty "questions" array' };
+    return { ok: false, error: 'JSON cần có mảng "questions" không rỗng' };
   }
   if (requireTitle && !payload.title) {
-    return { ok: false, error: 'JSON must have "title" and a non-empty "questions" array' };
+    return { ok: false, error: 'JSON cần có "title" và mảng "questions" không rỗng' };
   }
   if (payload.questions.every((q) => isSlideType(q.questionType))) {
-    return { ok: false, error: 'JSON must have at least one question, not only slides' };
+    return { ok: false, error: 'JSON cần ít nhất một câu hỏi, không chỉ có trang trình chiếu' };
   }
   for (let i = 0; i < payload.questions.length; i++) {
     const q = payload.questions[i];
     if (isSlideType(q.questionType) && !q.text?.trim()) {
-      return { ok: false, error: `Slide ${i + 1} is missing "text" (its title)` };
+      return { ok: false, error: `Trang ${i + 1} thiếu "text" (tiêu đề)` };
     }
     if ((q.questionType ?? 'multiple_choice') === 'closest_to') {
       const err = validateClosestToQuestion(q, i);
@@ -413,26 +412,26 @@ export function parseQuizTranslationJson(
   try {
     payload = JSON.parse(text);
   } catch {
-    return { ok: false, error: 'Invalid JSON — please check the format' };
+    return { ok: false, error: 'JSON không hợp lệ — hãy kiểm tra định dạng' };
   }
   const resolvedLocale = locale?.trim() || payload.locale?.trim();
   if (!resolvedLocale) {
-    return { ok: false, error: 'Enter a locale (e.g. "fr", "es-MX")' };
+    return { ok: false, error: 'Hãy nhập mã ngôn ngữ (ví dụ "fr", "es-MX")' };
   }
   if (!Array.isArray(payload.questions) || payload.questions.length === 0) {
-    return { ok: false, error: 'JSON must have a non-empty "questions" array' };
+    return { ok: false, error: 'JSON cần có mảng "questions" không rỗng' };
   }
   if (expectedCount !== undefined && payload.questions.length !== expectedCount) {
     return {
       ok: false,
-      error: `This quiz has ${expectedCount} question(s), but the translation has ${payload.questions.length}. They must match in count and order.`,
+      error: `Quiz có ${expectedCount} câu nhưng bản dịch có ${payload.questions.length} câu. Số lượng và thứ tự phải giống nhau.`,
     };
   }
   for (let i = 0; i < payload.questions.length; i++) {
     const q = payload.questions[i];
-    if (!q.text?.trim()) return { ok: false, error: `Question ${i + 1} is missing "text"` };
+    if (!q.text?.trim()) return { ok: false, error: `Câu ${i + 1} thiếu "text"` };
     if (!Array.isArray(q.options)) {
-      return { ok: false, error: `Question ${i + 1} is missing an "options" array` };
+      return { ok: false, error: `Câu ${i + 1} thiếu mảng "options"` };
     }
   }
   return { ok: true, payload: { ...payload, locale: resolvedLocale } };

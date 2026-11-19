@@ -252,18 +252,18 @@ export function QuizStudio({
       <header className="z-20 flex min-h-14 shrink-0 flex-wrap items-center gap-2 border-b border-border bg-muted/40 px-3 py-2 backdrop-blur sm:gap-3 sm:px-4">
         <span className="flex shrink-0 items-center gap-1.5 text-lg font-extrabold text-foreground">
           <Zap className="size-5 fill-brand text-brand" />
-          <span className="hidden sm:inline">Quizz</span>
+          <span className="hidden sm:inline">Quizzy</span>
         </span>
         <span className="hidden h-5 w-px bg-border sm:block" />
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter quiz title…"
+          placeholder="Nhập tiêu đề quiz…"
           className="min-w-0 flex-1 rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-[15px] font-bold text-foreground outline-none focus:border-border focus:bg-muted sm:max-w-xs sm:flex-none sm:px-3 lg:max-w-sm lg:w-72"
         />
         {mode === 'create' && draft && (
           <span className="hidden items-center gap-1 rounded-full border border-border px-2.5 py-1 text-xs text-muted-foreground sm:flex">
-            <PencilLine className="size-3" /> Draft restored
+            <PencilLine className="size-3" /> Đã khôi phục bản nháp
           </span>
         )}
         <div className="hidden flex-1 lg:block" />
@@ -274,40 +274,40 @@ export function QuizStudio({
               variant="ghost"
               size="sm"
               onClick={discardDraft}
-              title="Clear this draft and start blank"
+              title="Xóa bản nháp để bắt đầu lại"
               className="hidden sm:inline-flex"
             >
-              Discard draft
+              Bỏ bản nháp
             </Button>
           )}
           {headerExtra}
           <Button type="button" variant="ghost" size="sm" onClick={onCancel}>
-            Exit
+            Thoát
           </Button>
           <Button type="button" variant="secondary" size="sm" onClick={() => setBankOpen(true)}>
             <Library className="size-4" />
-            <span className="hidden sm:inline">Question bank</span>
+            <span className="hidden sm:inline">Ngân hàng câu hỏi</span>
           </Button>
           <Button type="button" variant="secondary" size="sm" onClick={() => setPreviewing(true)}>
             <Eye className="size-4" />
-            <span className="hidden sm:inline">Preview</span>
+            <span className="hidden sm:inline">Xem trước</span>
           </Button>
           <Button
             type="button"
             variant="secondary"
             size="sm"
             onClick={handleExportJson}
-            title="Copy quiz as import-ready JSON"
+            title="Sao chép quiz thành JSON để nhập lại"
           >
             {copiedJson ? (
               <>
                 <Check className="size-4" />
-                <span className="hidden sm:inline">Copied</span>
+                <span className="hidden sm:inline">Đã sao chép</span>
               </>
             ) : (
               <>
                 <Copy className="size-4" />
-                <span className="hidden sm:inline">Export JSON</span>
+                <span className="hidden sm:inline">Xuất JSON</span>
               </>
             )}
           </Button>
@@ -318,9 +318,9 @@ export function QuizStudio({
               <>
                 <Check className="size-4" />
                 <span className="hidden sm:inline">
-                  {mode === 'create' ? 'Create quiz' : 'Save'}
+                  {mode === 'create' ? 'Tạo quiz' : 'Lưu'}
                 </span>
-                <span className="sm:hidden">{mode === 'create' ? 'Create' : 'Save'}</span>
+                <span className="sm:hidden">{mode === 'create' ? 'Tạo' : 'Lưu'}</span>
               </>
             )}
           </Button>
@@ -378,7 +378,7 @@ export function QuizStudio({
                   : 'text-muted-foreground hover:text-foreground',
               )}
             >
-              <SlidersHorizontal className="size-3.5" /> Properties
+              <SlidersHorizontal className="size-3.5" /> Thuộc tính
             </button>
             <button
               type="button"
@@ -401,12 +401,12 @@ export function QuizStudio({
               <div>
                 <Input
                   noMargin
-                  label="Language"
+                  label="Ngôn ngữ"
                   list="quiz-language-suggestions"
                   value={language}
                   onChange={(e) => setLanguage(e.target.value || DEFAULT_LOCALE)}
                   placeholder={DEFAULT_LOCALE}
-                  hint={`The language this quiz is written in — players who don't pick a translation see "${localeName(language)}".`}
+                  hint={`Ngôn ngữ gốc của quiz. Người chơi không chọn bản dịch sẽ thấy nội dung bằng ${localeName(language)}.`}
                 />
                 <datalist id="quiz-language-suggestions">
                   {COMMON_LOCALES.map((code) => (
@@ -418,16 +418,16 @@ export function QuizStudio({
               </div>
               <Textarea
                 noMargin
-                label="Description"
+                label="Mô tả"
                 rows={3}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Shown to players in the lobby"
+                placeholder="Hiện cho người chơi trong phòng chờ"
               />
               <div>
                 <Input
                   noMargin
-                  label="Cover image URL"
+                  label="URL ảnh bìa"
                   type="url"
                   value={coverImage}
                   onChange={(e) => setCoverImage(e.target.value)}
@@ -440,12 +440,12 @@ export function QuizStudio({
                   className="mt-2"
                   onClick={() => setCoverPicker(true)}
                 >
-                  <Search className="size-3.5" /> Search image
+                  <Search className="size-3.5" /> Tìm ảnh
                 </Button>
                 {coverImage.trim() && (
                   <img
                     src={coverImage}
-                    alt="Cover preview"
+                    alt="Xem trước ảnh bìa"
                     className="mt-2 max-h-[140px] w-full rounded-lg object-cover"
                   />
                 )}

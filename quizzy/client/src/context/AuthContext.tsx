@@ -8,6 +8,7 @@ import {
   useState,
 } from 'react';
 import type { AuthRole, AuthUser } from '../types';
+import { translateError } from '@/lib/viErrors';
 
 export type LoginResult = { ok: false; error: string } | { ok: true; role: AuthRole };
 
@@ -56,7 +57,7 @@ async function fetchMe(token: string): Promise<MeResult> {
     playAvatar?: string | null;
   };
   if (!res.ok) {
-    return { ok: false, error: data.error ?? 'Unauthorized' };
+    return { ok: false, error: translateError(data.error ?? 'Unauthorized') };
   }
   return {
     ok: true,
@@ -129,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email: identifier, password }),
       });
       const data = await res.json();
-      if (!res.ok) return { ok: false, error: (data.error as string) ?? 'Login failed' };
+      if (!res.ok) return { ok: false, error: translateError((data.error as string) ?? 'Đăng nhập thất bại') };
       return applyToken(data.token as string);
     },
     [applyToken],
@@ -143,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password, username }),
       });
       const data = await res.json();
-      if (!res.ok) return (data.error as string) ?? 'Registration failed';
+      if (!res.ok) return translateError((data.error as string) ?? 'Đăng ký thất bại');
       const result = await applyToken(data.token as string);
       return result.ok ? null : result.error;
     },

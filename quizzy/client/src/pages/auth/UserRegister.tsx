@@ -37,14 +37,14 @@ export default function UserRegister() {
           <AppLogo>
             {appName || (
               <span className="inline-flex items-center gap-1.5">
-                <Zap className="size-4" /> Quizz
+                <Zap className="size-4" /> Quizzy
               </span>
             )}
           </AppLogo>
-          <Subtitle className="mt-2">Create your quiz creator account</Subtitle>
+          <Subtitle className="mt-2">Tạo tài khoản để soạn quiz</Subtitle>
           {allowedDomain && (
             <p className="text-muted-foreground text-sm mt-2">
-              Use an email ending in {domainHint}
+              Hãy dùng email có đuôi {domainHint}
             </p>
           )}
         </div>
@@ -53,7 +53,7 @@ export default function UserRegister() {
 
         {!allowedDomain && (
           <AppAlert variant="error" className="mb-4">
-            Registration is currently disabled (no allowed domain configured).
+            Hiện chưa mở đăng ký tài khoản.
           </AppAlert>
         )}
 
@@ -63,7 +63,7 @@ export default function UserRegister() {
             label="Email"
             type="email"
             autoComplete="email"
-            placeholder={allowedDomain ? `you@${allowedDomain}` : 'you@company.com'}
+            placeholder={allowedDomain ? `ten@${allowedDomain}` : 'ten@email.vn'}
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -71,10 +71,10 @@ export default function UserRegister() {
           />
           <Input
             id="username"
-            label="Display name"
+            label="Tên hiển thị"
             type="text"
             autoComplete="username"
-            placeholder="Your name"
+            placeholder="Tên của bạn"
             required
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -82,10 +82,10 @@ export default function UserRegister() {
           />
           <Input
             id="password"
-            label="Password"
+            label="Mật khẩu"
             type="password"
             autoComplete="new-password"
-            placeholder="At least 6 characters"
+            placeholder="Ít nhất 6 ký tự"
             required
             minLength={6}
             value={password}
@@ -99,15 +99,15 @@ export default function UserRegister() {
             size="lg"
             className="mt-2 w-full"
           >
-            {loading ? 'Creating account…' : 'Create account'}
+            {loading ? 'Đang tạo tài khoản…' : 'Tạo tài khoản'}
           </Button>
         </form>
 
         <p className="text-center text-muted-foreground text-sm mt-4">
-          Already have an account? <Link to="/login">Sign in</Link>
+          Đã có tài khoản? <Link to="/login">Đăng nhập</Link>
         </p>
         <p className="text-center text-muted-foreground text-sm mt-2">
-          <Link to="/play">Join a game</Link> · <Link to="/">Home</Link>
+          <Link to="/play">Tham gia trò chơi</Link> · <Link to="/">Trang chủ</Link>
         </p>
       </AuthCard>
     </PageCenter>

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { cn } from '@/lib/utils';
+import { translateError } from '@/lib/viErrors';
 
 type AppAlertVariant = 'error' | 'success' | 'warn' | 'info';
 
@@ -22,7 +23,7 @@ export function AppAlert({
 }) {
   return (
     <Alert className={cn('mb-4', variantClass[variant], className)}>
-      <AlertDescription>{children}</AlertDescription>
+      <AlertDescription>{typeof children === 'string' ? translateError(children) : children}</AlertDescription>
     </Alert>
   );
 }

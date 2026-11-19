@@ -8,6 +8,7 @@ import { MuteToggle } from '@/components/MuteToggle';
 import { useCountdown } from '@/hooks/useCountdown';
 import { getSocket, useSocketEvent } from '@/hooks/useSocket';
 import { sound } from '@/lib/sound';
+import { translateError } from '@/lib/viErrors';
 import type {
   FinalLeaderboardEntry,
   GameEndedPayload,
@@ -99,7 +100,7 @@ export default function Screen() {
   useSocketEvent<void>('connect', () => setOnline(true));
   useSocketEvent<void>('disconnect', () => setOnline(false));
 
-  useSocketEvent<{ message: string }>('screen:error', (data) => setError(data.message));
+  useSocketEvent<{ message: string }>('screen:error', (data) => setError(translateError(data.message)));
 
   useSocketEvent<ScreenState>('screen:state', (data) => {
     setError(null);
@@ -185,7 +186,7 @@ export default function Screen() {
     );
   }
 
-  if (!info || phase === 'connecting') return <PageLoading message="Connecting to the game…" />;
+  if (!info || phase === 'connecting') return <PageLoading message="Đang kết nối trò chơi…" />;
 
   return (
     <div className="screen-stage flex min-h-screen flex-1 flex-col">
@@ -228,20 +229,20 @@ export default function Screen() {
       <button
         type="button"
         onClick={toggleFullscreen}
-        aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
-        title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+        aria-label={isFullscreen ? 'Thoát toàn màn hình' : 'Vào toàn màn hình'}
+        title={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}
         className="fixed right-3 bottom-3 z-50 inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-[var(--surface2)] text-[var(--text2)] transition-colors hover:text-foreground"
       >
         {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
       </button>
       {!unlocked && (
         <p className="fixed inset-x-0 bottom-3 z-50 mx-auto w-fit rounded-full bg-black/70 px-4 py-1.5 text-sm text-white">
-          Click anywhere for sound
+          Chạm vào màn hình để bật âm thanh
         </p>
       )}
       {!online && (
         <output className="fixed inset-x-0 bottom-14 z-50 mx-auto flex w-fit items-center gap-2 rounded-full bg-warn px-4 py-1.5 text-sm font-semibold text-black">
-          <WifiOff className="size-4" /> Reconnecting…
+          <WifiOff className="size-4" /> Đang kết nối lại…
         </output>
       )}
     </div>

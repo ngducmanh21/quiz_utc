@@ -42,11 +42,11 @@ export function PresentationPanel({ baseUrl, pin, screenCount }: PanelProps) {
             className={`h-2.5 w-2.5 rounded-full ${connected ? 'bg-ok' : 'bg-warn'}`}
           />
           {connected
-            ? `Screen connected${screenCount > 1 ? ` (${screenCount})` : ''}`
-            : 'No screen connected'}
+            ? `Đã kết nối màn hình chiếu${screenCount > 1 ? ` (${screenCount})` : ''}`
+            : 'Chưa kết nối màn hình chiếu'}
         </output>
         <span className="hidden text-xs text-muted-foreground sm:inline">
-          Press N or → to advance
+          Nhấn N hoặc → để chuyển tiếp
         </span>
         <div className="ml-auto flex flex-wrap gap-2">
           <Button
@@ -55,21 +55,21 @@ export function PresentationPanel({ baseUrl, pin, screenCount }: PanelProps) {
             variant={connected ? 'secondary' : 'default'}
             onClick={() => window.open(screenUrl, `quizz-screen-${pin}`, 'popup')}
           >
-            <Monitor className="size-4" /> Open screen
+            <Monitor className="size-4" /> Mở màn hình chiếu
           </Button>
           <Button type="button" size="sm" variant="ghost" onClick={copyLink}>
             {copyState === 'copied' ? <Check className="size-4" /> : <Copy className="size-4" />}
-            {copyState === 'copied' ? 'Copied' : 'Copy screen link'}
+            {copyState === 'copied' ? 'Đã sao chép' : 'Sao chép liên kết màn hình chiếu'}
           </Button>
         </div>
         {copyState === 'failed' && (
           <div className="w-full">
             <p className="mb-1 text-sm text-warn">
-              Your browser blocked copying. Select this link and copy it yourself:
+              Trình duyệt chặn sao chép. Hãy chọn và tự sao chép liên kết này:
             </p>
             <Input
               readOnly
-              aria-label="Screen link"
+              aria-label="Liên kết màn hình chiếu"
               value={screenUrl}
               onFocus={(e) => e.target.select()}
             />
@@ -78,7 +78,7 @@ export function PresentationPanel({ baseUrl, pin, screenCount }: PanelProps) {
         {isLocalUrl(baseUrl) && (
           <p className="flex w-full items-center gap-1.5 text-sm text-warn">
             <TriangleAlert className="size-4 shrink-0" />
-            Phones can't reach localhost. Set a Public URL in Settings so the QR code works.
+            Điện thoại không mở được localhost. Hãy đặt Địa chỉ công khai trong Cài đặt để QR hoạt động.
           </p>
         )}
       </div>
@@ -104,17 +104,17 @@ export function PresentationActionBar({
     <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 p-3 backdrop-blur sm:hidden">
       {phase === 'question' ? (
         <Button type="button" size="lg" className="w-full" onClick={onFinishQuestion}>
-          <Square className="size-4" /> Finish question
+          <Square className="size-4" /> Kết thúc câu hỏi
         </Button>
       ) : (
         <Button type="button" size="lg" className="w-full" onClick={onNextQuestion}>
           {isLastQuestion ? (
             <>
-              <Flag className="size-4" /> Final scores
+              <Flag className="size-4" /> Điểm chung cuộc
             </>
           ) : (
             <>
-              Next <ArrowRight className="size-4" />
+              Tiếp <ArrowRight className="size-4" />
             </>
           )}
         </Button>

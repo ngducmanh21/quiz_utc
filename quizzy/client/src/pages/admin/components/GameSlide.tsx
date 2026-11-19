@@ -18,16 +18,16 @@ export function GameSlide({ slide, nextPreview, onNext, onEndGame }: Props) {
     <MainContent>
       <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
         <Button type="button" variant="ghost" size="lg" onClick={onEndGame}>
-          End Game
+          Kết thúc trò chơi
         </Button>
         <Button type="button" size="lg" onClick={onNext} className="min-w-0 sm:min-w-[180px]">
           {slide.isLast ? (
             <span className="flex items-center gap-1.5">
-              <Flag className="size-4" /> Final Scores
+              <Flag className="size-4" /> Điểm chung cuộc
             </span>
           ) : (
             <span className="flex items-center gap-1.5">
-              Next <ArrowRight className="size-4" />
+              Tiếp <ArrowRight className="size-4" />
             </span>
           )}
         </Button>

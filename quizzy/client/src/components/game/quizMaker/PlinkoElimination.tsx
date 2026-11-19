@@ -104,7 +104,7 @@ export function PlinkoElimination({ players, onStatus, onFinish }: PickerGamePro
         el.style.transform = 'translate3d(-100px, -100px, 0)';
       }
       cb.current.onStatus(
-        `Round ${roundNo} — ${contenders.length} in the draw. Land in red and you stay in!`,
+        `Vòng ${roundNo} — còn ${contenders.length} người chơi. Rơi vào ô đỏ để ở lại!`,
       );
     };
 
@@ -127,7 +127,7 @@ export function PlinkoElimination({ players, onStatus, onFinish }: PickerGamePro
       if (survivors.length === 1) {
         cb.current.onStatus(`${survivors[0]} is the last one in the red!`);
       } else if (survivors.length === 0) {
-        cb.current.onStatus('Nobody hit red — the same players drop again!');
+        cb.current.onStatus('Không ai rơi vào ô đỏ — những người này chơi lại!');
       } else {
         cb.current.onStatus(`${survivors.length} landed in red — they stay in!`);
       }
@@ -207,7 +207,7 @@ export function PlinkoElimination({ players, onStatus, onFinish }: PickerGamePro
       >
         {round > 0 && (
           <div className="absolute top-2 left-3 text-[11px] font-bold tracking-widest text-white/60 uppercase">
-            Round {round}
+            Vòng {round}
           </div>
         )}
         {pegs.map((peg) => (
@@ -233,7 +233,7 @@ export function PlinkoElimination({ players, onStatus, onFinish }: PickerGamePro
                   height: BIN_H,
                 }}
               >
-                {isRed ? 'IN' : 'SAFE'}
+                {isRed ? 'Ở LẠI' : 'AN TOÀN'}
               </div>
             );
           })}

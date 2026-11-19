@@ -48,7 +48,7 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
     <div className="flex flex-col gap-6 p-4">
       {/* Question type */}
       <section>
-        <SectionTitle>Slide type</SectionTitle>
+        <SectionTitle>Loại câu hỏi</SectionTitle>
         <div className="flex flex-col gap-1.5">
           {ALL_TYPES.map((t) => {
             const Icon = TYPE_META[t].icon;
@@ -75,7 +75,7 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
       {/* Time limit */}
       {!isSlide && (
         <section>
-          <SectionTitle icon={Timer}>Time limit</SectionTitle>
+          <SectionTitle icon={Timer}>Thời gian</SectionTitle>
           <div className="flex flex-wrap gap-1.5">
             {TIME_PRESETS.map((t) => (
               <button
@@ -84,7 +84,7 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
                 onClick={() => onChange('timeSec', t)}
                 className={chip((q.timeSec ?? 20) === t)}
               >
-                {t}s
+                {t} giây
               </button>
             ))}
           </div>
@@ -102,7 +102,7 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
       {/* Points */}
       {!isSlide && (
         <section>
-          <SectionTitle icon={Trophy}>Points</SectionTitle>
+          <SectionTitle icon={Trophy}>Điểm</SectionTitle>
           <div className="mb-2 flex gap-1.5">
             {POINT_PRESETS.map((p) => (
               <button
@@ -117,7 +117,7 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
           </div>
           <IntegerInput
             noMargin
-            label="Base score"
+            label="Điểm cơ bản"
             min={0}
             step={50}
             value={q.baseScore}
@@ -129,21 +129,21 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
       {/* Answer options mode */}
       {supportsMulti && (
         <section>
-          <SectionTitle icon={ListChecks}>Answer options</SectionTitle>
+          <SectionTitle icon={ListChecks}>Các lựa chọn</SectionTitle>
           <div className="flex gap-1.5">
             <button
               type="button"
               onClick={() => ops.setType('multiple_choice')}
               className={cn(chip(type === 'multiple_choice'), 'flex-1 text-center')}
             >
-              Single select
+              Chọn một đáp án
             </button>
             <button
               type="button"
               onClick={() => ops.setType('multi_select')}
               className={cn(chip(type === 'multi_select'), 'flex-1 text-center')}
             >
-              Multi-select
+              Chọn nhiều đáp án
             </button>
           </div>
         </section>
@@ -153,10 +153,10 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
       {!isSlide && (
         <section>
           <TagInput
-            label="Tags"
+            label="Thẻ"
             value={q.tags ?? []}
             onChange={(tags) => onChange('tags', tags)}
-            placeholder="Type a tag, press comma…"
+            placeholder="Nhập thẻ rồi nhấn dấu phẩy…"
           />
         </section>
       )}
@@ -166,12 +166,12 @@ export function PropertiesPanel({ q, ops, onChange }: Props) {
         <section>
           <Textarea
             noMargin
-            label="Explanation (shown after timer)"
+            label="Giải thích (hiện sau khi hết giờ)"
             rows={3}
             className="resize-y"
             value={q.explanation ?? ''}
             onChange={(e) => onChange('explanation', e.target.value || undefined)}
-            placeholder="Why is this the answer?"
+            placeholder="Vì sao đây là đáp án?"
           />
         </section>
       )}
