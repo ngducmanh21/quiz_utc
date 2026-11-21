@@ -1,6 +1,7 @@
 import { ArrowRight, Check, GripVertical, Presentation, SkipForward, X } from 'lucide-react';
 import { useState } from 'react';
 import { type LatLng, MapPicker } from '@/components/GeoMap';
+import { AvatarDisplay } from '@/components/AvatarPicker';
 import { QuadOptionGrid } from '@/components/game/QuadOptionGrid';
 import { TimerBar } from '@/components/game/TimerBar';
 import { IntegerInput } from '@/components/Input';
@@ -15,9 +16,12 @@ import { countBlanks, hasQuestionImage, quadColor } from '@/helpers';
 import { arrayMove, usePointerReorder } from '@/hooks/usePointerReorder';
 import { cn } from '@/lib/utils';
 import type { QuestionPayload } from '@/types';
+import './QuestionScreen.css';
 
 interface Props {
   question: QuestionPayload;
+  playerAvatar?: string;
+  playerName?: string;
   /** Presentation mode: media lives on the big screen, this phone only answers. */
   controller?: boolean;
   showQuestionText?: boolean;
@@ -51,6 +55,8 @@ interface Props {
 
 export function QuestionScreen({
   question,
+  playerAvatar,
+  playerName,
   controller = false,
   showQuestionText = true,
   timeLeft,
@@ -177,18 +183,26 @@ export function QuestionScreen({
   }
 
   return (
-    <PageVCenter>
+    <PageVCenter className="play-question-page">
       <div
-        className={
-          showImage ? 'mx-auto w-full max-w-[min(900px,95vw)]' : 'mx-auto w-full max-w-[700px]'
-        }
+        className={cn(
+          'play-question mx-auto w-full',
+          showImage ? 'max-w-[min(900px,95vw)]' : 'max-w-[700px]',
+        )}
       >
-        <div className="question-header">
-          <div className="question-counter">
-            Câu hỏi {question.questionIndex + 1} trên {question.totalQuestions}
+        <div className="question-header play-question-header">
+          <div className="play-question-topline">
+            <div className="question-counter">
+              Câu hỏi {question.questionIndex + 1} trên {question.totalQuestions}
+            </div>
+            {playerAvatar && (
+              <span className="play-question-avatar" title={playerName} aria-label={`Avatar của ${playerName ?? 'bạn'}`}>
+                <AvatarDisplay avatar={playerAvatar} size={44} style={{ border: 0 }} />
+              </span>
+            )}
           </div>
           {question.scoreMultiplier === 2 && (
-            <div className="mx-auto my-2 w-fit rounded-full bg-orange-600 px-4 py-2 font-extrabold text-white">
+            <div className="play-question-x2 mx-auto my-2 w-fit font-extrabold">
               Câu hỏi X2 điểm
             </div>
           )}
@@ -244,14 +258,7 @@ export function QuestionScreen({
 
         {/* Joker buttons */}
         {(jokersEnabled.pass || jokersEnabled.fiftyFifty) && !hasAnswered && (
-          <div
-            style={{
-              display: 'flex',
-              gap: 10,
-              padding: '0 20px 4px',
-              justifyContent: 'flex-end',
-            }}
-          >
+          <div className="play-question-jokers">
             {jokersEnabled.pass && (
               <Button
                 type="button"
@@ -294,7 +301,7 @@ export function QuestionScreen({
 
         {isTrueFalse ? (
           <QuadOptionGrid
-            className="p-5"
+            className="play-answer-grid"
             options={['Đúng', 'Sai']}
             selectedIndex={selectedIndex}
             colorFor={(i) => (i === 0 ? '#1f9d57' : '#e2455a')}
@@ -425,8 +432,9 @@ export function QuestionScreen({
             </div>
           </div>
         ) : isMultiSelect ? (
-          <div className="p-5">
+          <div className="play-answer-actions">
             <QuadOptionGrid
+              className="play-answer-grid"
               options={question.options}
               selectedIndices={selectedIndices}
               selectedBadge={<Check className="size-5" />}
@@ -686,7 +694,7 @@ export function QuestionScreen({
           </div>
         ) : (
           <QuadOptionGrid
-            className="p-5"
+            className="play-answer-grid"
             options={question.options}
             selectedIndex={selectedIndex}
             eliminatedIndices={eliminatedIndices}

@@ -6,6 +6,17 @@ import { fetchAvatarUrls } from '@/lib/avatars';
 
 const AVATAR_KEY = 'quizz_avatar';
 
+const BUILTIN_AVATARS = [
+  { url: '/characters/fox.svg', label: 'Cáo cam' },
+  { url: '/characters/frog.svg', label: 'Ếch xanh' },
+  { url: '/characters/cat.svg', label: 'Mèo tím' },
+  { url: '/characters/bunny.svg', label: 'Thỏ hồng' },
+  { url: '/characters/robot.svg', label: 'Robot xanh' },
+  { url: '/characters/bear.svg', label: 'Gấu nâu' },
+  { url: '/characters/penguin.svg', label: 'Cánh cụt' },
+  { url: '/characters/alien.svg', label: 'Bạn ngoài hành tinh' },
+];
+
 // Emoji fallbacks shown while the server list is loading or if it returns empty
 const FALLBACK_EMOJIS = [
   '🦊',
@@ -31,7 +42,7 @@ const FALLBACK_EMOJIS = [
 ];
 
 export function loadSavedAvatar(): string {
-  return localStorage.getItem(AVATAR_KEY) ?? FALLBACK_EMOJIS[0];
+  return localStorage.getItem(AVATAR_KEY) ?? BUILTIN_AVATARS[0].url;
 }
 
 export function saveAvatar(avatar: string) {
@@ -86,9 +97,13 @@ export function AvatarPicker({ value, onChange }: AvatarPickerProps) {
     img.src = url;
   }
 
-  const isImage = value.startsWith('data:') || value.startsWith('/avatars/');
+  const isImage =
+    value.startsWith('data:') || value.startsWith('/avatars/') || value.startsWith('/characters/');
   const loading = serverUrls === null;
-  const options = serverUrls?.length ? serverUrls : null;
+  const options = [
+    ...BUILTIN_AVATARS,
+    ...(serverUrls ?? []).map((url, index) => ({ url, label: `Avatar tải lên ${index + 1}` })),
+  ];
 
   return (
     <div>
@@ -161,38 +176,40 @@ export function AvatarPicker({ value, onChange }: AvatarPickerProps) {
         </div>
       )}
 
-      {!loading && options && options.length > 0 && (
+      {!loading && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {options.map((url) => {
+          {options.map(({ url, label }) => {
             const selected = value === url;
             return (
               <button
                 type="button"
                 key={url}
+                aria-label={`Chọn ${label}`}
+                aria-pressed={selected}
                 onClick={() => onChange(url)}
                 style={{
                   width: 52,
                   height: 52,
-                  borderRadius: 10,
-                  padding: 3,
-                  border: `2px solid ${selected ? 'var(--accent)' : 'var(--border)'}`,
+                  borderRadius: '50%',
+                  padding: 2,
+                  border: `2px solid ${selected ? 'var(--foreground)' : 'var(--border)'}`,
                   background: selected ? 'var(--accent-soft)' : 'var(--surface2)',
                   cursor: 'pointer',
                   overflow: 'hidden',
-                  boxShadow: selected ? '0 0 0 3px var(--accent-soft)' : 'none',
+                  boxShadow: selected ? '0 3px 0 var(--foreground)' : 'none',
                   transition: 'all .15s',
                   flexShrink: 0,
                 }}
               >
                 <img
                   src={url}
-                  alt=""
+                  alt={label}
                   style={{
                     width: '100%',
                     height: '100%',
                     objectFit: 'contain',
                     display: 'block',
-                    borderRadius: 6,
+                    borderRadius: '50%',
                   }}
                 />
               </button>
@@ -201,36 +218,40 @@ export function AvatarPicker({ value, onChange }: AvatarPickerProps) {
         </div>
       )}
 
-      {/* Fallback: show emoji chars if server returned empty list */}
-      {!loading && (!options || options.length === 0) && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          {FALLBACK_EMOJIS.map((emoji) => {
-            const selected = value === emoji;
-            return (
-              <button
-                type="button"
-                key={emoji}
-                onClick={() => onChange(emoji)}
-                style={{
-                  width: 46,
-                  height: 46,
-                  borderRadius: 10,
-                  border: `2px solid ${selected ? 'var(--accent)' : 'var(--border)'}`,
-                  background: selected ? 'var(--accent-soft)' : 'var(--surface2)',
-                  fontSize: '1.6rem',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: selected ? '0 0 0 3px var(--accent-soft)' : 'none',
-                  transition: 'all .15s',
-                }}
-              >
-                {emoji}
-              </button>
-            );
-          })}
-        </div>
+      {!loading && (
+        <details className="mt-3">
+          <summary className="cursor-pointer text-sm text-muted-foreground">Thêm emoji</summary>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+            {FALLBACK_EMOJIS.map((emoji) => {
+              const selected = value === emoji;
+              return (
+                <button
+                  type="button"
+                  key={emoji}
+                  aria-label={`Chọn avatar ${emoji}`}
+                  aria-pressed={selected}
+                  onClick={() => onChange(emoji)}
+                  style={{
+                    width: 46,
+                    height: 46,
+                    borderRadius: 10,
+                    border: `2px solid ${selected ? 'var(--accent)' : 'var(--border)'}`,
+                    background: selected ? 'var(--accent-soft)' : 'var(--surface2)',
+                    fontSize: '1.6rem',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: selected ? '0 0 0 3px var(--accent-soft)' : 'none',
+                    transition: 'all .15s',
+                  }}
+                >
+                  {emoji}
+                </button>
+              );
+            })}
+          </div>
+        </details>
       )}
     </div>
   );
@@ -245,7 +266,10 @@ interface AvatarDisplayProps {
 }
 
 export function AvatarDisplay({ avatar, size = 36, style }: AvatarDisplayProps) {
-  const isImage = avatar?.startsWith('data:') || avatar?.startsWith('/avatars/');
+  const isImage =
+    avatar?.startsWith('data:') ||
+    avatar?.startsWith('/avatars/') ||
+    avatar?.startsWith('/characters/');
   return (
     <div
       style={{

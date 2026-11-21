@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Ếch xanh">
+  <circle cx="48" cy="48" r="46" fill="#dff4bb" stroke="#302016" stroke-width="3"/>
+  <circle cx="28" cy="30" r="14" fill="#86c9a2" stroke="#302016" stroke-width="3"/><circle cx="68" cy="30" r="14" fill="#86c9a2" stroke="#302016" stroke-width="3"/>
+  <path d="M14 49q0-23 34-23t34 23v10Q82 80 48 80T14 59z" fill="#86c9a2" stroke="#302016" stroke-width="3"/>
+  <ellipse cx="30" cy="38" rx="4" ry="5" fill="#302016"/><ellipse cx="66" cy="38" rx="4" ry="5" fill="#302016"/>
+  <circle cx="26" cy="56" r="5" fill="#f6a5a6" opacity=".8"/><circle cx="70" cy="56" r="5" fill="#f6a5a6" opacity=".8"/>
+  <path d="M34 58q14 14 28 0" fill="none" stroke="#302016" stroke-width="3" stroke-linecap="round"/>
+  <path d="M45 64q3 7 7 0" fill="#f37f95" stroke="#302016" stroke-width="2"/>
+</svg>

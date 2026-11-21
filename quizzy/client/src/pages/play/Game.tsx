@@ -336,6 +336,8 @@ export default function Game() {
     return (
       <QuestionScreen
         question={question}
+        playerAvatar={myAvatar}
+        playerName={username}
         controller={presentationMode}
         showQuestionText={!presentationMode || isTranslated}
         timeLeft={questionTimer.seconds}

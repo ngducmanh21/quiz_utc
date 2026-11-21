@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Cáo cam">
+  <circle cx="48" cy="48" r="46" fill="#ffe1bd" stroke="#302016" stroke-width="3"/>
+  <path d="M20 35 18 12l22 14M76 35l2-23-22 14" fill="#ef8a46" stroke="#302016" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M27 30q21-16 42 0l9 25q-4 24-30 27-26-3-30-27z" fill="#ef8a46" stroke="#302016" stroke-width="3"/>
+  <path d="M20 57q11-4 25 10h6q14-14 25-10-7 20-28 24-21-4-28-24" fill="#fff8e9"/>
+  <ellipse cx="36" cy="49" rx="3" ry="4" fill="#302016"/><ellipse cx="60" cy="49" rx="3" ry="4" fill="#302016"/>
+  <circle cx="28" cy="58" r="5" fill="#f6a5a6" opacity=".7"/><circle cx="68" cy="58" r="5" fill="#f6a5a6" opacity=".7"/>
+  <path d="m44 61 4-3 4 3-4 4z" fill="#302016"/><path d="M43 68q5 5 10 0" fill="none" stroke="#302016" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
