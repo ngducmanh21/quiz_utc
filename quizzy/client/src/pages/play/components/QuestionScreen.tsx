@@ -1,4 +1,4 @@
-import { ArrowRight, Check, GripVertical, Presentation, SkipForward, X } from 'lucide-react';
+import { ArrowRight, Check, GripVertical, Presentation, SkipForward, Sparkles, X } from 'lucide-react';
 import { useState } from 'react';
 import { type LatLng, MapPicker } from '@/components/GeoMap';
 import { AvatarDisplay } from '@/components/AvatarPicker';
@@ -202,8 +202,15 @@ export function QuestionScreen({
             )}
           </div>
           {question.scoreMultiplier === 2 && (
-            <div className="play-question-x2 mx-auto my-2 w-fit font-extrabold">
-              Câu hỏi X2 điểm
+            <div className="play-question-x2" role="status" aria-live="polite">
+              <span className="play-question-x2-icon" aria-hidden="true">
+                <Sparkles size={24} strokeWidth={2.5} />
+              </span>
+              <span className="play-question-x2-copy">
+                <strong>Câu {question.questionIndex + 1}: nhân đôi điểm!</strong>
+                <span>Điểm nhận được ở câu hỏi này được gấp đôi.</span>
+              </span>
+              <span className="play-question-x2-badge" aria-hidden="true">×2</span>
             </div>
           )}
           {controller ? (
