@@ -109,6 +109,7 @@ export async function initDb(): Promise<void> {
     `ALTER TABLE answers ADD COLUMN chosen_text TEXT`,
     `ALTER TABLE questions ADD COLUMN correct_indices TEXT`,
     `ALTER TABLE answers ADD COLUMN chosen_indices TEXT`,
+    `ALTER TABLE answers ADD COLUMN elapsed_ms INTEGER`,
     `ALTER TABLE quizzes ADD COLUMN owner_id INTEGER REFERENCES users(id) ON DELETE SET NULL`,
     `ALTER TABLE quizzes ADD COLUMN owner_kind TEXT NOT NULL DEFAULT 'admin'`,
     `ALTER TABLE sessions ADD COLUMN hosted_by_user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`,

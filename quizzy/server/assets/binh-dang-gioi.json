@@ -1,0 +1,204 @@
+{
+  "title": "Bình đẳng giới trong môi trường đại học",
+  "description": "15 câu hỏi dành cho sinh viên. Trả lời đúng càng nhanh càng nhiều điểm; câu 13 nhân đôi điểm.",
+  "language": "vi",
+  "questions": [
+    {
+      "text": "Bình đẳng giới trong môi trường đại học được thể hiện rõ nhất qua điều nào?",
+      "options": [
+        "Nam giới được ưu tiên tham gia các hoạt động ngoại khóa.",
+        "Sinh viên nam và nữ có cơ hội học tập, phát triển và tham gia hoạt động như nhau.",
+        "Nữ giới chỉ nên đảm nhận những công việc nhẹ nhàng.",
+        "Nam giới nên giữ vai trò lãnh đạo trong các đội nhóm."
+      ],
+      "correctIndex": 1,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Trong một buổi thảo luận nhóm, một bạn nam cho rằng nữ giới không phù hợp với các nhiệm vụ kỹ thuật. Đây là biểu hiện của:",
+      "options": [
+        "Sự phân công hợp lý.",
+        "Định kiến giới.",
+        "Tinh thần làm việc nhóm.",
+        "Sự khác biệt về sở thích."
+      ],
+      "correctIndex": 1,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Một sinh viên nam muốn tham gia câu lạc bộ múa nhưng bị bạn bè chế giễu vì cho rằng hoạt động này chỉ dành cho nữ. Cách ứng xử phù hợp nhất là gì?",
+      "options": [
+        "Khuyên bạn từ bỏ vì không phù hợp giới tính.",
+        "Đồng tình với những lời trêu chọc.",
+        "Tôn trọng sở thích và quyền lựa chọn hoạt động của bạn.",
+        "Khuyên bạn chỉ nên tham gia những câu lạc bộ dành cho nam."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Trong hoạt động của câu lạc bộ, việc lựa chọn trưởng ban nên dựa trên tiêu chí nào?",
+      "options": [
+        "Giới tính của ứng viên.",
+        "Ngoại hình và khả năng giao tiếp.",
+        "Năng lực, trách nhiệm và mức độ phù hợp với vị trí.",
+        "Số lượng nam và nữ trong ban."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Hành vi nào sau đây có thể được xem là quấy rối tình dục trong môi trường đại học?",
+      "options": [
+        "Góp ý về kết quả học tập của bạn.",
+        "Cố tình đưa ra những lời bình luận khiếm nhã về cơ thể người khác khiến họ không thoải mái.",
+        "Trao đổi công việc trong nhóm.",
+        "Hỏi thăm bạn bè khi gặp mặt."
+      ],
+      "correctIndex": 1,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Khi một bạn nữ bị trêu chọc vì ngoại hình trong lớp học, bạn nên làm gì?",
+      "options": [
+        "Cười theo để tạo không khí vui vẻ.",
+        "Im lặng vì không liên quan đến mình.",
+        "Lên tiếng ngăn chặn phù hợp và thể hiện sự tôn trọng đối với bạn.",
+        "Quay video đăng lên mạng xã hội."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Quan niệm “Con trai phải mạnh mẽ, không được khóc” là biểu hiện của điều gì?",
+      "options": [
+        "Chuẩn mực giới mang tính định kiến.",
+        "Quy luật tự nhiên.",
+        "Sự trưởng thành về cảm xúc.",
+        "Trách nhiệm của nam giới."
+      ],
+      "correctIndex": 0,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Trong một nhóm chat sinh viên, một thành viên tự ý chia sẻ hình ảnh riêng tư của bạn khác khi chưa được đồng ý. Hành vi này:",
+      "options": [
+        "Bình thường vì nhóm chat chỉ có bạn bè.",
+        "Là trò đùa vô hại.",
+        "Có thể xâm phạm quyền riêng tư và gây tổn thương cho người bị chia sẻ.",
+        "Chỉ sai khi hình ảnh được đăng lên Facebook."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Khi một bạn nữ từ chối lời mời đi chơi nhưng liên tục bị nhắn tin, gọi điện và gây áp lực, hành động này thể hiện điều gì?",
+      "options": [
+        "Sự quan tâm chân thành.",
+        "Quyền chủ động trong tình cảm.",
+        "Không tôn trọng sự đồng thuận và ranh giới cá nhân.",
+        "Cách thể hiện tình cảm bình thường."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Trong một buổi làm việc nhóm, một bạn nam liên tục ngắt lời và không cho các bạn nữ trình bày ý kiến. Điều gì cần được thực hiện?",
+      "options": [
+        "Để bạn nam quyết định vì có thể có kinh nghiệm hơn.",
+        "Tạo cơ hội để mọi thành viên được phát biểu và lắng nghe bình đẳng.",
+        "Đề nghị các bạn nữ không tham gia thảo luận.",
+        "Bỏ qua vì đây là chuyện bình thường."
+      ],
+      "correctIndex": 1,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Đâu là cách chia sẻ trách nhiệm phù hợp trong đời sống sinh viên khi ở ký túc xá hoặc ở ghép?",
+      "options": [
+        "Nữ giới đảm nhận toàn bộ việc dọn dẹp.",
+        "Nam giới chỉ phụ trách những công việc nặng.",
+        "Phân chia công việc công bằng dựa trên sự thống nhất và khả năng của mỗi người.",
+        "Người nào có nhiều thời gian hơn thì phải làm tất cả."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Một sinh viên chứng kiến bạn mình có hành vi trêu ghẹo, đụng chạm cơ thể người khác dù người đó đã từ chối. Cách xử lý phù hợp nhất là gì?",
+      "options": [
+        "Không can thiệp vì đó là chuyện cá nhân.",
+        "Cổ vũ vì cho rằng đó là hành động vui đùa.",
+        "Chủ động ngăn chặn nếu an toàn, hỗ trợ người bị ảnh hưởng và báo cho người có trách nhiệm khi cần thiết.",
+        "Đăng câu chuyện lên mạng để cộng đồng tự xử lý."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Khi nhận được một lời trêu đùa mang tính phân biệt giới trong lớp học, điều nào sau đây là phù hợp?",
+      "options": [
+        "Chấp nhận vì đó chỉ là lời nói.",
+        "Có thể thẳng thắn góp ý rằng lời nói đó không phù hợp và đề nghị dừng lại.",
+        "Đáp trả bằng những lời xúc phạm tương tự.",
+        "Chia sẻ lời nói đó lên mạng xã hội để chế giễu lại."
+      ],
+      "correctIndex": 1,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": [
+        "X2 điểm"
+      ]
+    },
+    {
+      "text": "Vai trò của nam giới trong việc xây dựng môi trường đại học bình đẳng, an toàn là gì?",
+      "options": [
+        "Chỉ cần không trực tiếp thực hiện hành vi phân biệt giới.",
+        "Để nữ giới tự lên tiếng bảo vệ quyền lợi của mình.",
+        "Chủ động phản đối định kiến giới, tôn trọng sự đồng thuận và lên tiếng trước hành vi quấy rối, phân biệt đối xử.",
+        "Chỉ tham gia khi có chương trình phát động."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    },
+    {
+      "text": "Điều gì là yếu tố quan trọng nhất để xây dựng môi trường đại học an toàn và bình đẳng giới?",
+      "options": [
+        "Chỉ cần có nội quy và quy định xử phạt.",
+        "Chỉ cần tổ chức các buổi tuyên truyền.",
+        "Sự tôn trọng, bình đẳng, trách nhiệm và hành động của mỗi sinh viên.",
+        "Chỉ cần sự quản lý của nhà trường."
+      ],
+      "correctIndex": 2,
+      "baseScore": 500,
+      "timeSec": 30,
+      "tags": []
+    }
+  ]
+}

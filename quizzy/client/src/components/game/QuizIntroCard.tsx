@@ -14,6 +14,8 @@ interface Props {
   layout?: 'row' | 'grid';
   /** Extra content appended to the details column (e.g. player status). */
   footer?: ReactNode;
+  /** Keep only the cover and footer when the quiz statistics are not needed. */
+  showQuizDetails?: boolean;
   className?: string;
 }
 
@@ -23,6 +25,7 @@ export function QuizIntroCard({
   typesHeading = 'Các loại câu hỏi',
   layout = 'row',
   footer,
+  showQuizDetails = true,
   className,
 }: Props) {
   const isRow = layout === 'row';
@@ -71,7 +74,7 @@ export function QuizIntroCard({
 
       {/* Quiz details */}
       <div className={cn('flex flex-col p-5', isRow && 'flex-1 justify-center')}>
-        {intro?.subtitle && (
+        {showQuizDetails && intro?.subtitle && (
           <p
             className={cn(
               'leading-relaxed text-muted-foreground',
@@ -82,7 +85,7 @@ export function QuizIntroCard({
           </p>
         )}
 
-        {intro && (
+        {showQuizDetails && intro && (
           <div className={cn('flex flex-wrap gap-2', isRow ? 'mt-3' : 'mt-4')}>
             <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-muted/40 px-3 py-1.5 text-sm font-medium">
               <CircleHelp className="size-4" /> {intro.questionCount} câu hỏi
@@ -95,7 +98,7 @@ export function QuizIntroCard({
           </div>
         )}
 
-        {intro && intro.typeCounts.length > 0 && (
+        {showQuizDetails && intro && intro.typeCounts.length > 0 && (
           <div className={isRow ? 'mt-4' : 'mt-5'}>
             <p className="mb-2 text-[0.72rem] font-semibold uppercase tracking-wider text-muted-foreground">
               {typesHeading}

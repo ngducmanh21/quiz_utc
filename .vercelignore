@@ -1,0 +1,9 @@
+/.env.local
+/quizzy/.env
+quizzy/data/
+quizzy/avatars/
+**/node_modules/
+**/dist/
+*.db
+*.db-shm
+*.db-wal

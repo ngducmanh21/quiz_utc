@@ -19,6 +19,9 @@ RUN cd /app/node_modules/.pnpm/sqlite3@5.1.7/node_modules/sqlite3 && npm rebuild
 
 COPY . .
 
+# The Docker image serves both the client and Socket.IO from this server.
+# Override the Vercel-only origin in client/.env.production during the build.
+ENV VITE_SOCKET_ORIGIN=
 RUN pnpm build
 
 EXPOSE 3000

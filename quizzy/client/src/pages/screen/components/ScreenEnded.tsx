@@ -36,7 +36,7 @@ export function ScreenEnded({ title, leaderboard, chooseQuizMaker }: Props) {
       {leaderboard.length > 3 && (
         <Card className="w-full max-w-2xl">
           <CardContent className="p-6">
-            <FinalLeaderboard entries={leaderboard.slice(0, 10)} />
+            <FinalLeaderboard entries={leaderboard} />
           </CardContent>
         </Card>
       )}

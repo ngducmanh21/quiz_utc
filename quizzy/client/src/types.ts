@@ -132,6 +132,7 @@ export interface QuestionPayload {
   text: string;
   options: string[];
   timeSec: number;
+  scoreMultiplier?: number;
   /** Remaining seconds — only present on reconnect; absent means use timeSec */
   timeRemaining?: number;
   imageUrl?: string;
@@ -146,6 +147,20 @@ export interface QuestionPayload {
   blankCount?: number;
   /** matching: the shuffled right column shown during the live question. */
   rightOptions?: string[];
+}
+
+/** Live submission order shown on the presentation screen during a question. */
+export interface SpeedLeaderboardEntry {
+  rank: number;
+  playerId: number;
+  username: string;
+  avatar?: string;
+  elapsedMs: number | null;
+}
+
+export interface SpeedLeaderboardPayload {
+  questionId: number;
+  entries: SpeedLeaderboardEntry[];
 }
 
 /** A non-question slide: stays on screen until the host advances. */

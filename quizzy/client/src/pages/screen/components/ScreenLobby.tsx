@@ -1,21 +1,18 @@
 import { QRCodeSVG } from 'qrcode.react';
 import { EventBrand } from '@/components/EventBrand';
 import { LobbyPlayers } from '@/components/game/LobbyPlayers';
-import { QuizIntroCard } from '@/components/game/QuizIntroCard';
 import { useApp } from '@/context/AppContext';
 import { publicBaseUrl } from '@/helpers';
-import type { PlayerInfo, QuizIntro } from '@/types';
+import type { PlayerInfo } from '@/types';
 import './ScreenLobby.css';
 
 interface Props {
   pin: string;
   title: string;
-  questionCount: number;
-  intro?: QuizIntro;
   players: PlayerInfo[];
 }
 
-export function ScreenLobby({ pin, title, questionCount, intro, players }: Props) {
+export function ScreenLobby({ pin, title, players }: Props) {
   const { publicUrl } = useApp();
   const baseUrl = publicBaseUrl(publicUrl);
   const joinUrl = `${baseUrl}/play/${pin}`;
@@ -35,26 +32,13 @@ export function ScreenLobby({ pin, title, questionCount, intro, players }: Props
             style={{ width: '100%', height: 'auto' }}
           />
         </div>
-        <div className="text-xl text-muted-foreground">
-          hoặc truy cập{' '}
-          <strong className="text-foreground">{baseUrl.replace(/^https?:\/\//, '')}</strong> rồi nhập
-        </div>
         <div className="pin-display">{pin}</div>
       </div>
 
       <div className="flex min-w-0 flex-col gap-6">
-        {intro ? (
-          <QuizIntroCard intro={intro} layout="row" className="screen-intro" />
-        ) : (
-          <div className="text-center">
-            <h1 className="font-extrabold" style={{ fontSize: 'clamp(2rem, 4vw, 4.5rem)' }}>
-              {title}
-            </h1>
-            <p className="mt-1 text-xl text-muted-foreground">
-              {questionCount} câu hỏi
-            </p>
-          </div>
-        )}
+        <h1 className="text-center font-extrabold" style={{ fontSize: 'clamp(2rem, 4vw, 4.5rem)' }}>
+          {title}
+        </h1>
         <div className="flex flex-col items-center gap-4 text-center">
           <div className="text-2xl font-semibold">
             {players.length} người chơi đã tham gia

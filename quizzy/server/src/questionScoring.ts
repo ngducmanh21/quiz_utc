@@ -128,6 +128,18 @@ export function computeSpeedBonus(
   return Math.max(bonus, minBonus);
 }
 
+/** Award more points for a correct answer submitted earlier in the question timer. */
+export function computeTimeBonus(
+  elapsedMs: number,
+  timeSec: number,
+  maxBonus: number,
+  minBonus: number,
+): number {
+  const durationMs = Math.max(1, timeSec * 1000);
+  const fraction = Math.min(1, Math.max(0, elapsedMs / durationMs));
+  return Math.round(maxBonus - (maxBonus - minBonus) * fraction);
+}
+
 /**
  * GeoGuessr-style scoring by real great-circle distance. A pin within ~50 km is
  * fully correct (base + speed bonus); otherwise the score decays exponentially

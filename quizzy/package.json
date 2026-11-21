@@ -12,6 +12,7 @@
     "build": "pnpm -r build",
     "start": "pnpm --filter server start",
     "seed:demo": "node --env-file=.env server/scripts/seed-demo.mjs",
+    "seed:gender-equality": "node --env-file=.env server/scripts/seed-gender-equality.mjs",
     "typecheck": "pnpm -r typecheck",
     "lint": "biome lint .",
     "format": "biome format --write .",

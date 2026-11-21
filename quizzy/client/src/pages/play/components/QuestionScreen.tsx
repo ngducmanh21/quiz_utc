@@ -187,6 +187,11 @@ export function QuestionScreen({
           <div className="question-counter">
             Câu hỏi {question.questionIndex + 1} trên {question.totalQuestions}
           </div>
+          {question.scoreMultiplier === 2 && (
+            <div className="mx-auto my-2 w-fit rounded-full bg-orange-600 px-4 py-2 font-extrabold text-white">
+              Câu hỏi X2 điểm
+            </div>
+          )}
           {controller ? (
             <p className="my-2 inline-flex w-full items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground">
               <Presentation className="size-4" /> Xem câu hỏi trên màn hình lớn

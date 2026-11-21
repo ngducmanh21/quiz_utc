@@ -51,7 +51,12 @@ export function QuestionDisplay({
           <span className="mono-label">
             Câu hỏi {question.questionIndex + 1} trên {question.totalQuestions}
           </span>
-          <span className="mono-label">{question.timeSec} giây</span>
+          <div className="flex items-center gap-3">
+            {question.scoreMultiplier === 2 && (
+              <span className="rounded-full bg-orange-600 px-4 py-2 text-lg font-extrabold text-white">X2 ĐIỂM</span>
+            )}
+            <span className="mono-label">{question.timeSec} giây</span>
+          </div>
         </div>
 
         {question.mediaType
@@ -66,7 +71,7 @@ export function QuestionDisplay({
         <div
           className={cn('mx-auto mb-5 text-center font-extrabold', !stage && 'max-w-[820px]')}
           style={{
-            fontSize: stage ? 'clamp(2rem, 4.5vw, 5rem)' : 'clamp(1.6rem, 4vw, 42px)',
+            fontSize: stage ? 'clamp(1.75rem, 3vw, 3.75rem)' : 'clamp(1.6rem, 4vw, 42px)',
             lineHeight: 1.16,
             letterSpacing: '-0.02em',
           }}

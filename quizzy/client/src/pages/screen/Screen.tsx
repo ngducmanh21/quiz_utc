@@ -18,11 +18,13 @@ import type {
   QuestionResults,
   QuizIntro,
   SlidePayload,
+  SpeedLeaderboardPayload,
 } from '@/types';
 import { CountdownScreen } from '../play/components/CountdownScreen';
 import { ScreenEnded } from './components/ScreenEnded';
 import { ScreenLobby } from './components/ScreenLobby';
 import { ScreenResults } from './components/ScreenResults';
+import { ScreenSpeedLeaderboard } from './components/ScreenSpeedLeaderboard';
 
 interface ScreenState {
   pin: string;
@@ -56,6 +58,7 @@ export default function Screen() {
   const [countdownSec, setCountdownSec] = useState(3);
   const [answeredCount, setAnsweredCount] = useState(0);
   const [totalPlayers, setTotalPlayers] = useState(0);
+  const [speedBoard, setSpeedBoard] = useState<SpeedLeaderboardPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [online, setOnline] = useState(true);
   const [unlocked, setUnlocked] = useState(false);
@@ -134,6 +137,7 @@ export default function Screen() {
 
   useSocketEvent<QuestionPayload>('game:question', (data) => {
     if (question?.questionId !== data.questionId) setAnsweredCount(0);
+    if (question?.questionId !== data.questionId) setSpeedBoard(null);
     setQuestion(data);
     setPhase('question');
     questionTimer.start(data.timeRemaining ?? data.timeSec);
@@ -149,6 +153,8 @@ export default function Screen() {
     setAnsweredCount(data.answeredCount);
     setTotalPlayers(data.totalPlayers);
   });
+
+  useSocketEvent<SpeedLeaderboardPayload>('game:speed-leaderboard', setSpeedBoard);
 
   useSocketEvent<QuestionResults>('game:question-results', (data) => {
     setResults(data);
@@ -194,18 +200,23 @@ export default function Screen() {
         <ScreenLobby
           pin={info.pin}
           title={info.quizTitle}
-          questionCount={info.questionCount}
-          intro={info.quizIntro}
           players={players}
         />
       )}
       {phase === 'countdown' && <CountdownScreen seconds={countdownSec} />}
       {phase === 'question' && question && (
-        <div className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-center p-4 lg:p-8">
-          <QuestionDisplay
-            stage
-            question={question}
-            timeLeft={questionTimer.seconds}
+        <div className="mx-auto grid w-full max-w-[1800px] flex-1 content-center gap-4 p-4 lg:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] lg:gap-6 lg:p-8">
+          <div className="min-w-0">
+            <QuestionDisplay
+              stage
+              question={question}
+              timeLeft={questionTimer.seconds}
+              answeredCount={answeredCount}
+              totalPlayers={totalPlayers || players.length}
+            />
+          </div>
+          <ScreenSpeedLeaderboard
+            entries={speedBoard?.questionId === question.questionId ? speedBoard.entries : []}
             answeredCount={answeredCount}
             totalPlayers={totalPlayers || players.length}
           />

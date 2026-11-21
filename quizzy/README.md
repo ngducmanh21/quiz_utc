@@ -6,7 +6,11 @@
 
 Bản tùy biến giao diện cam kem cho trò chơi quiz nhiều người. Quản trò đăng nhập để tạo quiz và mở phòng; người chơi nhập mã PIN hoặc quét QR, trả lời trên điện thoại và xem bảng điểm trực tiếp.
 
-## Chạy bản này
+## Bản đang sử dụng
+
+Giao diện công khai và mã QR của sự kiện dùng **https://quiz-utc.vercel.app**. Quản trò đăng nhập tại `https://quiz-utc.vercel.app/admin` để mở phòng; điện thoại của người chơi không cần cùng mạng Wi-Fi với máy quản trò.
+
+## Chạy bản này trên máy cục bộ
 
 ```bash
 docker compose up --build -d
@@ -16,7 +20,13 @@ Mở `http://localhost:3001` trên máy này (`APP_PORT=3001` trong `.env` vì c
 
 Một quiz mẫu tiếng Việt đã được tạo sẵn trên bản chạy này. Với cơ sở dữ liệu mới, chạy `npm run seed:demo` sau khi server khởi động để thêm lại quiz mẫu.
 
-Máy khác trong cùng mạng Wi-Fi mở `http://192.168.1.8:3001`. `PUBLIC_URL` trong `.env` đang trỏ đến địa chỉ này để QR/mã mời hoạt động trên điện thoại; cập nhật nó nếu IP của máy đổi. Muốn chơi qua Internet, cần đặt ứng dụng sau HTTPS/reverse proxy và cấu hình lại `PUBLIC_URL`.
+### Bộ câu hỏi bình đẳng giới
+
+Bộ 15 câu trong `server/assets/binh-dang-gioi.json` được nhập từ tài liệu Word của chương trình và đã được thêm lên bản Vercel. Trên cơ sở dữ liệu cục bộ mới, chạy `npm run seed:gender-equality` để thêm bộ câu hỏi. Lệnh `npm run seed:gender-equality -- --create-session` tạo phòng **cục bộ**; để tạo phòng công khai, dùng trang quản trị Vercel.
+
+Mỗi câu có 30 giây. Màn hình lớn hiện bảng tốc độ khi người chơi trả lời; trả lời đúng càng sớm càng nhiều điểm. Câu 13 nhân đôi toàn bộ điểm của câu. Phòng trình chiếu chờ hết thời gian câu hỏi, hiện kết quả trong 5 giây rồi tự sang câu tiếp; quản trò vẫn có thể chuyển sớm. Sau câu 15, trò chơi tự hiện bảng xếp hạng chung cuộc.
+
+Máy khác trong cùng mạng Wi-Fi có thể truy cập bản cục bộ nếu `PUBLIC_URL` trỏ đúng địa chỉ LAN hiện tại. Bản sự kiện công khai dùng Vercel và backend HTTPS như trong [DEPLOYMENT.md](DEPLOYMENT.md).
 
 **Nguồn:** Tùy biến từ [Lawndlwd/quizz](https://github.com/Lawndlwd/quizz), giấy phép MIT. Giữ nguyên [LICENSE](LICENSE) và phần tài liệu gốc bên dưới.
 

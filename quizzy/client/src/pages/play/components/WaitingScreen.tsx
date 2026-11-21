@@ -47,7 +47,7 @@ export function WaitingScreen({
           intro={intro}
           title={title}
           layout="grid"
-          typesHeading="Cách chơi"
+          showQuizDetails={false}
           footer={
             /* Pinned to the bottom of the right column */
             <div className="mt-auto pt-6">

@@ -7,7 +7,7 @@ import { db, getRankedPlayers } from '../db';
 import { verifyToken } from '../middleware';
 import { linkPlayerToUser, resolveUserFromAuthToken, seedPlayProfile } from '../playProfile';
 import {
-  computeSpeedBonus,
+  computeTimeBonus,
   geoDistanceKm,
   matchFillBlank,
   parseLatLng,
@@ -255,6 +255,7 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
           answeredCount: state.answeredPlayers.get(currentQ.id)?.size ?? 0,
           totalPlayers: state.playerSockets.size,
         });
+        await emitSpeedLeaderboard(socket, state, currentQ.id);
       }
     });
 
@@ -664,6 +665,7 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
 
         const currentQ = state.questions[state.currentQuestionIndex];
         if (!currentQ || currentQ.id !== questionId) return;
+        const elapsedMs = Math.max(0, Date.now() - (state.questionStartedAt ?? Date.now()));
 
         // Prevent duplicate answer
         const answered = getOrCreateAnsweredSet(state, questionId);
@@ -691,8 +693,8 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
             currentQ.base_score,
             correctCount,
             Math.max(state.playerSockets.size, 1),
-            config.speedBonusMax,
-            config.speedBonusMin,
+            0,
+            0,
           );
           isCorrect = scored.isCorrect;
           score = scored.score;
@@ -701,6 +703,12 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
 
           if (isCorrect) {
             state.correctAnswerCount.set(questionId, correctCount + 1);
+            score += computeTimeBonus(
+              elapsedMs,
+              currentQ.time_sec,
+              config.speedBonusMax,
+              config.speedBonusMin,
+            );
             score += streak.bonus;
           }
         } else if (currentQ.question_type === 'geo') {
@@ -715,8 +723,8 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
             currentQ.base_score,
             correctCount,
             Math.max(state.playerSockets.size, 1),
-            config.speedBonusMax,
-            config.speedBonusMin,
+            0,
+            0,
           );
           isCorrect = scored.isCorrect;
           score = scored.score;
@@ -725,6 +733,12 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
 
           if (isCorrect) {
             state.correctAnswerCount.set(questionId, correctCount + 1);
+            score += computeTimeBonus(
+              elapsedMs,
+              currentQ.time_sec,
+              config.speedBonusMax,
+              config.speedBonusMin,
+            );
             score += streak.bonus;
           }
         } else if (
@@ -764,9 +778,9 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
 
           if (isCorrect) {
             const correctCount = state.correctAnswerCount.get(questionId) ?? 0;
-            score += computeSpeedBonus(
-              correctCount,
-              Math.max(state.playerSockets.size, 1),
+            score += computeTimeBonus(
+              elapsedMs,
+              currentQ.time_sec,
               config.speedBonusMax,
               config.speedBonusMin,
             );
@@ -802,9 +816,9 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
           if (isCorrect) {
             score += currentQ.base_score;
             const correctCount = state.correctAnswerCount.get(questionId) ?? 0;
-            score += computeSpeedBonus(
-              correctCount,
-              Math.max(state.playerSockets.size, 1),
+            score += computeTimeBonus(
+              elapsedMs,
+              currentQ.time_sec,
               config.speedBonusMax,
               config.speedBonusMin,
             );
@@ -844,6 +858,7 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
           streak: newStreak,
           chosenText: chosenText ?? null,
           chosenIndices: storedChosenIndices,
+          elapsedMs,
         });
       },
     );
@@ -885,6 +900,7 @@ export function setupSockets(httpServer: HttpServer): SocketServer {
         streak: 0,
         chosenText: null,
         chosenIndices: null,
+        elapsedMs: Math.max(0, Date.now() - (state.questionStartedAt ?? Date.now())),
         wasPassJoker: true,
         alwaysUpdateTotal: true,
       });
@@ -997,8 +1013,9 @@ function applyStreakBonus(
 /**
  * Shared tail of `player:answer` and `player:joker-pass`: persist the answer
  * row, credit the player's total score, emit the received/count events, and
- * show results early once everyone has answered. The caller must have already
- * added the player to `answered` (so `answered.size` includes this answer).
+ * show results early in non-presentation games once everyone has answered.
+ * The caller must have already added the player to `answered` (so its size
+ * includes this answer).
  * `alwaysUpdateTotal` runs the total_score UPDATE even for a 0 score (the
  * joker path always updated; the answer path only when score > 0).
  */
@@ -1016,14 +1033,18 @@ async function recordAnswer(opts: {
   streak: number;
   chosenText: string | null;
   chosenIndices: string | null;
+  elapsedMs: number;
   wasPassJoker?: boolean;
   alwaysUpdateTotal?: boolean;
 }): Promise<void> {
-  const { io, socket, state, answered, sessionId, questionId, playerId, score } = opts;
+  const { io, socket, state, answered, sessionId, questionId, playerId } = opts;
+  const question = state.questions[state.currentQuestionIndex];
+  const multiplier = question?.id === questionId && parseStringArray(question.tags).includes('X2 điểm') ? 2 : 1;
+  const score = opts.score * multiplier;
 
   const answerOrder = answered.size;
   await db.run(
-    'INSERT INTO answers (player_id, session_id, question_id, chosen_index, is_correct, score, answer_order, chosen_text, chosen_indices) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO answers (player_id, session_id, question_id, chosen_index, is_correct, score, answer_order, chosen_text, chosen_indices, elapsed_ms) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     playerId,
     sessionId,
     questionId,
@@ -1033,6 +1054,7 @@ async function recordAnswer(opts: {
     answerOrder,
     opts.chosenText,
     opts.chosenIndices,
+    opts.elapsedMs,
   );
 
   if (opts.alwaysUpdateTotal || score > 0) {
@@ -1065,17 +1087,53 @@ async function recordAnswer(opts: {
         answeredCount: state.answeredPlayers.get(questionId)?.size ?? 0,
         totalPlayers: state.playerSockets.size,
       });
+      if (state.presentationMode) {
+        emitSpeedLeaderboard(io.to(`screen:${sessionId}`), state, questionId).catch((error) =>
+          console.error('Failed to update speed leaderboard', error),
+        );
+      }
     }, 100);
   }
 
-  // Reveal only after all accepted answers have actually reached the database.
-  if (recordedCount >= state.playerSockets.size) {
+  // Presentation games keep the full question timer even when everyone answers.
+  // Other games reveal only after all accepted answers reach the database.
+  if (!state.presentationMode && recordedCount >= state.playerSockets.size) {
     if (state.questionTimer) {
       clearTimeout(state.questionTimer);
       state.questionTimer = null;
     }
     showResults(io, state, questionId);
   }
+}
+
+/** Show submission speed while the timer runs, without revealing correctness or points. */
+async function emitSpeedLeaderboard(
+  target: Pick<Socket, 'emit'>,
+  state: ActiveSession,
+  questionId: number,
+): Promise<void> {
+  const answers = await db.all<
+    Array<{
+      player_id: number;
+      username: string;
+      avatar: string | null;
+      elapsed_ms: number | null;
+    }>
+  >(
+    'SELECT a.player_id, p.username, p.avatar, a.elapsed_ms FROM answers a JOIN players p ON p.id = a.player_id WHERE a.session_id = ? AND a.question_id = ? ORDER BY a.elapsed_ms IS NULL, a.elapsed_ms ASC, a.answer_order ASC LIMIT 5',
+    state.sessionId,
+    questionId,
+  );
+  target.emit('game:speed-leaderboard', {
+    questionId,
+    entries: answers.map((answer, index) => ({
+      rank: index + 1,
+      playerId: answer.player_id,
+      username: answer.username,
+      avatar: state.playerAvatars.get(answer.player_id) ?? answer.avatar ?? undefined,
+      elapsedMs: answer.elapsed_ms,
+    })),
+  });
 }
 
 /** Tell the host how many presentation screens are connected to the game. */
@@ -1357,6 +1415,12 @@ function sendQuestion(io: SocketServer, state: ActiveSession, index: number): vo
   // base-locale) is emitted to directly instead of via that shared room.
   if (state.adminSocketId) io.to(state.adminSocketId).emit('game:question', payload);
   io.to(`screen:${state.sessionId}`).emit('game:question', payload);
+  if (state.presentationMode) {
+    io.to(`screen:${state.sessionId}`).emit('game:speed-leaderboard', {
+      questionId: q.id,
+      entries: [],
+    });
+  }
   if (state.presentationMode) emitAnswerKey(io, state, q);
   for (const [locale, socketIds] of playerSocketGroups(state)) {
     const playerPayload =
@@ -1579,7 +1643,7 @@ function showResults(io: SocketServer, state: ActiveSession, questionId: number)
       : undefined;
 
     // Presentation games are paced by the host talking over the results.
-    const autoAdvanceSec = state.presentationMode ? 0 : (config.resultsAutoAdvanceSec ?? 5);
+    const autoAdvanceSec = state.presentationMode ? 5 : (config.resultsAutoAdvanceSec ?? 5);
 
     const showLeaderboard =
       state.gameSettings.showLeaderboardAfterQuestion ?? config.showLeaderboardAfterQuestion;
@@ -1804,6 +1868,7 @@ function buildQuestionPayload(
     text: q.text,
     options: JSON.parse(q.options) as string[],
     timeSec: q.time_sec,
+    scoreMultiplier: parseStringArray(q.tags).includes('X2 điểm') ? 2 : 1,
     imageUrl: normalizeImageUrl(q.image_url),
     questionType: q.question_type,
     mediaUrl: q.media_url ?? undefined,
