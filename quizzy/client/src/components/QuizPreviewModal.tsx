@@ -1,5 +1,7 @@
 import { ArrowLeft, ArrowRight, Check, Eye, SkipForward, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { EventBrand } from '@/components/EventBrand';
+import { QuestionAnswerReview } from '@/components/game/QuestionAnswerReview';
 import { QuestionReveal } from '@/components/game/QuestionReveal';
 import { SlideDisplay } from '@/components/game/SlideDisplay';
 import { PageVCenter } from '@/components/layout';
@@ -60,6 +62,7 @@ export function QuizPreviewModal({ title, questions, onClose }: Props) {
   const q = questions[index];
   const type = q?.questionType ?? 'multiple_choice';
   const isSlide = isSlideType(type);
+  const isOptionBased = type === 'multiple_choice' || type === 'true_false' || type === 'multi_select';
 
   // Reset per-question state and (re)start the timer whenever the question changes.
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally keyed on index only
@@ -248,7 +251,7 @@ export function QuizPreviewModal({ title, questions, onClose }: Props) {
         )}
       </div>
 
-      <div className="pb-32 sm:pb-28">
+      <div className="pb-32 pt-10 sm:pb-28 sm:pt-0">
         {isSlide ? (
           <PageVCenter>
             <SlideDisplay
@@ -295,41 +298,60 @@ export function QuizPreviewModal({ title, questions, onClose }: Props) {
             onMatchingSubmit={() => reveal()}
           />
         ) : (
-          <PageVCenter>
-            <div className="mx-auto w-full max-w-[700px]">
-              {payload.mediaType ? (
-                <QuestionMedia url={payload.mediaUrl} kind={payload.mediaType} className="mb-3" />
-              ) : (
-                showImage && <QuestionImage src={q.imageUrl} className="question-image mb-3" />
-              )}
-              <div className="question-text mb-4 text-center">
-                <QuestionText text={q.text} />
-              </div>
-              {v !== null && (
-                <div
-                  className={`mb-4 rounded-lg px-4 py-2 text-center font-semibold ${
-                    v ? 'bg-ok/15 text-ok' : 'bg-bad/15 text-bad'
-                  }`}
-                >
-                  {v ? (
-                    <span className="inline-flex items-center justify-center gap-1.5">
-                      <Check className="size-4" /> Đúng
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center justify-center gap-1.5">
-                      <X className="size-4" /> Sai
-                    </span>
-                  )}
+          <PageVCenter className={isOptionBased ? 'play-question-page' : undefined}>
+            {isOptionBased ? (
+              <>
+                <EventBrand logosOnly className="player-event-brand-strip" />
+                <QuestionAnswerReview
+                  text={q.text}
+                  options={q.options ?? []}
+                  questionType={type}
+                  correctIndex={q.correctIndex}
+                  correctIndices={q.correctIndices}
+                  chosenIndex={selectedIndex}
+                  chosenIndices={selectedIndices}
+                  questionNumber={payload.questionIndex + 1}
+                  totalQuestions={payload.totalQuestions}
+                  imageUrl={q.imageUrl}
+                  explanation={q.explanation}
+                />
+              </>
+            ) : (
+              <div className="mx-auto w-full max-w-[700px]">
+                {payload.mediaType ? (
+                  <QuestionMedia url={payload.mediaUrl} kind={payload.mediaType} className="mb-3" />
+                ) : (
+                  showImage && <QuestionImage src={q.imageUrl} className="question-image mb-3" />
+                )}
+                <div className="question-text mb-4 text-center">
+                  <QuestionText text={q.text} />
                 </div>
-              )}
-              <QuestionReveal
-                results={results}
-                myChosenIndex={selectedIndex}
-                myChosenIndices={selectedIndices}
-                myChosenPoint={chosenPoint}
-                animate
-              />
-            </div>
+                {v !== null && (
+                  <div
+                    className={`mb-4 rounded-lg px-4 py-2 text-center font-semibold ${
+                      v ? 'bg-ok/15 text-ok' : 'bg-bad/15 text-bad'
+                    }`}
+                  >
+                    {v ? (
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <Check className="size-4" /> Đúng
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center justify-center gap-1.5">
+                        <X className="size-4" /> Sai
+                      </span>
+                    )}
+                  </div>
+                )}
+                <QuestionReveal
+                  results={results}
+                  myChosenIndex={selectedIndex}
+                  myChosenIndices={selectedIndices}
+                  myChosenPoint={chosenPoint}
+                  animate
+                />
+              </div>
+            )}
           </PageVCenter>
         )}
       </div>

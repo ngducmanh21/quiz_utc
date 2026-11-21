@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
+import { Check } from 'lucide-react';
 import { QuadGlyph } from '@/components/game/QuadGlyph';
 import { OptionText } from '@/components/OptionText';
 import { quadColor } from '@/helpers';
@@ -22,6 +23,8 @@ interface Props {
   badgeFor?: (index: number) => ReactNode;
   /** Badge shown instead of the glyph while an option is selected (multi-select ✓). */
   selectedBadge?: ReactNode;
+  /** Add a visible confirmation under the chosen answer on the player screen. */
+  showSelectedCue?: boolean;
   /** Size of the default QuadGlyph badge. */
   glyphSize?: number;
   /** Entrance-animation stagger per option, in seconds. */
@@ -48,6 +51,7 @@ export function QuadOptionGrid({
   colorFor = quadColor,
   badgeFor,
   selectedBadge,
+  showSelectedCue = false,
   glyphSize = 22,
   staggerSec = 0.08,
   onSelect,
@@ -66,12 +70,12 @@ export function QuadOptionGrid({
           ...(interactive ? {} : { cursor: 'default' }),
           animationDelay: `${i * staggerSec}s`,
         } as CSSProperties;
-        const badge = badgeFor ? (
-          badgeFor(i)
-        ) : eliminated ? (
+        const badge = eliminated ? (
           '—'
         ) : selected && selectedBadge !== undefined ? (
           selectedBadge
+        ) : badgeFor ? (
+          badgeFor(i)
         ) : (
           <QuadGlyph index={i} size={glyphSize} />
         );
@@ -80,6 +84,9 @@ export function QuadOptionGrid({
             <span className="quad-badge">{badge}</span>
             <span className={cn('quad-label', labelClassName)}>
               {eliminated ? '—' : <OptionText value={opt} />}
+              {selected && showSelectedCue && !eliminated && (
+                <span className="quad-selected-hint"><Check size={14} aria-hidden="true" /> Đã chọn</span>
+              )}
             </span>
           </>
         );

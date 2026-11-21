@@ -323,6 +323,8 @@ export function QuestionScreen({
             className="play-answer-grid"
             options={['Đúng', 'Sai']}
             selectedIndex={selectedIndex}
+            selectedBadge={<Check className="size-5" />}
+            showSelectedCue
             colorFor={(i) => (i === 0 ? '#1f9d57' : '#e2455a')}
             badgeFor={(i) => (i === 0 ? <Check className="size-5" /> : <X className="size-5" />)}
             optionClassName="justify-center"
@@ -457,6 +459,7 @@ export function QuestionScreen({
               options={question.options}
               selectedIndices={selectedIndices}
               selectedBadge={<Check className="size-5" />}
+              showSelectedCue
               disabled={multiSelectSubmitted}
               onSelect={onToggleMultiSelect}
             />
@@ -716,6 +719,8 @@ export function QuestionScreen({
             className="play-answer-grid"
             options={question.options}
             selectedIndex={selectedIndex}
+            selectedBadge={<Check className="size-5" />}
+            showSelectedCue
             eliminatedIndices={eliminatedIndices}
             onSelect={onAnswer}
           />

@@ -384,6 +384,9 @@ export default function Game() {
         wasPassJoker={answerResult.wasPassJoker}
         answeredCount={answeredCount}
         totalPlayers={totalPlayers}
+        question={question}
+        selectedIndex={selectedIndex}
+        selectedIndices={selectedIndices}
       />
     );
 
@@ -394,6 +397,7 @@ export default function Game() {
         playerId={playerId}
         autoAdvanceLeft={autoAdvanceTimer.seconds}
         onReveal={commitStreakOnReveal}
+        question={question}
       />
     );
 

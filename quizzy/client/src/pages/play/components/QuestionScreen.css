@@ -166,7 +166,26 @@
 }
 
 .play-answer-grid .option-quad.selected {
-  background: color-mix(in srgb, var(--quad-color) 45%, var(--surface2));
+  border-width: 3px;
+  background: color-mix(in srgb, var(--quad-color) 55%, var(--surface2));
+  box-shadow: 0 5px 0 var(--foreground), 0 0 0 4px var(--surface2), 0 0 0 7px var(--accent);
+}
+
+.play-answer-grid .quad-selected-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: fit-content;
+  margin: 6px auto 0;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: var(--surface2);
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .play-answer-grid .quad-badge {

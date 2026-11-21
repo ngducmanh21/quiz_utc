@@ -1,20 +1,23 @@
 import { Check, Heart, MapPin, Target, Trophy, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AppAlert } from '@/components/AppAlert';
+import { EventBrand } from '@/components/EventBrand';
 import { ClosestGuessesList, LeaderboardList } from '@/components/game/LeaderboardList';
+import { QuestionAnswerReview } from '@/components/game/QuestionAnswerReview';
 import { QuestionDistribution } from '@/components/game/QuestionDistribution';
 import { Page } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { displayOptions } from '@/helpers';
 import { sound } from '@/lib/sound';
-import type { LeaderboardEntry, QuestionResults } from '../../../types';
+import type { LeaderboardEntry, QuestionPayload, QuestionResults } from '../../../types';
 
 interface Props {
   results: QuestionResults;
   playerId: number;
   autoAdvanceLeft: number;
   onReveal?: () => void;
+  question?: QuestionPayload | null;
 }
 
 function AdvanceHint({
@@ -125,9 +128,11 @@ function YourAnswer({ entry, results }: { entry: LeaderboardEntry; results: Ques
   );
 }
 
-export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: Props) {
+export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal, question }: Props) {
   const myEntry = results.leaderboard.find((e) => e.playerId === playerId);
   const isClosestTo = results.questionType === 'closest_to';
+  const isOptionBased = results.questionType === 'multiple_choice' ||
+    results.questionType === 'true_false' || results.questionType === 'multi_select';
   const closestList = results.closestRanking ?? [];
 
   // Reveal drama: a short heartbeat pause before the answer distribution, then
@@ -156,20 +161,39 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal }: 
   }
 
   return (
-    <Page className="mx-auto w-full max-w-[600px] px-4 py-6">
-      <Card className="mb-4 min-w-0 max-w-full">
-        <CardContent className="p-6">
-          <p className="mb-3 text-sm text-muted-foreground">{results.questionText}</p>
-          <QuestionDistribution
-            results={results}
-            myChosenIndex={myEntry?.chosenIndex}
-            myChosenIndices={myEntry?.chosenIndices}
-            myChosenPoint={myEntry?.chosenPoint}
+    <Page className="mx-auto w-full max-w-[700px] px-4 py-6">
+      {isOptionBased ? (
+        <div className="mb-4">
+          <EventBrand logosOnly className="player-event-brand-strip mx-auto" />
+          <QuestionAnswerReview
+            text={results.questionText}
+            options={results.options}
+            questionType={results.questionType}
+            correctIndex={results.correctIndex}
+            correctIndices={results.correctIndices}
+            chosenIndex={myEntry?.chosenIndex}
+            chosenIndices={myEntry?.chosenIndices}
+            questionNumber={question ? question.questionIndex + 1 : undefined}
+            totalQuestions={question?.totalQuestions}
+            imageUrl={results.imageUrl}
+            explanation={results.explanation}
           />
-        </CardContent>
-      </Card>
+        </div>
+      ) : (
+        <Card className="mb-4 min-w-0 max-w-full">
+          <CardContent className="p-6">
+            <p className="mb-3 text-sm text-muted-foreground">{results.questionText}</p>
+            <QuestionDistribution
+              results={results}
+              myChosenIndex={myEntry?.chosenIndex}
+              myChosenIndices={myEntry?.chosenIndices}
+              myChosenPoint={myEntry?.chosenPoint}
+            />
+          </CardContent>
+        </Card>
+      )}
 
-      {myEntry && !isClosestTo && <YourAnswer entry={myEntry} results={results} />}
+      {myEntry && !isClosestTo && !isOptionBased && <YourAnswer entry={myEntry} results={results} />}
 
       {myEntry && isClosestTo && (
         <AppAlert

@@ -1,6 +1,11 @@
 import { Lock, SkipForward } from 'lucide-react';
+import type { CSSProperties } from 'react';
+import { OptionText } from '@/components/OptionText';
 import { PageCenter } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
+import { displayOptions, quadColor } from '@/helpers';
+import type { QuestionPayload } from '@/types';
+import './AnsweredScreen.css';
 
 interface Props {
   isCorrect: boolean;
@@ -8,14 +13,27 @@ interface Props {
   wasPassJoker?: boolean;
   answeredCount: number;
   totalPlayers: number;
+  question?: QuestionPayload | null;
+  selectedIndex?: number | null;
+  selectedIndices?: number[];
 }
 
 export function AnsweredScreen({
   wasPassJoker,
   answeredCount,
   totalPlayers,
+  question,
+  selectedIndex,
+  selectedIndices = [],
 }: Props) {
   const answerPct = totalPlayers > 0 ? (answeredCount / totalPlayers) * 100 : 0;
+  const options = question ? displayOptions(question.options, question.questionType) : [];
+  const chosenIndices = question?.questionType === 'multi_select'
+    ? selectedIndices
+    : selectedIndex == null ? [] : [selectedIndex];
+  const chosenOptions = wasPassJoker ? [] : chosenIndices
+    .filter((index) => index >= 0 && index < options.length)
+    .map((index) => ({ index, text: options[index] }));
 
   return (
     <PageCenter>
@@ -32,6 +50,24 @@ export function AnsweredScreen({
                 <Lock className="answer-icon mx-auto size-12" />
                 <div className="answer-label">Đã ghi nhận câu trả lời!</div>
               </>
+            )}
+
+            {chosenOptions.length > 0 && (
+              <div className="mt-5 text-left">
+                <p className="mb-2 text-center text-sm font-bold">Bạn đã chọn</p>
+                <div className="space-y-2">
+                  {chosenOptions.map(({ index, text }) => (
+                    <div
+                      key={index}
+                      className="play-picked-answer"
+                      style={{ '--quad-color': quadColor(index) } as CSSProperties}
+                    >
+                      <span className="play-picked-answer-mark" aria-hidden="true"><Lock size={16} strokeWidth={2.5} /></span>
+                      <strong><OptionText value={text} /></strong>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
 
             {totalPlayers > 0 && (

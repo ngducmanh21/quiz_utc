@@ -1,0 +1,29 @@
+.play-picked-answer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 2px solid var(--foreground);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--quad-color) 48%, var(--surface2));
+  box-shadow: 0 4px 0 var(--foreground);
+  color: var(--foreground);
+  line-height: 1.35;
+}
+
+.play-picked-answer-mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--foreground);
+  border-radius: 50%;
+  background: var(--surface2);
+  font-weight: 900;
+}
+
+.play-picked-answer strong {
+  min-width: 0;
+  font-size: 0.92rem;
+}
