@@ -314,7 +314,7 @@ export default function Join() {
         <p className="mt-4 text-center text-sm text-muted-foreground">
           {user ? (
             <>
-              Đã đăng nhập: {user.username} · <a href="/u/my-games">Lịch sử</a> ·{' '}
+              <a href="/u/my-games">Lịch sử</a> ·{' '}
               <a href="/">Trang chủ</a>
             </>
           ) : (
