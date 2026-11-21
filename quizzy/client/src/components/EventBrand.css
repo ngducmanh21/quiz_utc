@@ -121,8 +121,8 @@
 }
 
 .player-event-brand-full.event-brand-compact .event-brand-logos {
-  --event-logo-size: 48px;
-  height: 58px;
+  --event-logo-size: 60px;
+  height: 72px;
 }
 
 .player-event-brand-full.event-brand-compact .event-brand-kicker {
@@ -141,10 +141,10 @@
 }
 
 .player-event-brand-strip .event-brand-logos {
-  --event-logo-size: 44px;
-  height: 54px;
-  padding: 4px 12px;
-  gap: 5px;
+  --event-logo-size: 66px;
+  height: 80px;
+  padding: 6px 16px;
+  gap: 8px;
   border: 1px solid var(--border);
   box-shadow: 0 3px 0 var(--border);
 }
@@ -159,8 +159,8 @@
   }
 
   .player-event-brand-full.event-brand-compact .event-brand-logos {
-    --event-logo-size: 44px;
-    height: 54px;
+    --event-logo-size: clamp(46px, 17vw, 56px);
+    height: calc(var(--event-logo-size) + 12px);
   }
 
   .player-event-brand-full.event-brand-compact .event-brand-kicker {
@@ -172,7 +172,9 @@
   }
 
   .player-event-brand-strip .event-brand-logos {
-    --event-logo-size: 40px;
-    height: 50px;
+    --event-logo-size: clamp(46px, 17vw, 56px);
+    height: calc(var(--event-logo-size) + 14px);
+    padding: 5px 12px;
+    gap: 6px;
   }
 }
