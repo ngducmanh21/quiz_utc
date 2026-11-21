@@ -1,5 +1,5 @@
 import { ArrowRight, Check, GripVertical, Presentation, SkipForward, Sparkles, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { type LatLng, MapPicker } from '@/components/GeoMap';
 import { AvatarDisplay } from '@/components/AvatarPicker';
 import { QuadOptionGrid } from '@/components/game/QuadOptionGrid';
@@ -113,6 +113,9 @@ export function QuestionScreen({
   );
   const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
   const [links, setLinks] = useState<Array<number | null>>(() => question.options.map(() => null));
+  const [doublePointsNoticeFor, setDoublePointsNoticeFor] = useState<number | null>(
+    question.scoreMultiplier === 2 ? question.questionId : null,
+  );
   const reorder = usePointerReorder(
     (from, to) => setOrder((prev) => arrayMove(prev, from, to)),
     localSubmitted,
@@ -130,7 +133,14 @@ export function QuestionScreen({
     setClosestInputIsInteger(Number.isInteger(closestValue));
     setSelectedLeft(null);
     setLinks(question.options.map(() => null));
+    setDoublePointsNoticeFor(question.scoreMultiplier === 2 ? question.questionId : null);
   }
+
+  useEffect(() => {
+    if (question.scoreMultiplier !== 2) return;
+    const timeout = window.setTimeout(() => setDoublePointsNoticeFor(null), 3000);
+    return () => window.clearTimeout(timeout);
+  }, [question.questionId, question.scoreMultiplier]);
 
   const hasAnswered =
     selectedIndex !== null ||
@@ -184,6 +194,18 @@ export function QuestionScreen({
 
   return (
     <PageVCenter className="play-question-page">
+      {question.scoreMultiplier === 2 && doublePointsNoticeFor === question.questionId && (
+        <div className="play-question-x2" role="status" aria-live="polite">
+          <span className="play-question-x2-icon" aria-hidden="true">
+            <Sparkles size={24} strokeWidth={2.5} />
+          </span>
+          <span className="play-question-x2-copy">
+            <strong>Câu {question.questionIndex + 1}: nhân đôi điểm!</strong>
+            <span>Điểm nhận được ở câu hỏi này được gấp đôi.</span>
+          </span>
+          <span className="play-question-x2-badge" aria-hidden="true">×2</span>
+        </div>
+      )}
       <div
         className={cn(
           'play-question mx-auto w-full',
@@ -201,18 +223,6 @@ export function QuestionScreen({
               </span>
             )}
           </div>
-          {question.scoreMultiplier === 2 && (
-            <div className="play-question-x2" role="status" aria-live="polite">
-              <span className="play-question-x2-icon" aria-hidden="true">
-                <Sparkles size={24} strokeWidth={2.5} />
-              </span>
-              <span className="play-question-x2-copy">
-                <strong>Câu {question.questionIndex + 1}: nhân đôi điểm!</strong>
-                <span>Điểm nhận được ở câu hỏi này được gấp đôi.</span>
-              </span>
-              <span className="play-question-x2-badge" aria-hidden="true">×2</span>
-            </div>
-          )}
           {controller ? (
             <p className="my-2 inline-flex w-full items-center justify-center gap-1.5 text-sm font-semibold text-muted-foreground">
               <Presentation className="size-4" /> Xem câu hỏi trên màn hình lớn
