@@ -64,6 +64,21 @@
   color: var(--foreground);
   pointer-events: none;
   transform: translateX(-50%);
+  animation: play-x2-appear 320ms cubic-bezier(.2, 1.4, .4, 1) both;
+}
+
+.quiz-preview-modal .play-question-x2 {
+  z-index: 220;
+  top: max(56px, calc(env(safe-area-inset-top) + 48px));
+}
+
+@keyframes play-x2-appear {
+  from { opacity: 0; transform: translate(-50%, -12px) scale(.9); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .play-question-x2 { animation: none; }
 }
 
 .play-question-x2-icon {

@@ -103,6 +103,7 @@ export function QuizPreviewModal({ title, questions, onClose }: Props) {
       text: q.text,
       options: q.options ?? [],
       timeSec: q.timeSec ?? 20,
+      scoreMultiplier: q.tags?.includes('X2 điểm') ? 2 : 1,
       imageUrl: q.imageUrl,
       explanation: q.explanation,
       questionType: type,
@@ -195,7 +196,7 @@ export function QuizPreviewModal({ title, questions, onClose }: Props) {
   const v = phase === 'reveal' ? verdict() : null;
 
   return (
-    <div className="fixed inset-0 z-[1100] overflow-y-auto bg-[var(--bg)]">
+    <div className="quiz-preview-modal fixed inset-0 z-[1100] overflow-y-auto bg-[var(--bg)]">
       {/* Top-left preview badge */}
       <div className="fixed left-3 top-3 z-[210] flex max-w-[calc(100%-4rem)] items-center gap-2 sm:left-4 sm:top-4">
         <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[var(--accent)] px-2 py-1.5 text-xs font-bold tracking-wide text-primary-foreground shadow-lg sm:px-2.5">
