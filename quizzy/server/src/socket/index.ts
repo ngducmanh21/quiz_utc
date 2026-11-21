@@ -40,22 +40,12 @@ import { loadQuizTranslations, localizeDbQuestion } from './localization';
 import { endActiveSession, setSocketIo } from './sessionLifecycle';
 
 /**
- * Verify a socket admin token and check that the bearer may operate on the
- * given session. Returns the JWT payload on success, or null on failure.
- * Super admin (id: 0) always passes; users must own the session
- * (hosted_by_user_id === their id).
+ * Only an admin token may operate a quiz session. Player account tokens may
+ * join and answer games through player events, but cannot use host events.
  */
-async function authorizeAdmin(token: string, sessionId: number): Promise<JwtPayload | null> {
+async function authorizeAdmin(token: string, _sessionId: number): Promise<JwtPayload | null> {
   const payload = verifyToken(token);
-  if (!payload) return null;
-  if (payload.role === 'super_admin') return payload;
-  const session = await db.get<DbSession>(
-    'SELECT hosted_by_user_id FROM sessions WHERE id = ?',
-    sessionId,
-  );
-  if (!session) return null;
-  if (session.hosted_by_user_id !== payload.id) return null;
-  return payload;
+  return payload?.role === 'super_admin' ? payload : null;
 }
 
 /**

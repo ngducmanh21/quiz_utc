@@ -27,7 +27,7 @@ export default function UserLogin() {
       setError(result.error);
       return;
     }
-    navigate(result.role === 'super_admin' ? '/admin' : '/u');
+    navigate(result.role === 'super_admin' ? '/admin' : '/u/my-games');
   }
 
   return (
@@ -41,7 +41,7 @@ export default function UserLogin() {
               </span>
             )}
           </AppLogo>
-          <Subtitle className="mt-2">Đăng nhập để tạo quiz và làm quản trò</Subtitle>
+          <Subtitle className="mt-2">Tài khoản quản trị mới có thể quản lý quiz</Subtitle>
         </div>
 
         {error && <AppAlert variant="error">{error}</AppAlert>}

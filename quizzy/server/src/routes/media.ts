@@ -1,12 +1,11 @@
 import { type Request, type Response, Router } from 'express';
 import { enabledProviders, findProvider } from '../media';
-import { requireAuth } from '../middleware';
+import { requireSuperAdmin } from '../middleware';
 
 export const mediaRouter = Router();
 
-// Only authenticated creators may search media (each call hits a rate-limited
-// external API on our key).
-mediaRouter.use(requireAuth);
+// Media searches are part of admin-only quiz authoring and use our API key.
+mediaRouter.use(requireSuperAdmin);
 
 // Which providers are configured, grouped by tab — the client uses this to
 // decide which tabs/pills to show.

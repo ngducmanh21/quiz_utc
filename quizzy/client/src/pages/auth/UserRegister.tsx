@@ -27,7 +27,7 @@ export default function UserRegister() {
     const err = await registerUser(email, password, username);
     setLoading(false);
     if (err) setError(err);
-    else navigate('/u');
+    else navigate('/u/my-games');
   }
 
   return (
@@ -41,7 +41,7 @@ export default function UserRegister() {
               </span>
             )}
           </AppLogo>
-          <Subtitle className="mt-2">Tạo tài khoản để soạn quiz</Subtitle>
+          <Subtitle className="mt-2">Tạo tài khoản người chơi để lưu lịch sử và kết quả</Subtitle>
           {allowedDomain && (
             <p className="text-muted-foreground text-sm mt-2">
               Hãy dùng email có đuôi {domainHint}

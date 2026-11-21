@@ -14,6 +14,7 @@ interface Props {
   loginPath: string;
   showUsers?: boolean;
   showMyGames?: boolean;
+  creatorLinks?: boolean;
   playLabel?: string;
 }
 
@@ -22,6 +23,7 @@ export default function CreatorNavBar({
   loginPath,
   showUsers = false,
   showMyGames = false,
+  creatorLinks = true,
   playLabel = 'Vào chơi ↗',
 }: Props) {
   const { logout } = useAuth();
@@ -34,9 +36,11 @@ export default function CreatorNavBar({
     cn(navBtn, location.pathname === path && 'bg-muted text-foreground');
 
   const links = [
-    { to: basePath, label: 'Bảng điều khiển' },
-    { to: `${basePath}/quiz/new`, label: '+ Tạo quiz' },
-    { to: `${basePath}/history`, label: 'Lịch sử' },
+    ...(creatorLinks ? [
+      { to: basePath, label: 'Bảng điều khiển' },
+      { to: `${basePath}/quiz/new`, label: '+ Tạo quiz' },
+      { to: `${basePath}/history`, label: 'Lịch sử' },
+    ] : []),
     ...(showMyGames ? [{ to: `${basePath}/my-games`, label: 'Lịch sử chơi' }] : []),
     ...(showUsers ? [{ to: `${basePath}/users`, label: 'Người dùng' }] : []),
     { to: `${basePath}/settings`, label: 'Cài đặt' },

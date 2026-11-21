@@ -153,7 +153,8 @@ export default function App() {
           </Lazy>
         }
       />
-      {guardedCreatorRoutes('/u', RequireUser)}
+      <Route path="/u" element={<Navigate to="/u/my-games" replace />} />
+      <Route path="/u/*" element={<Navigate to="/u/my-games" replace />} />
 
       <Route
         path="/play"

@@ -85,7 +85,7 @@ export default function UserSettings() {
       <UserNav />
       <MainContent className="max-w-[520px]">
         <h1>Cài đặt tài khoản</h1>
-        <Subtitle className="mb-6">Quản lý tài khoản tạo quiz của bạn</Subtitle>
+        <Subtitle className="mb-6">Quản lý tài khoản người chơi của bạn</Subtitle>
 
         <Card className="mb-6">
           <CardContent className="p-6">

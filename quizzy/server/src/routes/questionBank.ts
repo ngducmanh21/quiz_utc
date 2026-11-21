@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { type Request, type Response, Router } from 'express';
-import { requireAuth } from '../middleware';
+import { requireSuperAdmin } from '../middleware';
 
 interface BankQuestion {
   category: string;
@@ -72,7 +72,7 @@ function shuffled<T>(items: T[]): T[] {
 
 export const questionBankRouter = Router();
 
-questionBankRouter.get('/meta', requireAuth, (_req: Request, res: Response) => {
+questionBankRouter.get('/meta', requireSuperAdmin, (_req: Request, res: Response) => {
   const data = loadBank();
   if (!data) {
     res.status(503).json({ error: 'Question bank is not available' });
@@ -89,7 +89,7 @@ questionBankRouter.get('/meta', requireAuth, (_req: Request, res: Response) => {
   });
 });
 
-questionBankRouter.get('/', requireAuth, (req: Request, res: Response) => {
+questionBankRouter.get('/', requireSuperAdmin, (req: Request, res: Response) => {
   const data = loadBank();
   if (!data) {
     res.status(503).json({ error: 'Question bank is not available' });

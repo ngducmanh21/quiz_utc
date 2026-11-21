@@ -56,6 +56,10 @@ adminRouter.get('/me', requireAuth, async (req, res) => {
   });
 });
 
+// Every quiz, session, and configuration endpoint below is reserved for admins.
+// Player accounts keep their profile and play history under /api/auth.
+adminRouter.use(requireSuperAdmin);
+
 // ─── Admin Management (super admin only) ────────────────────────────────────
 
 adminRouter.get('/admins', requireSuperAdmin, async (_req, res) => {

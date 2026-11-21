@@ -86,5 +86,5 @@ export async function requireSuperAdmin(
   next();
 }
 
-/** Backward-compat alias for requireAuth (used by existing admin routes). */
-export const requireAdmin = requireAuth;
+/** Admin-only alias for callers that use the shorter middleware name. */
+export const requireAdmin = requireSuperAdmin;

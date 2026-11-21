@@ -13,7 +13,7 @@ export default function Landing() {
   const navigate = useNavigate();
   const { role } = useAuth();
   const [pin, setPin] = useState('');
-  const creatorUrl = role === 'super_admin' ? '/admin' : role === 'user' ? '/u' : '/login';
+  const creatorUrl = role === 'super_admin' ? '/admin' : '/login';
 
   function joinWithPin(e: FormEvent) {
     e.preventDefault();
@@ -25,7 +25,7 @@ export default function Landing() {
     <header className="quizzy-header">
       <Logo />
       <form className="quizzy-pinbar" onSubmit={joinWithPin}><label htmlFor="home-pin">Có mã phòng rồi?</label><input id="home-pin" inputMode="numeric" maxLength={8} placeholder="Nhập mã PIN" value={pin} onChange={(e) => setPin(e.target.value)} /><button type="submit" aria-label="Vào phòng chơi"><ArrowRight size={22} /></button></form>
-      <Link className="quizzy-signin" to={creatorUrl}>{role ? 'Quản lý quiz' : 'Đăng nhập'}</Link>
+      <Link className="quizzy-signin" to={creatorUrl}>{role === 'super_admin' ? 'Quản lý quiz' : 'Đăng nhập quản trị'}</Link>
     </header>
 
     <main>
