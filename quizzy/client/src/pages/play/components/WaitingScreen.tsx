@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { EventBrand } from '@/components/EventBrand';
 import { QuizIntroCard } from '@/components/game/QuizIntroCard';
 import { PageCenter } from '@/components/layout';
 import { getSocket } from '@/hooks/useSocket';
@@ -43,6 +44,7 @@ export function WaitingScreen({
   return (
     <PageCenter>
       <div className="mx-auto w-full max-w-[820px] px-4 py-6">
+        <EventBrand compact className="player-event-brand-full mb-5" />
         <QuizIntroCard
           intro={intro}
           title={title}

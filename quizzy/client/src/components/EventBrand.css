@@ -109,3 +109,70 @@
   .event-brand-compact .event-brand-logos { --event-logo-size: 58px; height: 68px; }
   .event-brand-compact h1 { font-size: clamp(1.75rem, 8.2vw, 3rem); }
 }
+
+/* The player sees the full event identity while waiting and after the game. */
+.player-event-brand-full {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #71321d;
+  border-radius: 22px;
+  background: linear-gradient(135deg, #783119, #b9451e 70%, #d76629);
+  box-shadow: 0 5px 0 #71321d;
+}
+
+.player-event-brand-full.event-brand-compact .event-brand-logos {
+  --event-logo-size: 48px;
+  height: 58px;
+}
+
+.player-event-brand-full.event-brand-compact .event-brand-kicker {
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+}
+
+.player-event-brand-full.event-brand-compact h1 {
+  font-size: clamp(1.55rem, 3.2vw, 2.5rem);
+}
+
+/* During a question, only the marks appear so the answer controls stay in view. */
+.player-event-brand-strip {
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 12px;
+}
+
+.player-event-brand-strip .event-brand-logos {
+  --event-logo-size: 44px;
+  height: 54px;
+  padding: 4px 12px;
+  gap: 5px;
+  border: 1px solid var(--border);
+  box-shadow: 0 3px 0 var(--border);
+}
+
+@media (max-width: 560px) {
+  .player-event-brand-full {
+    padding: 11px 8px;
+  }
+
+  .player-event-brand-full.event-brand-compact {
+    gap: 7px;
+  }
+
+  .player-event-brand-full.event-brand-compact .event-brand-logos {
+    --event-logo-size: 44px;
+    height: 54px;
+  }
+
+  .player-event-brand-full.event-brand-compact .event-brand-kicker {
+    font-size: 1.5rem;
+  }
+
+  .player-event-brand-full.event-brand-compact h1 {
+    font-size: clamp(1.5rem, 7.4vw, 1.75rem);
+  }
+
+  .player-event-brand-strip .event-brand-logos {
+    --event-logo-size: 40px;
+    height: 50px;
+  }
+}

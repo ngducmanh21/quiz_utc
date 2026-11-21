@@ -2,6 +2,7 @@ import { ArrowRight, Check, GripVertical, Presentation, SkipForward, Sparkles, X
 import { useEffect, useState } from 'react';
 import { type LatLng, MapPicker } from '@/components/GeoMap';
 import { AvatarDisplay } from '@/components/AvatarPicker';
+import { EventBrand } from '@/components/EventBrand';
 import { QuadOptionGrid } from '@/components/game/QuadOptionGrid';
 import { TimerBar } from '@/components/game/TimerBar';
 import { IntegerInput } from '@/components/Input';
@@ -206,6 +207,7 @@ export function QuestionScreen({
           <span className="play-question-x2-badge" aria-hidden="true">×2</span>
         </div>
       )}
+      <EventBrand logosOnly className="player-event-brand-strip" />
       <div
         className={cn(
           'play-question mx-auto w-full',

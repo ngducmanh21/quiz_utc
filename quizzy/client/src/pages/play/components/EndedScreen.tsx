@@ -2,6 +2,7 @@ import { Flag, Gamepad2, ThumbsUp, Trophy } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { FinalLeaderboard } from '@/components/game/LeaderboardList';
 import { MedalIcon } from '@/components/game/MedalIcon';
+import { EventBrand } from '@/components/EventBrand';
 import { PageCenter, Subtitle } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -32,38 +33,41 @@ export function EndedScreen({ leaderboard, username, onPlayAgain }: Props) {
 
   return (
     <PageCenter>
-      <Card className="w-full max-w-md">
-        <CardContent className="p-8">
-          <div className="mb-6 text-center">
-            <div className="mb-3 flex justify-center">{icon}</div>
-            <h1>{title}</h1>
-            {myRank && (
-              <Subtitle className="mt-2">
-                Bạn về đích <strong className="text-brand">#{myRank.rank}</strong> với{' '}
-                <strong className="text-brand">{myRank.totalScore.toLocaleString('vi-VN')} điểm</strong>
-              </Subtitle>
-            )}
-          </div>
-          <h2 className="mb-4 flex items-center justify-center gap-1.5">
-            <Trophy className="size-4" /> Điểm chung cuộc
-          </h2>
-          <FinalLeaderboard
-            entries={leaderboard}
-            highlightUsername={username}
-            footer={
-              <Button
-                type="button"
-                variant="default"
-                size="lg"
-                className="mt-6 w-full"
-                onClick={onPlayAgain}
-              >
-                Chơi lại
-              </Button>
-            }
-          />
-        </CardContent>
-      </Card>
+      <div className="w-full max-w-md">
+        <EventBrand compact className="player-event-brand-full mb-5" />
+        <Card className="w-full">
+          <CardContent className="p-8">
+            <div className="mb-6 text-center">
+              <div className="mb-3 flex justify-center">{icon}</div>
+              <h1>{title}</h1>
+              {myRank && (
+                <Subtitle className="mt-2">
+                  Bạn về đích <strong className="text-brand">#{myRank.rank}</strong> với{' '}
+                  <strong className="text-brand">{myRank.totalScore.toLocaleString('vi-VN')} điểm</strong>
+                </Subtitle>
+              )}
+            </div>
+            <h2 className="mb-4 flex items-center justify-center gap-1.5">
+              <Trophy className="size-4" /> Điểm chung cuộc
+            </h2>
+            <FinalLeaderboard
+              entries={leaderboard}
+              highlightUsername={username}
+              footer={
+                <Button
+                  type="button"
+                  variant="default"
+                  size="lg"
+                  className="mt-6 w-full"
+                  onClick={onPlayAgain}
+                >
+                  Chơi lại
+                </Button>
+              }
+            />
+          </CardContent>
+        </Card>
+      </div>
     </PageCenter>
   );
 }
