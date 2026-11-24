@@ -87,7 +87,7 @@ export function AnsweredScreen({
             {question && timeLeft !== null ? (
               <div className="answer-time-left mt-5">
                 <p className="mb-2 text-sm font-semibold text-muted-foreground">
-                  Đáp án hiện khi hết giờ
+                  Đáp án hiện khi mọi người trả lời hoặc hết giờ
                 </p>
                 <TimerBar timeLeft={timeLeft} totalSec={question.timeSec} className="gap-3" silent />
               </div>

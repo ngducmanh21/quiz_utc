@@ -64,7 +64,7 @@ export function PreGameSettingsModal({ config, onConfirm, onCancel }: Props) {
                   Chế độ trình chiếu
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  Chiếu trò chơi lên màn hình lớn. Mỗi câu giữ đủ thời gian đã đặt; sau khi hiện đáp án, cả phòng tự chuyển cùng lúc.
+                  Chiếu trò chơi lên màn hình lớn. Đáp án hiện khi mọi người đã trả lời hoặc hết giờ; sau đó cả phòng tự chuyển cùng lúc.
                 </p>
               </div>
             </div>
