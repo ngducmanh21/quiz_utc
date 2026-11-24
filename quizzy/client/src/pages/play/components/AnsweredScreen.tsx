@@ -1,6 +1,7 @@
 import { Lock, SkipForward } from 'lucide-react';
 import type { CSSProperties } from 'react';
 import { OptionText } from '@/components/OptionText';
+import { TimerBar } from '@/components/game/TimerBar';
 import { PageCenter } from '@/components/layout';
 import { Card, CardContent } from '@/components/ui/card';
 import { displayOptions, quadColor } from '@/helpers';
@@ -83,11 +84,18 @@ export function AnsweredScreen({
               </div>
             )}
 
-            <p className="mt-5 text-base font-semibold tabular-nums text-muted-foreground">
-              {timeLeft !== null && timeLeft > 0
-                ? `Còn ${timeLeft} giây nữa sẽ hiện đáp án`
-                : 'Đang chờ hiện đáp án…'}
-            </p>
+            {question && timeLeft !== null ? (
+              <div className="answer-time-left mt-5">
+                <p className="mb-2 text-sm font-semibold text-muted-foreground">
+                  Đáp án hiện khi hết giờ
+                </p>
+                <TimerBar timeLeft={timeLeft} totalSec={question.timeSec} className="gap-3" silent />
+              </div>
+            ) : (
+              <p className="mt-5 text-base font-semibold text-muted-foreground">
+                Đang chờ hết giờ…
+              </p>
+            )}
           </div>
         </CardContent>
       </Card>
