@@ -1,24 +1,13 @@
-import { Heart, Trophy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Trophy } from 'lucide-react';
 import { ClosestGuessesList, LeaderboardList } from '@/components/game/LeaderboardList';
 import { QuestionDistribution } from '@/components/game/QuestionDistribution';
 import { QuestionText } from '@/components/QuestionText';
 import { Card, CardContent } from '@/components/ui/card';
-import { sound } from '@/lib/sound';
 import type { QuestionResults } from '@/types';
 
 export function ScreenResults({ results }: { results: QuestionResults }) {
   const closest = results.closestRanking ?? [];
   const showStandings = results.showLeaderboard !== false;
-
-  const [revealed, setRevealed] = useState(false);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-runs each question (keyed on questionId)
-  useEffect(() => {
-    setRevealed(false);
-    sound.play('heartbeat');
-    const t = setTimeout(() => setRevealed(true), 1200);
-    return () => clearTimeout(t);
-  }, [results.questionId]);
 
   return (
     <div
@@ -34,14 +23,7 @@ export function ScreenResults({ results }: { results: QuestionResults }) {
           >
             <QuestionText text={results.questionText} />
           </div>
-          {revealed ? (
-            <QuestionDistribution results={results} />
-          ) : (
-            <div className="pre-reveal">
-              <Heart className="pre-reveal-heart" fill="currentColor" />
-              <span>Đang hiện đáp án…</span>
-            </div>
-          )}
+          <QuestionDistribution results={results} />
         </CardContent>
       </Card>
 

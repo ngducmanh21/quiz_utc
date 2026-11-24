@@ -1,5 +1,5 @@
-import { Check, Heart, MapPin, Target, Trophy, X } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Check, MapPin, Target, Trophy, X } from 'lucide-react';
+import { useEffect } from 'react';
 import { AppAlert } from '@/components/AppAlert';
 import { EventBrand } from '@/components/EventBrand';
 import { ClosestGuessesList, LeaderboardList } from '@/components/game/LeaderboardList';
@@ -135,30 +135,11 @@ export function ResultsScreen({ results, playerId, autoAdvanceLeft, onReveal, qu
     results.questionType === 'true_false' || results.questionType === 'multi_select';
   const closestList = results.closestRanking ?? [];
 
-  // Reveal drama: a short heartbeat pause before the answer distribution, then
-  // the correct/wrong sting lands exactly when the result appears.
-  const [revealed, setRevealed] = useState(false);
   // biome-ignore lint/correctness/useExhaustiveDependencies: runs once per question (keyed on questionId); myEntry is stable within a round
   useEffect(() => {
-    sound.play('heartbeat');
-    const t = setTimeout(() => {
-      setRevealed(true);
-      onReveal?.();
-      if (myEntry) sound.play(myEntry.isCorrect ? 'correct' : 'wrong');
-    }, 1200);
-    return () => clearTimeout(t);
+    onReveal?.();
+    if (myEntry) sound.play(myEntry.isCorrect ? 'correct' : 'wrong');
   }, [results.questionId]);
-
-  if (!revealed) {
-    return (
-      <Page className="mx-auto w-full max-w-[600px] px-4 py-6">
-        <div className="pre-reveal">
-          <Heart className="pre-reveal-heart" fill="currentColor" />
-          <span>Đang hiện đáp án…</span>
-        </div>
-      </Page>
-    );
-  }
 
   return (
     <Page className="mx-auto w-full max-w-[700px] px-4 py-6">

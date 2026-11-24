@@ -1,11 +1,9 @@
-import { ArrowRight, Flag, Heart, Trophy } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ArrowRight, Flag, Trophy } from 'lucide-react';
 import { ClosestGuessesList, LeaderboardList } from '@/components/game/LeaderboardList';
 import { QuestionDistribution } from '@/components/game/QuestionDistribution';
 import { MainContent } from '@/components/layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { sound } from '@/lib/sound';
 import type { NextPreview, QuestionResults } from '../../../types';
 import { UpNextCard } from './UpNextCard';
 
@@ -32,16 +30,6 @@ export function GameResults({
 }: Props) {
   const isClosestTo = results.questionType === 'closest_to';
   const closestList = results.closestRanking ?? [];
-
-  // Reveal drama: a brief heartbeat pause before the distribution appears.
-  const [revealed, setRevealed] = useState(false);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: re-runs each question (keyed on questionId)
-  useEffect(() => {
-    setRevealed(false);
-    sound.play('heartbeat');
-    const t = setTimeout(() => setRevealed(true), 1200);
-    return () => clearTimeout(t);
-  }, [results.questionId]);
 
   return (
     <MainContent>
@@ -78,14 +66,7 @@ export function GameResults({
       <Card className="mb-4 w-full max-w-4xl">
         <CardContent className="p-6">
           <p className="mb-3 text-sm text-muted-foreground">{results.questionText}</p>
-          {revealed ? (
-            <QuestionDistribution results={results} />
-          ) : (
-            <div className="pre-reveal">
-              <Heart className="pre-reveal-heart" fill="currentColor" />
-              <span>Đang hiện đáp án…</span>
-            </div>
-          )}
+          <QuestionDistribution results={results} />
         </CardContent>
       </Card>
 
