@@ -1058,7 +1058,16 @@ async function recordAnswer(opts: {
     'player:answer-received',
     opts.wasPassJoker
       ? { isCorrect: opts.isCorrect, score, streak: opts.streak, wasPassJoker: true }
-      : { isCorrect: opts.isCorrect, score, streak: opts.streak },
+      : {
+          isCorrect: opts.isCorrect,
+          score,
+          streak: opts.streak,
+          chosenIndex: opts.storedIndex >= 0 ? opts.storedIndex : null,
+          chosenIndices: question?.question_type === 'multi_select'
+            ? JSON.parse(opts.chosenIndices ?? '[]') as number[]
+            : undefined,
+          answerKey: question ? buildPersonalAnswerKey(state, playerId, question) : undefined,
+        },
   );
 
   // Notify admin
@@ -1317,11 +1326,20 @@ async function emitReconnectGameState(
 
   if (await restoreSlide(socket, state, locale)) return;
 
+  // A player may reconnect before the host after a server restart. Re-arm the
+  // question timer even when that player has already submitted an answer.
+  if (state.questionPhase === null) coldRebuildQuestion(io, state, session, 'base');
+
   const currentQ = state.questions[state.currentQuestionIndex];
   if (!currentQ) return;
 
-  const dbAnswer = await db.get<{ is_correct: number; score: number }>(
-    'SELECT is_correct, score FROM answers WHERE player_id = ? AND question_id = ? AND session_id = ?',
+  const dbAnswer = await db.get<{
+    is_correct: number;
+    score: number;
+    chosen_index: number | null;
+    chosen_indices: string | null;
+  }>(
+    'SELECT is_correct, score, chosen_index, chosen_indices FROM answers WHERE player_id = ? AND question_id = ? AND session_id = ?',
     playerId,
     currentQ.id,
     session.id,
@@ -1337,6 +1355,10 @@ async function emitReconnectGameState(
       session.id,
     );
     for (const row of allAnswers) answered.add(row.player_id);
+    state.recordedAnswerCount.set(
+      currentQ.id,
+      Math.max(state.recordedAnswerCount.get(currentQ.id) ?? 0, allAnswers.length),
+    );
 
     socket.emit('game:answer-count', {
       answeredCount: answered.size,
@@ -1346,6 +1368,15 @@ async function emitReconnectGameState(
       isCorrect: dbAnswer.is_correct === 1,
       score: dbAnswer.score,
       streak: state.playerStreaks.get(playerId) ?? 0,
+      chosenIndex: dbAnswer.chosen_index != null && dbAnswer.chosen_index >= 0
+        ? dbAnswer.chosen_index : null,
+      chosenIndices: currentQ.question_type === 'multi_select'
+        ? JSON.parse(dbAnswer.chosen_indices ?? '[]') as number[]
+        : undefined,
+      wasPassJoker: dbAnswer.chosen_index === -2,
+      answerKey: dbAnswer.chosen_index === -2
+        ? undefined : buildPersonalAnswerKey(state, playerId, currentQ),
+      timeRemaining: remainingSec(state.questionStartedAt, currentQ.time_sec),
     });
     return;
   }
@@ -1766,6 +1797,21 @@ function buildAnswerReveal(q: DbQuestion, answerSeed: number) {
     explanation: q.explanation?.trim() || undefined,
     rangeMin: isClosestTo ? (q.range_min ?? undefined) : undefined,
     rangeMax: isClosestTo ? (q.range_max ?? undefined) : undefined,
+  };
+}
+
+/** Send the answer key only to the player who has already submitted. */
+function buildPersonalAnswerKey(state: ActiveSession, playerId: number, q: DbQuestion) {
+  const index = state.currentQuestionIndex;
+  const locale = state.playerLocales.get(playerId) ?? 'base';
+  const localized = localizeDbQuestion(q, index, locale, state.translations);
+  return {
+    questionId: q.id,
+    questionText: localized.text,
+    questionIndex: playableIndex(state.questions, index),
+    totalQuestions: playableCount(state.questions),
+    timeSec: localized.time_sec,
+    ...buildAnswerReveal(localized, state.answerSeed),
   };
 }
 

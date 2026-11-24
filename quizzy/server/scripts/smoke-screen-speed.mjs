@@ -82,17 +82,25 @@ try {
   assert.equal(shown.text, 'Câu một');
   const firstRoundStartedAt = Date.now();
 
+  let screenRevealedBeforeEveryone = false;
+  const trackEarlyReveal = () => { screenRevealedBeforeEveryone = true; };
+  screen.on('game:question-results', trackEarlyReveal);
   const speedFirst = event(screen, 'game:speed-leaderboard', 12000, (data) => data.entries.length === 1);
   const firstReceived = event(first, 'player:answer-received');
   first.emit('player:answer', {
     sessionId: session.id, questionId: q1.questionId, playerId: p1.playerId,
     chosenIndex: q1.options.indexOf('Đúng'),
   });
-  await firstReceived;
+  const firstFeedback = await firstReceived;
+  assert.equal(firstFeedback.isCorrect, true);
+  assert.equal(firstFeedback.answerKey.options[firstFeedback.answerKey.correctIndex], 'Đúng');
+  assert.ok(firstFeedback.score > 0);
   const firstBoard = await speedFirst;
   assert.equal(firstBoard.entries[0].username, 'Nhanh');
 
   await new Promise((resolve) => setTimeout(resolve, 500));
+  assert.equal(screenRevealedBeforeEveryone, false, 'screen revealed before every player answered');
+  screen.off('game:question-results', trackEarlyReveal);
   const speedSecond = event(screen, 'game:speed-leaderboard', 12000, (data) => data.entries.length === 2);
   const resultsReady = event(screen, 'game:question-results', 3500);
   const playerResultsReady = event(first, 'game:question-results', 3500);
@@ -101,7 +109,9 @@ try {
     sessionId: session.id, questionId: q2.questionId, playerId: p2.playerId,
     chosenIndex: q2.options.indexOf('Đúng'),
   });
-  await secondReceived;
+  const secondFeedback = await secondReceived;
+  assert.equal(secondFeedback.isCorrect, true);
+  assert.equal(secondFeedback.answerKey.options[secondFeedback.answerKey.correctIndex], 'Đúng');
   const board = await speedSecond;
   assert.deepEqual(board.entries.map((entry) => entry.username), ['Nhanh', 'Chậm']);
   assert.ok(board.entries[0].elapsedMs < board.entries[1].elapsedMs);

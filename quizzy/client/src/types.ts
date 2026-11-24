@@ -223,6 +223,23 @@ export type AnswerKey = Pick<
   | 'explanation'
 >;
 
+/** Private result sent only to a player after their answer is stored. */
+export interface PlayerAnswerReceived {
+  isCorrect: boolean;
+  score: number;
+  wasPassJoker?: boolean;
+  streak?: number;
+  chosenIndex?: number | null;
+  chosenIndices?: number[];
+  timeRemaining?: number;
+  answerKey?: AnswerKey & {
+    questionText: string;
+    questionIndex: number;
+    totalQuestions: number;
+    timeSec: number;
+  };
+}
+
 /** Lobby/host view of a connected player. */
 export interface PlayerInfo {
   id: number;

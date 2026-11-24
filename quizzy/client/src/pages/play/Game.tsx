@@ -11,6 +11,7 @@ import { PageVCenter } from '@/components/layout';
 import { getSocket, useSocketEvent } from '../../hooks/useSocket';
 import type {
   GameEndedPayload,
+  PlayerAnswerReceived,
   QuestionPayload,
   QuestionResults,
   QuizIntro,
@@ -57,12 +58,7 @@ export default function Game() {
   const [openTextSubmitted, setOpenTextSubmitted] = useState(false);
   const [closestValue, setClosestValue] = useState(50);
   const [closestSubmitted, setClosestSubmitted] = useState(false);
-  const [answerResult, setAnswerResult] = useState<{
-    isCorrect: boolean;
-    score: number;
-    wasPassJoker?: boolean;
-    streak?: number;
-  } | null>(null);
+  const [answerResult, setAnswerResult] = useState<PlayerAnswerReceived | null>(null);
   const [eliminatedIndices, setEliminatedIndices] = useState<number[]>([]);
   const [jokersEnabled, setJokersEnabled] = useState({ pass: false, fiftyFifty: false });
   const [jokersUsed, setJokersUsed] = useState({ pass: false, fiftyFifty: false });
@@ -155,11 +151,15 @@ export default function Game() {
     questionTimer.start(data.timeRemaining ?? data.timeSec);
   });
 
-  useSocketEvent<{ isCorrect: boolean; score: number; wasPassJoker?: boolean; streak?: number }>(
+  useSocketEvent<PlayerAnswerReceived>(
     'player:answer-received',
     (data) => {
       setReconnecting(false);
       setAnswerResult(data);
+      if (data.chosenIndex != null) setSelectedIndex(data.chosenIndex);
+      if (data.chosenIndices) setSelectedIndices(data.chosenIndices);
+      if (data.timeRemaining != null) questionTimer.start(data.timeRemaining);
+      if (!data.wasPassJoker) setStreak(data.isCorrect ? (data.streak ?? 0) : 0);
       setPhase('answered');
     },
   );
@@ -380,10 +380,11 @@ export default function Game() {
       <AnsweredScreen
         isCorrect={answerResult.isCorrect}
         score={answerResult.score}
+        answerKey={answerResult.answerKey}
         wasPassJoker={answerResult.wasPassJoker}
         answeredCount={answeredCount}
         totalPlayers={totalPlayers}
-        timeLeft={question ? questionTimer.seconds : null}
+        timeLeft={question || answerResult.answerKey ? questionTimer.seconds : null}
         question={question}
         selectedIndex={selectedIndex}
         selectedIndices={selectedIndices}
