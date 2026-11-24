@@ -13,6 +13,7 @@ interface Props {
   wasPassJoker?: boolean;
   answeredCount: number;
   totalPlayers: number;
+  timeLeft: number | null;
   question?: QuestionPayload | null;
   selectedIndex?: number | null;
   selectedIndices?: number[];
@@ -22,6 +23,7 @@ export function AnsweredScreen({
   wasPassJoker,
   answeredCount,
   totalPlayers,
+  timeLeft,
   question,
   selectedIndex,
   selectedIndices = [],
@@ -81,13 +83,10 @@ export function AnsweredScreen({
               </div>
             )}
 
-            <p className="mt-4 text-sm text-muted-foreground">
-              Đang chờ người chơi khác
-              <span className="dots">
-                <span>.</span>
-                <span>.</span>
-                <span>.</span>
-              </span>
+            <p className="mt-5 text-base font-semibold tabular-nums text-muted-foreground">
+              {timeLeft !== null && timeLeft > 0
+                ? `Còn ${timeLeft} giây nữa sẽ hiện đáp án`
+                : 'Đang chờ hiện đáp án…'}
             </p>
           </div>
         </CardContent>

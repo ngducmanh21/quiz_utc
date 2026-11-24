@@ -161,7 +161,6 @@ export default function Game() {
       setReconnecting(false);
       setAnswerResult(data);
       setPhase('answered');
-      questionTimer.stop();
     },
   );
 
@@ -384,6 +383,7 @@ export default function Game() {
         wasPassJoker={answerResult.wasPassJoker}
         answeredCount={answeredCount}
         totalPlayers={totalPlayers}
+        timeLeft={question ? questionTimer.seconds : null}
         question={question}
         selectedIndex={selectedIndex}
         selectedIndices={selectedIndices}
