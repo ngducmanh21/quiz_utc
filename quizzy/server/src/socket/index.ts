@@ -1003,7 +1003,7 @@ function applyStreakBonus(
 /**
  * Shared tail of `player:answer` and `player:joker-pass`: persist the answer
  * row, credit the player's total score, emit the received/count events, and
- * show results early in non-presentation games once everyone has answered.
+ * keep the question open until its timer expires, even if everyone has answered.
  * The caller must have already added the player to `answered` (so its size
  * includes this answer).
  * `alwaysUpdateTotal` runs the total_score UPDATE even for a 0 score (the
@@ -1085,21 +1085,14 @@ async function recordAnswer(opts: {
     }, 100);
   }
 
-  // End early once every connected player has answered. The question timer is
-  // still the maximum wait for anyone who has not answered yet.
-  if (recordedCount >= state.playerSockets.size) {
-    if (state.questionTimer) {
-      clearTimeout(state.questionTimer);
-      state.questionTimer = null;
+  // Keep the live speed ranking current, but reveal answers only when the
+  // question timer expires. Early submissions still earn a larger time bonus.
+  if (recordedCount >= state.playerSockets.size && state.presentationMode) {
+    try {
+      await emitSpeedLeaderboard(io.to(`screen:${sessionId}`), state, questionId);
+    } catch (error) {
+      console.error('Failed to update final speed leaderboard', error);
     }
-    if (state.presentationMode) {
-      try {
-        await emitSpeedLeaderboard(io.to(`screen:${sessionId}`), state, questionId);
-      } catch (error) {
-        console.error('Failed to update final speed leaderboard', error);
-      }
-    }
-    showResults(io, state, questionId);
   }
 }
 

@@ -94,7 +94,9 @@ try {
 
   await new Promise((resolve) => setTimeout(resolve, 500));
   const speedSecond = event(screen, 'game:speed-leaderboard', 12000, (data) => data.entries.length === 2);
-  const earlyResults = event(screen, 'game:question-results', 3500);
+  const resultsReady = event(screen, 'game:question-results', 8000);
+  let resultsShown = false;
+  resultsReady.then(() => { resultsShown = true; }, () => {});
   const secondReceived = event(second, 'player:answer-received');
   second.emit('player:answer', {
     sessionId: session.id, questionId: q2.questionId, playerId: p2.playerId,
@@ -105,10 +107,15 @@ try {
   assert.deepEqual(board.entries.map((entry) => entry.username), ['Nhanh', 'Chậm']);
   assert.ok(board.entries[0].elapsedMs < board.entries[1].elapsedMs);
 
-  // Everyone answered, so the result arrives before the four-second timer.
-  const results = await earlyResults;
+  // Everyone answered, but the question stays visible until its full timer.
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+  assert.equal(resultsShown, false, 'answers were revealed before the question timer expired');
+  const results = await resultsReady;
   assert.equal(results.questionId, q1.questionId);
-  assert.ok(Date.now() - firstRoundStartedAt < 3500);
+  assert.ok(Date.now() - firstRoundStartedAt >= 3500);
+  const fast = results.leaderboard.find((entry) => entry.username === 'Nhanh');
+  const slow = results.leaderboard.find((entry) => entry.username === 'Chậm');
+  assert.ok(fast.questionScore > slow.questionScore, 'faster correct answer should earn more points');
   assert.equal(results.autoAdvanceSec, 5);
   const next = await event(screen, 'game:question', 8000);
   assert.equal(next.text, 'Câu hai');
@@ -119,7 +126,7 @@ try {
   assert.equal(secondResults.questionId, next.questionId);
   const ended = event(host, 'game:ended', 8000);
   await ended;
-  console.log('OK: bảng tốc độ, kết thúc sớm khi đủ đáp án, tự chuyển và tự kết thúc');
+  console.log('OK: chờ hết giờ dù đủ đáp án, thưởng người nhanh hơn, tự chuyển và tự kết thúc');
 } finally {
   sockets.forEach((socket) => socket.disconnect());
   if (quizId && token) await api(`/api/admin/quizzes/${quizId}`, 'DELETE', undefined, token);
