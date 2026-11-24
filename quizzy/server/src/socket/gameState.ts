@@ -58,7 +58,7 @@ export interface ActiveSession {
   sessionId: number;
   quizId: number;
   pin: string;
-  // Big-screen game: /screen/:pin displays it and the host paces every step.
+  // Big-screen game: /screen/:pin displays synchronized questions and results.
   presentationMode: boolean;
   adminSocketId: string;
   questions: DbQuestion[];

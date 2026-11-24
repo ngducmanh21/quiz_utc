@@ -26,7 +26,7 @@ const DEFAULTS: AppConfig = {
   streakBonusEnabled: true,
   streakMinimum: 2,
   streakBonusBase: 50,
-  resultsAutoAdvanceSec: 0,
+  resultsAutoAdvanceSec: 5,
   publicUrl: '',
 };
 

@@ -1085,12 +1085,19 @@ async function recordAnswer(opts: {
     }, 100);
   }
 
-  // Presentation games keep the full question timer even when everyone answers.
-  // Other games reveal only after all accepted answers reach the database.
-  if (!state.presentationMode && recordedCount >= state.playerSockets.size) {
+  // End early once every connected player has answered. The question timer is
+  // still the maximum wait for anyone who has not answered yet.
+  if (recordedCount >= state.playerSockets.size) {
     if (state.questionTimer) {
       clearTimeout(state.questionTimer);
       state.questionTimer = null;
+    }
+    if (state.presentationMode) {
+      try {
+        await emitSpeedLeaderboard(io.to(`screen:${sessionId}`), state, questionId);
+      } catch (error) {
+        console.error('Failed to update final speed leaderboard', error);
+      }
     }
     showResults(io, state, questionId);
   }

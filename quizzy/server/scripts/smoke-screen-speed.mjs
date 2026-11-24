@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { io } from 'socket.io-client';
 
-const base = `http://localhost:${process.env.APP_PORT || 3000}`;
+const base = process.env.API_BASE || `http://localhost:${process.env.APP_PORT || 3000}`;
 if (!process.env.ADMIN_PASSWORD) throw new Error('ADMIN_PASSWORD is required');
 
 async function api(path, method = 'GET', body, token) {
@@ -80,6 +80,7 @@ try {
   host.emit('admin:start-game', { sessionId: session.id, token });
   const [shown, q1, q2] = await Promise.all([screenQuestion, firstQuestion, secondQuestion]);
   assert.equal(shown.text, 'Câu một');
+  const firstRoundStartedAt = Date.now();
 
   const speedFirst = event(screen, 'game:speed-leaderboard', 12000, (data) => data.entries.length === 1);
   const firstReceived = event(first, 'player:answer-received');
@@ -93,6 +94,7 @@ try {
 
   await new Promise((resolve) => setTimeout(resolve, 500));
   const speedSecond = event(screen, 'game:speed-leaderboard', 12000, (data) => data.entries.length === 2);
+  const earlyResults = event(screen, 'game:question-results', 3500);
   const secondReceived = event(second, 'player:answer-received');
   second.emit('player:answer', {
     sessionId: session.id, questionId: q2.questionId, playerId: p2.playerId,
@@ -103,22 +105,21 @@ try {
   assert.deepEqual(board.entries.map((entry) => entry.username), ['Nhanh', 'Chậm']);
   assert.ok(board.entries[0].elapsedMs < board.entries[1].elapsedMs);
 
-  // All players answered, but presentation mode should keep the full timer.
-  let earlyResults = false;
-  screen.once('game:question-results', () => { earlyResults = true; });
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  assert.equal(earlyResults, false);
-
-  const results = await event(screen, 'game:question-results', 8000);
+  // Everyone answered, so the result arrives before the four-second timer.
+  const results = await earlyResults;
   assert.equal(results.questionId, q1.questionId);
+  assert.ok(Date.now() - firstRoundStartedAt < 3500);
   assert.equal(results.autoAdvanceSec, 5);
   const next = await event(screen, 'game:question', 8000);
   assert.equal(next.text, 'Câu hai');
 
-  const ended = event(host, 'game:ended');
-  host.emit('admin:end-game', { sessionId: session.id, token });
+  // No one answers the second question: its timer and the result countdown
+  // still finish the game with no admin click.
+  const secondResults = await event(screen, 'game:question-results', 8000);
+  assert.equal(secondResults.questionId, next.questionId);
+  const ended = event(host, 'game:ended', 8000);
   await ended;
-  console.log('OK: màn hình hiện bảng tốc độ, chờ hết giờ, tự chuyển câu');
+  console.log('OK: bảng tốc độ, kết thúc sớm khi đủ đáp án, tự chuyển và tự kết thúc');
 } finally {
   sockets.forEach((socket) => socket.disconnect());
   if (quizId && token) await api(`/api/admin/quizzes/${quizId}`, 'DELETE', undefined, token);
